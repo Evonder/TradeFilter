@@ -45,7 +45,7 @@ TradeFilter = Rock:NewAddon("TradeFilter", "LibRockDB-1.0", "LibRockConfig-1.0",
 
 --TradeFilter.version = "|cff8080ff1.0|r |cffff8080r|r" .. string.sub("$Revision: 005 $", 12, -3)
 local MAJOR_VERSION = "1.0"
-local MINOR_VERSION = 100 + tonumber(("$Revision: 5 $"):match("%d+"))
+local MINOR_VERSION = 100 + tonumber(("$Revision: 3 $"):match("%d+"))
 TradeFilter.version = MAJOR_VERSION .. "." .. MINOR_VERSION
 TradeFilter.date = string.sub("$Date: 2008-11-14 12:00:00 -0800 (Fri, 14 Nov 2008) $", 8, 17)
 
