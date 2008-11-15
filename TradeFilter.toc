@@ -8,7 +8,6 @@
 ## X-Category: Chat & Communication
 ## X-License: BSD
 ## Version: 1.0
-## X-Curse-Packaged-Version: 1.0
 
 ## OptionalDeps: LibRock-1.0, Ace2
 ## X-Embeds: LibRock-1.0, LibRockDB-1.0,, LibRockHook-1.0, LibRockEvent-1.0, LibRockTimer-1.0, LibRockConsole-1.0, LibRockLocale-1.0, AceLibrary
