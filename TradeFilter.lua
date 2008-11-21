@@ -43,11 +43,10 @@ local L = Rock("LibRockLocale-1.0"):GetTranslationNamespace("TradeFilter")
 
 TradeFilter = Rock:NewAddon("TradeFilter", "LibRockDB-1.0", "LibRockConfig-1.0", "LibRockEvent-1.0", "LibRockHook-1.0", "LibRockTimer-1.0", "LibRockConsole-1.0")
 
---TradeFilter.version = "|cff8080ff1.0|r |cffff8080r|r" .. string.sub("$Revision: 005 $", 12, -3)
 local MAJOR_VERSION = "1.0"
-local MINOR_VERSION = 100 + tonumber(("$Revision: 7 $"):match("%d+"))
-TradeFilter.version = MAJOR_VERSION .. "." .. MINOR_VERSION
-TradeFilter.date = string.sub("$Date: 2008-11-14 12:00:00 -0800 (Fri, 14 Nov 2008) $", 8, 17)
+local MINOR_VERSION = 000 + tonumber(("$Revision: 8 $"):match("%d+"))
+TradeFilter.version = MAJOR_VERSION .. "r" .. MINOR_VERSION
+TradeFilter.date = string.sub("$Date: 2008-11-21 12:00:00 -0800 (Fri, 21 Nov 2008) $", 8, 17)
 
 TradeFilter:SetDatabase("TradeFilterDB")
 TradeFilter:SetDatabaseDefaults('profile', {
@@ -64,7 +63,7 @@ TradeFilter:SetDatabaseDefaults('profile', {
 		{"LFEnchant",true},
 		{"LF [eE][nN][cC][hH][aA][nN][tT]",true},
 		{"LF [jJ][cC]",true},
-		{"LF%dM?",true},
+		{"[lL][fF]%d[mM]?",true},
 		{"[lL][fF][gG]",true},
 		{"AH",true},
 		{"looking for work",true},
@@ -107,6 +106,22 @@ function TradeFilter:SetAddFilter3(v)
 	self.db.profile.addfilter3 = ""..v..""
 end
 
+function TradeFilter:IsFilterGeneral()
+	return self.db.profile.filtergeneral
+end
+
+function TradeFilter:ToggleFilterGeneral()
+	self.db.profile.filtergeneral = not self.db.profile.filtergeneral
+end
+
+function TradeFilter:IsFilterTrade()
+	return self.db.profile.filtertrade
+end
+
+function TradeFilter:ToggleFilterTrade()
+	self.db.profile.filtertrade = not self.db.profile.filtertrade
+end
+
 function TradeFilter:IsDebug()
 	return self.db.profile.debug
 end
@@ -143,18 +158,6 @@ function TradeFilter:OnDisable()
 	print("|cFF33FF99TradeFilter|r: " .. TradeFilter.version .. " |cffff8080Disabled|r")
 end
 
-function TradeFilter:reloadUI()
-	type = 'execute',{
-		name = L["RUI"],
-		desc = L["RUID"],
-		buttonText = L["Reload"],
-		func = function()
-			_G.ReloadUI()
-		end,
-		order = -1,
-	}
-end
-
 function TradeFilter:OnInitialize()
 local optionsTable = {
 		name = "TradeFilter",
@@ -163,7 +166,7 @@ local optionsTable = {
     type='group',
     args = {
 			turnOn = {
-				type = 'toggle',
+				type = 'boolean',
 				order = 1,
 				name = L["TurnOn"],
 				desc = L["TurnOnDesc"],
@@ -171,7 +174,7 @@ local optionsTable = {
 				set = "ToggleTurnOn",
 			},
 			redirect = {
-				type = 'toggle',
+				type = 'boolean',
 				order = 2,
 				name = L["Redir"],
 				desc = L["RedirDesc"],
@@ -179,14 +182,54 @@ local optionsTable = {
 				set = "ToggleRedirect",
 			},
 			debug = {
-        type = 'toggle',
+        type = 'boolean',
 				order = 3,
+				disabled = true,
         name = L["Debug"],
         desc = L["DebugDesc"],
         get = "IsDebug",
         set = "ToggleDebug",
 			},
-			-- TODO
+			reload = {
+				type = 'execute',
+				name = L["RUI"],
+				desc = L["RUID"],
+				buttonText = L["RUI"],
+				func = function()
+					_G.ReloadUI()
+				end,
+				--disabled = function()
+				--	return not self:IsDebug or return not self:IsRedirect
+				--end,
+				order = -1,
+			},
+			channelGroup = {
+				type = 'group',
+				order = 1,
+				disabled = false,
+				name = "Channel Selection",
+				desc = "Channel Selection [Not Implemented Yet]",
+				args = {
+					tradeChannel = {
+						type = 'boolean',
+						order = 1,
+						disabled = false,
+						name = "Trade Chat",
+						desc = "Trade Chat",
+						get = "IsFilterTrade",
+						set = "ToggleFilterTrade",
+					},
+					generalChannel = {
+						type = 'boolean',
+						order = 2,
+						disabled = false,
+						name = "General Chat",
+						desc = "General Chat",
+						get = "IsFilterGeneral",
+						set = "ToggleFilterGeneral",
+					},
+				},
+			},
 			addFilterGroup = {
 				type = 'group',
 				disabled = false,
@@ -241,9 +284,9 @@ local optionsTable = {
 			},
 		},
 	}
-	TradeFilter:SetConfigTable(optionsTable)
-	TradeFilter.OnMenuRequest = optionsTable
-	TradeFilter:SetConfigSlashCommand("/TradeFilter")
+	self:SetConfigTable(optionsTable)
+	self.OnMenuRequest = optionsTable
+	self:SetConfigSlashCommand("/TradeFilter", "/Filter")
 end
 
 --[[ Locals ]]--
@@ -282,7 +325,9 @@ function TradeFilter:FindOrCreateChatWindow(window, create)
 
 	for i=1,NUM_CHAT_WINDOWS do
 		name, fontSize, r, g, b, alpha, shown, locked, docked = GetChatWindowInfo(i)
-		if (TradeFilter:IsDebug()) then TradeFilter:SendMessageToChat(debugFrame, name .. " found") end
+		if (TradeFilter:IsDebug()) then
+			TradeFilter:SendMessageToChat(debugFrame, name .. " found")
+		end
 		if (name == window) then
 			SetChatWindowShown(i, true)
 			--SetChatWindowDocked(i+1, true)
@@ -302,7 +347,34 @@ function TradeFilter:SendMessageToChat(frame, message)
 	end
 end
 
-local function TradeFilter_OnEvent(event)
+local function TradeFilter_OnEvent(...)
+	--[[ Taken from SpamMeNot
+		arg1:	chat message 
+		arg2:	author 
+		arg3:	language 
+		arg4:	channel name with number ex: "1. General - Stormwind City" 
+				zone is always current zone even if not the same as the 
+				channel name 
+		arg5:	target 
+				second player name when two users are passed for a 
+				CHANNEL_NOTICE_USER (E.G. x kicked y) 
+		arg6:	AFK/DND/GM "CHAT_FLAG_"..arg6 flags 
+		arg7:	zone ID used for generic system channels (1 for General, 
+				2 for Trade, 22 for LocalDefense, 23 for WorldDefense and 
+				26 for LFG)	not used for custom channels or if you joined 
+				an Out-Of-Zone channel ex: "General - Stormwind City" 
+		arg8:	channel number 
+		arg9:	channel name without number (this is _sometimes_ in lowercase) 
+				zone is always current zone even if not the same as the 
+				channel name 
+		arg11:	spam id
+	]]--
+	local event = select(1, ...)
+	local msg = select(2, ...)
+	local author = select(3, ...)
+	local status = select(7, ...)
+	local zoneID = select(8, ...)
+	local lineID = select(12, ...)
 	local showIt = true
 	local filterFuncList = ChatFrame_GetMessageEventFilters("CHAT_MSG_CHANNEL")
 	if (TradeFilter:IsDebug() and debugFrame == nil) then
@@ -314,25 +386,58 @@ local function TradeFilter_OnEvent(event)
 		TradeFilter:SendMessageToChat(redirectFrame,"*** Redirect is ON ***")
 	end
 	if (filterFuncList and TradeFilter:IsTurnOn()) then
-		if arg4 == "2. Trade - City" --[[or "4. LookingForGroup" or "Guild"]] then
-			showIt = false
-			if (TradeFilter:IsDebug()) then TradeFilter:SendMessageToChat(debugFrame, "arg1: " .. arg1 .. " arg2: " .. arg2 .. " arg4: " .. arg4) end
+		--[[
+		if (TradeFilter:IsFilterGeneral()) then
+			if (zoneID == 2) then
+				showIt = false
+			end
+		elseif (TradeFilter:IsFilterTrade()) then
+			if (zoneID == 1) then
+				showIt = false
+			end
+		elseif (TradeFilter:IsFilterTrade() and TradeFilter:IsFilterGeneral()) then
+			if (zoneID == 1) or (zoneID == 2) then
+				showIt = false
+			end
+			]]--
+			if (zoneID == 2) then
+				showIt = false
+			if (TradeFilter:IsDebug()) then
+				TradeFilter:SendMessageToChat(debugFrame, "arg1: " .. arg1 .. " arg2: " .. arg2)
+			end
 			for i, matchIt in ipairs(TradeFilter.db.profile.filter) do
-				if (TradeFilter:IsDebug()) then TradeFilter:SendMessageToChat(debugFrame, "Checking for Match with " .. matchIt[1]) end
-					if(TradeFilter:GetAddFilter()) then
-						if matchIt[2] and string.find(arg1, matchIt[1]) or string.find(arg1, TradeFilter.db.profile.addfilter1) or string.find(arg1, TradeFilter.db.profile.addfilter2) or string.find(arg1, TradeFilter.db.profile.addfilter3) then
-							if (TradeFilter:IsDebug()) then TradeFilter:SendMessageToChat(debugFrame, "|cff00ff00**** Matched ***|r") end
-							showIt = true
-					elseif matchIt[2] and string.find(arg1, matchIt[1]) then
-						if (TradeFilter:IsDebug()) then TradeFilter:SendMessageToChat(debugFrame, "|cff00ff00**** Matched ***|r") end
+				if (TradeFilter:IsDebug() and not TradeFilter:GetAddFilter()) then
+					TradeFilter:SendMessageToChat(debugFrame, "Checking for Match with " .. matchIt[1])
+				elseif (TradeFilter:IsDebug() and TradeFilter:GetAddFilter()) then
+					TradeFilter:SendMessageToChat(debugFrame, "Checking for Match with " .. matchIt[1])
+					TradeFilter:SendMessageToChat(debugFrame, TradeFilter.db.profile.addfilter1)
+					TradeFilter:SendMessageToChat(debugFrame, TradeFilter.db.profile.addfilter2)
+					TradeFilter:SendMessageToChat(debugFrame, TradeFilter.db.profile.addfilter3)
+				end
+				if(not TradeFilter:GetAddFilter()) then
+					if matchIt[2] and string.find(arg1, matchIt[1]) then
+						if (TradeFilter:IsDebug()) then
+							TradeFilter:SendMessageToChat(debugFrame, "|cff00ff00**** Matched ***|r")
+						end
+						showIt = true
+					end
+				elseif(TradeFilter:GetAddFilter()) then
+					if matchIt[2] and string.find(arg1, matchIt[1]) or string.find(arg1, TradeFilter.db.profile.addfilter1) or string.find(arg1, TradeFilter.db.profile.addfilter2) or string.find(arg1, TradeFilter.db.profile.addfilter3) then
+						if (TradeFilter:IsDebug()) then
+							TradeFilter:SendMessageToChat(debugFrame, "|cff00ff00**** Matched ***|r")
+						end
 						showIt = true
 					end
 				end
 			end
 			if showIt == false then
 				if lastArg1 ~= arg1 or lastArg2 ~= arg2 then
-					if (TradeFilter:IsDebug()) then TradeFilter:SendMessageToChat(debugFrame, "|cff00ff00*** NO Match - Redirected ***|r") end
-					if (TradeFilter:IsRedirect()) then TradeFilter:SendMessageToChat(redirectFrame, string.format(CHAT_CHANNEL_GET, arg2) .. arg1) end
+					if (TradeFilter:IsDebug()) then
+						TradeFilter:SendMessageToChat(debugFrame, "|cff00ff00*** NO Match - Redirected ***|r")
+					end
+					if (TradeFilter:IsRedirect()) then
+						TradeFilter:SendMessageToChat(redirectFrame, string.format(CHAT_CHANNEL_GET, arg8) .. string.format(CHAT_CHANNEL_GET, arg2) .. arg1)
+					end
 					lastArg1, lastArg2 = arg1, arg2
 					return true
 				end
