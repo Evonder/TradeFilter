@@ -17,4 +17,12 @@ L:AddTranslations("enUS", function() return {
 	["AddFilterUsage"] = "Case Insensitive LFG = [lL][fF][gG]",
 	["RUI"] = "Reload UI",
 	["RUID"] = "Reload the User Interface for some changes to take effect.",
+	["TC"] = "Filter Trade Channel",
+	["TCD"] = "Select this to apply filter to Trade Channel",
+	["GC"] = "Filter General Channel",
+	["GCD"] = "Select this to apply filter to General Channel.",
+	["LFGC"] = "Filter LFG Channel",
+	["LFGCD"] = "Select this to apply filter to LFG Channel.",
+	["SAYC"] = "Filter SAY Channel",
+	["SAYCD"] = "Select this to apply filter to SAY Channel.",
 } end)
