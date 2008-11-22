@@ -49,7 +49,7 @@ local L = Rock("LibRockLocale-1.0"):GetTranslationNamespace("TradeFilter")
 TradeFilter = Rock:NewAddon("TradeFilter", "LibRockDB-1.0", "LibRockConfig-1.0", "LibRockEvent-1.0", "LibRockHook-1.0", "LibRockTimer-1.0", "LibRockConsole-1.0")
 
 local MAJOR_VERSION = "1.1b"
-local MINOR_VERSION = 000 + tonumber(("$Revision: 12 $"):match("%d+"))
+local MINOR_VERSION = 000 + tonumber(("$Revision: 13 $"):match("%d+"))
 TradeFilter.version = MAJOR_VERSION .. " r" .. MINOR_VERSION
 TradeFilter.date = string.sub("$Date: 2008-11-21 12:00:00 -0800 (Fri, 21 Nov 2008) $", 8, 17)
 
