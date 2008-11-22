@@ -43,8 +43,8 @@ local L = Rock("LibRockLocale-1.0"):GetTranslationNamespace("TradeFilter")
 
 TradeFilter = Rock:NewAddon("TradeFilter", "LibRockDB-1.0", "LibRockConfig-1.0", "LibRockEvent-1.0", "LibRockHook-1.0", "LibRockTimer-1.0", "LibRockConsole-1.0")
 
-local MAJOR_VERSION = "1.0"
-local MINOR_VERSION = 000 + tonumber(("$Revision: 8 $"):match("%d+"))
+local MAJOR_VERSION = "1.1b"
+local MINOR_VERSION = 000 + tonumber(("$Revision: 11 $"):match("%d+"))
 TradeFilter.version = MAJOR_VERSION .. "r" .. MINOR_VERSION
 TradeFilter.date = string.sub("$Date: 2008-11-21 12:00:00 -0800 (Fri, 21 Nov 2008) $", 8, 17)
 
@@ -53,6 +53,9 @@ TradeFilter:SetDatabaseDefaults('profile', {
 	turnOn = true,
 	redirect = false,
 	debug = false,
+	filterLFG = false,
+	filterGeneral = false,
+	filterTrade = true,
 	addfilter = false,
 	addfilter1 = "Add Custom Filter 1",
 	addfilter2 = "Add Custom Filter 2",
@@ -104,6 +107,14 @@ end
 
 function TradeFilter:SetAddFilter3(v)
 	self.db.profile.addfilter3 = ""..v..""
+end
+
+function TradeFilter:IsFilterLFG()
+	return self.db.profile.filterLFG
+end
+
+function TradeFilter:ToggleFilterLFG()
+	self.db.profile.filterLFG = not self.db.profile.filterLFG
 end
 
 function TradeFilter:IsFilterGeneral()
@@ -228,6 +239,15 @@ local optionsTable = {
 						get = "IsFilterGeneral",
 						set = "ToggleFilterGeneral",
 					},
+					LFGChannel = {
+						type = 'boolean',
+						order = 3,
+						disabled = false,
+						name = "LFG Chat",
+						desc = "LFG Chat",
+						get = "IsFilterLFG",
+						set = "ToggleFilterLFG",
+					},
 				},
 			},
 			addFilterGroup = {
@@ -291,6 +311,7 @@ end
 
 --[[ Locals ]]--
 local _G = getfenv()
+local filtered = false
 local redirectFrame = nil
 local debugFrame = nil
 local lastArg1
@@ -347,7 +368,7 @@ function TradeFilter:SendMessageToChat(frame, message)
 	end
 end
 
-local function TradeFilter_OnEvent(...)
+local function PreFilter_OnEvent(...)
 	--[[ Taken from SpamMeNot
 		arg1:	chat message 
 		arg2:	author 
@@ -368,14 +389,30 @@ local function TradeFilter_OnEvent(...)
 				zone is always current zone even if not the same as the 
 				channel name 
 		arg11:	spam id
-	]]--
-	local event = select(1, ...)
-	local msg = select(2, ...)
-	local author = select(3, ...)
-	local status = select(7, ...)
+	]]
 	local zoneID = select(8, ...)
-	local lineID = select(12, ...)
-	local showIt = true
+	if (zoneID == 2 and TradeFilter:IsFilterTrade()) then
+		TradeFilter:TradeFilter_OnEvent()
+	elseif (zoneID == 2 and not TradeFilter:IsFilterTrade()) then
+		filtered = false
+	end
+	
+	if (zoneID == 1 and TradeFilter:IsFilterGeneral()) then
+		TradeFilter:TradeFilter_OnEvent()
+	elseif (zoneID == 1 and not TradeFilter:IsFilterGeneral()) then
+		filtered = false
+	end
+	
+	if (zoneID == 4 and TradeFilter:IsFilterLFG()) then
+		TradeFilter:TradeFilter_OnEvent()
+	elseif (zoneID == 1 and not TradeFilter:IsFilterLFG()) then
+		filtered = false
+	end
+	
+	return filtered
+end
+
+function TradeFilter:TradeFilter_OnEvent(...)
 	local filterFuncList = ChatFrame_GetMessageEventFilters("CHAT_MSG_CHANNEL")
 	if (TradeFilter:IsDebug() and debugFrame == nil) then
 		debugFrame = TradeFilter:FindOrCreateChatWindow("DEBUG", true)
@@ -386,22 +423,7 @@ local function TradeFilter_OnEvent(...)
 		TradeFilter:SendMessageToChat(redirectFrame,"*** Redirect is ON ***")
 	end
 	if (filterFuncList and TradeFilter:IsTurnOn()) then
-		--[[
-		if (TradeFilter:IsFilterGeneral()) then
-			if (zoneID == 2) then
-				showIt = false
-			end
-		elseif (TradeFilter:IsFilterTrade()) then
-			if (zoneID == 1) then
-				showIt = false
-			end
-		elseif (TradeFilter:IsFilterTrade() and TradeFilter:IsFilterGeneral()) then
-			if (zoneID == 1) or (zoneID == 2) then
-				showIt = false
-			end
-			]]--
-			if (zoneID == 2) then
-				showIt = false
+				filtered = true
 			if (TradeFilter:IsDebug()) then
 				TradeFilter:SendMessageToChat(debugFrame, "arg1: " .. arg1 .. " arg2: " .. arg2)
 			end
@@ -419,18 +441,18 @@ local function TradeFilter_OnEvent(...)
 						if (TradeFilter:IsDebug()) then
 							TradeFilter:SendMessageToChat(debugFrame, "|cff00ff00**** Matched ***|r")
 						end
-						showIt = true
+						filtered = false
 					end
 				elseif(TradeFilter:GetAddFilter()) then
 					if matchIt[2] and string.find(arg1, matchIt[1]) or string.find(arg1, TradeFilter.db.profile.addfilter1) or string.find(arg1, TradeFilter.db.profile.addfilter2) or string.find(arg1, TradeFilter.db.profile.addfilter3) then
 						if (TradeFilter:IsDebug()) then
 							TradeFilter:SendMessageToChat(debugFrame, "|cff00ff00**** Matched ***|r")
 						end
-						showIt = true
+						filtered = false
 					end
 				end
 			end
-			if showIt == false then
+			if filtered == true then
 				if lastArg1 ~= arg1 or lastArg2 ~= arg2 then
 					if (TradeFilter:IsDebug()) then
 						TradeFilter:SendMessageToChat(debugFrame, "|cff00ff00*** NO Match - Redirected ***|r")
@@ -439,11 +461,11 @@ local function TradeFilter_OnEvent(...)
 						TradeFilter:SendMessageToChat(redirectFrame, string.format(CHAT_CHANNEL_GET, arg8) .. string.format(CHAT_CHANNEL_GET, arg2) .. arg1)
 					end
 					lastArg1, lastArg2 = arg1, arg2
-					return true
+					return
 				end
 			end
 		end
-	end
+	return filtered
 end
 
-ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", TradeFilter_OnEvent)
+ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", PreFilter_OnEvent)
