@@ -8,6 +8,7 @@
 <Include file="libs\LibRockHook-1.0\lib.xml"/>
 <Include file="libs\LibRockTimer-1.0\lib.xml"/>
 <Include file="libs\LibRockConsole-1.0\lib.xml"/>
+<Include file="libs\LibRockConfig-1.0\lib.xml"/>
 <Script file="libs\AceLibrary\AceLibrary.lua"/>
 
 </Ui>
