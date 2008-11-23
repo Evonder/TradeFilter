@@ -1,5 +1,4 @@
 --[[
-
 TradeFilter
 		Filter that shit!
 
@@ -22,7 +21,7 @@ Versioning:
 			- Initial release for WotLK
 			- Added Custom Filter option
 
-* Copyright (c) <year>, <copyright holder>
+* Copyright (c) 2008, Evonder
 * All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
@@ -53,7 +52,7 @@ local L = Rock("LibRockLocale-1.0"):GetTranslationNamespace("TradeFilter")
 TradeFilter = Rock:NewAddon("TradeFilter", "LibRockDB-1.0", "LibRockConfig-1.0", "LibRockEvent-1.0", "LibRockHook-1.0", "LibRockTimer-1.0", "LibRockConsole-1.0")
 
 local MAJOR_VERSION = "1.1"
-local MINOR_VERSION = 000 + tonumber(("$Revision: 21 $"):match("%d+"))
+local MINOR_VERSION = 000 + tonumber(("$Revision: 25 $"):match("%d+"))
 TradeFilter.version = MAJOR_VERSION .. "." .. MINOR_VERSION
 TradeFilter.date = string.sub("$Date: 2008-11-21 12:00:00 -0800 (Fri, 21 Nov 2008) $", 8, 17)
 
@@ -62,6 +61,7 @@ TradeFilter:SetDatabaseDefaults('profile', {
 	turnOn = true,
 	redirect = false,
 	debug = false,
+	filterSAY = false,
 	filterLFG = false,
 	filterGeneral = false,
 	filterTrade = true,
@@ -399,6 +399,7 @@ function TradeFilter:SendMessageToChat(frame, message)
 	end
 end
 
+--[[ PreFilter ]]--
 local function PreFilter_OnEvent(...)
 	--[[ Taken from SpamMeNot
 		arg1:	chat message 
@@ -439,6 +440,7 @@ local function PreFilter_OnEvent(...)
 	return filtered
 end
 
+--[[ Filter Func ]]--
 function TradeFilter:TradeFilter_OnEvent(...)
 	local filterFuncList = ChatFrame_GetMessageEventFilters("CHAT_MSG_CHANNEL")
 	if (TradeFilter:IsDebug() and debugFrame == nil) then

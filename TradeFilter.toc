@@ -7,7 +7,6 @@
 ## X-Website: 
 ## X-Category: Chat & Communication
 ## X-License: BSD
-## Version: 1.1
 ## Version: @project-version@ 
 
 ## OptionalDeps: LibRock-1.0, Ace2
