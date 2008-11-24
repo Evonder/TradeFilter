@@ -17,6 +17,8 @@ Versioning:
 				- SAY Channel
 		-r21
 				- Release
+		-r27
+				- Fixed embeds.xml and .pkgmeta
 	v1.0
 			- Initial release for WotLK
 			- Added Custom Filter option
@@ -411,24 +413,29 @@ local function PreFilter_OnEvent(...)
 		arg8:	channel number 
 	]]
 	local zoneID = select(8, ...)
+
+	--[[ Check for General Channel and User setting ]]--
+	if (zoneID == 1 and TradeFilter:IsFilterGeneral()) then
+		TradeFilter:TradeFilter_OnEvent()
+	else
+		filtered = false
+	end
 	--[[ Check for Trade Channel and User setting ]]--
 	if (zoneID == 2 and TradeFilter:IsFilterTrade()) then
 		TradeFilter:TradeFilter_OnEvent()
 	elseif (zoneID == 2 and not TradeFilter:IsFilterTrade()) then
 		filtered = false
 	end
-	
-	--[[ Check for General Channel and User setting ]]--
-	if (zoneID == 1 and TradeFilter:IsFilterGeneral()) then
-		TradeFilter:TradeFilter_OnEvent()
-	elseif (zoneID == 1 and not TradeFilter:IsFilterGeneral()) then
-		filtered = false
-	end
-	
 	--[[ Check for LFG Channel and User setting ]]--
 	if (zoneID == 4 and TradeFilter:IsFilterLFG()) then
 		TradeFilter:TradeFilter_OnEvent()
-	elseif (zoneID == 1 and not TradeFilter:IsFilterLFG()) then
+	else
+		filtered = false
+	end
+	--[[ Check for test Channel and User setting ]]--
+	if (zoneID == 5 and TradeFilter:IsFilterGeneral()) then
+		TradeFilter:TradeFilter_OnEvent(...)
+	else
 		filtered = false
 	end
 	--[[ Check for SAY Channel and User setting ]]--
@@ -494,7 +501,6 @@ function TradeFilter:TradeFilter_OnEvent(...)
 			end
 		end
 	end
-	return filtered
 end
 
 --[[ Pass ALL chat messages to PreFilter function ]]--
