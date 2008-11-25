@@ -54,7 +54,7 @@ local L = Rock("LibRockLocale-1.0"):GetTranslationNamespace("TradeFilter")
 TradeFilter = Rock:NewAddon("TradeFilter", "LibRockDB-1.0", "LibRockConfig-1.0", "LibRockEvent-1.0", "LibRockHook-1.0", "LibRockTimer-1.0", "LibRockConsole-1.0")
 
 local MAJOR_VERSION = "1.1"
-local MINOR_VERSION = 000 + tonumber(("$Revision: 34 $"):match("%d+"))
+local MINOR_VERSION = 000 + tonumber(("$Revision: 39 $"):match("%d+"))
 TradeFilter.version = MAJOR_VERSION .. "." .. MINOR_VERSION
 TradeFilter.date = string.sub("$Date: 2008-11-21 12:00:00 -0800 (Fri, 21 Nov 2008) $", 8, 17)
 
@@ -428,7 +428,7 @@ local function PreFilter_OnEvent(...)
 	--[[ Check for LFG Channel and User setting ]]--
 	if (zoneID == 4 and TradeFilter:IsFilterLFG()) then
 		TradeFilter:TradeFilter_OnEvent()
-	elseif (zoneID == 1 and not TradeFilter:IsFilterLFG()) then
+	elseif (zoneID == 4 and not TradeFilter:IsFilterLFG()) then
 		filtered = false
 	end
 	--[[ Check for SAY Channel and User setting ]]--
