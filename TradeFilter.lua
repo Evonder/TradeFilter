@@ -277,7 +277,7 @@ local optionsTable = {
 						order = 3,
 						disabled = false,
 						name = L["SAYC"],
-						desc = L["SAYD"],
+						desc = L["SAYCD"],
 						get = "IsFilterSAY",
 						set = "ToggleFilterSAY",
 					},
