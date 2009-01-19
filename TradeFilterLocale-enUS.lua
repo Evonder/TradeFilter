@@ -1,3 +1,9 @@
+--[[
+File Author: @file-author@
+File Revision: @file-revision@
+File Date: @file-date-iso@
+]]--
+
 local L = Rock("LibRockLocale-1.0"):GetTranslationNamespace("TradeFilter")
 L:AddTranslations("enUS", function() return {
 	["TurnOn"] = "Turn On",

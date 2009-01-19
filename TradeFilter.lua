@@ -2,9 +2,12 @@
 TradeFilter
 		Filter that shit!
 
-By Evonder (evonder@gmail.com) AKA: Networkerror
+File Author: @file-author@
+File Revision: @file-revision@
+File Date: @file-date-iso@
 
-Basic structure and code ripped from crashmstr (wowzn@crashmstr.com)
+
+Basic structure and code from crashmstr (wowzn@crashmstr.com)
 		which was ripped from TasteTheNaimbow (Thank you Guillotine!)
 
 Versioning:
@@ -54,7 +57,7 @@ local L = Rock("LibRockLocale-1.0"):GetTranslationNamespace("TradeFilter")
 TradeFilter = Rock:NewAddon("TradeFilter", "LibRockDB-1.0", "LibRockConfig-1.0", "LibRockEvent-1.0", "LibRockHook-1.0", "LibRockTimer-1.0", "LibRockConsole-1.0")
 
 local MAJOR_VERSION = "1.1"
-local MINOR_VERSION = 000 + tonumber(("$Revision: 39 $"):match("%d+"))
+local MINOR_VERSION = 000 + tonumber(("$Revision: 42 $"):match("%d+"))
 TradeFilter.version = MAJOR_VERSION .. "." .. MINOR_VERSION
 TradeFilter.date = string.sub("$Date: 2008-11-21 12:00:00 -0800 (Fri, 21 Nov 2008) $", 8, 17)
 
@@ -414,25 +417,25 @@ local function PreFilter_OnEvent(...)
 	]]
 	local zoneID = select(8, ...)
 	--[[ Check for Trade Channel and User setting ]]--
-	if (zoneID == 2 and TradeFilter:IsFilterTrade()) then
+	if (zoneID == 2 and TradeFilter:IsFilterTrade() and arg2 ~= UnitName("Player")) then
 		TradeFilter:TradeFilter_OnEvent()
 	elseif (zoneID == 2 and not TradeFilter:IsFilterTrade()) then
 		filtered = false
 	end
 	--[[ Check for General Channel and User setting ]]--
-	if (zoneID == 1 and TradeFilter:IsFilterGeneral()) then
+	if (zoneID == 1 and TradeFilter:IsFilterGeneral() and arg2 ~= UnitName("Player")) then
 		TradeFilter:TradeFilter_OnEvent()
 	elseif (zoneID == 1 and not TradeFilter:IsFilterGeneral()) then
 		filtered = false
 	end
 	--[[ Check for LFG Channel and User setting ]]--
-	if (zoneID == 4 and TradeFilter:IsFilterLFG()) then
+	if (zoneID == 4 and TradeFilter:IsFilterLFG() and arg2 ~= UnitName("Player")) then
 		TradeFilter:TradeFilter_OnEvent()
 	elseif (zoneID == 4 and not TradeFilter:IsFilterLFG()) then
 		filtered = false
 	end
 	--[[ Check for SAY Channel and User setting ]]--
-	if (zoneID == 0 and TradeFilter:IsFilterSAY()) then
+	if (zoneID == 0 and TradeFilter:IsFilterSAY() and arg2 ~= UnitName("Player")) then
 		TradeFilter:TradeFilter_OnEvent()
 	elseif (zoneID == 0 and not TradeFilter:IsFilterSAY()) then
 		filtered = false
