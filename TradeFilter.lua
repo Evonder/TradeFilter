@@ -6,7 +6,6 @@ File Author: networkerror
 File Revision: 41
 File Date: 2009-01-19T01:56:36Z
 
-
 Basic structure and code from crashmstr (wowzn@crashmstr.com)
 		which was ripped from TasteTheNaimbow (Thank you Guillotine!)
 
