@@ -10,22 +10,6 @@ File Date: 2009-01-19T01:56:36Z
 Basic structure and code from crashmstr (wowzn@crashmstr.com)
 		which was ripped from TasteTheNaimbow (Thank you Guillotine!)
 
-Versioning:
-	v1.1
-			- Added Configurable Channel Filtering
-				- Trade
-				- General
-				- LFG
-		-r16
-				- SAY Channel
-		-r21
-				- Release
-		-r27
-				- Fixed embeds.xml and .pkgmeta
-	v1.0
-			- Initial release for WotLK
-			- Added Custom Filter option
-
 * Copyright (c) 2008, Evonder
 * All rights reserved.
 *
