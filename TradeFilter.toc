@@ -1,10 +1,10 @@
 ## Interface: 30000
-## Title: Trade|cffffffffFilter|r 1.0
+## Title: Trade|cffffffffFilter|r 1.1
 ## Notes: Filter the shit outta trade channel.
 ## Author: @project-author@
 ## Release Date: @project-date-iso@
-## Inspired By: crashmstr(wowzn@crashmstr.com)
-## X-eMail: evonder@gmail.com
+## Inspired By: crashmstr(wowzn AT crashmstr DOT com)
+## X-eMail: evonder AT gmail DOT com
 ## X-Website: 
 ## X-Category: Chat & Communication
 ## X-License: BSD
@@ -15,8 +15,20 @@
 ## X-Embeds: LibRock-1.0, LibRockDB-1.0,, LibRockHook-1.0, LibRockEvent-1.0, LibRockTimer-1.0, LibRockConsole-1.0, LibRockLocale-1.0, AceLibrary
 ## SavedVariables: TradeFilterDB
 
-embeds.xml
+#@no-lib-strip@
+libs\LibRock-1.0\lib.xml
+libs\LibRockDB-1.0\lib.xml
+libs\LibRockLocale-1.0\lib.xml
+libs\LibRockEvent-1.0\lib.xml
+libs\LibRockHook-1.0\lib.xml
+libs\LibRockTimer-1.0\lib.xml
+libs\LibRockConsole-1.0\lib.xml
+libs\LibRockConfig-1.0\lib.xml
+libs\AceLibrary\AceLibrary.lua
+#@end-no-lib-strip@
 
-TradeFilterLocale-enUS.lua
-
+## Core ##
 TradeFilter.lua
+
+## Locale ##
+TradeFilterLocale-enUS.lua
