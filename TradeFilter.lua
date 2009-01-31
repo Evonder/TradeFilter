@@ -2,9 +2,9 @@
 TradeFilter
 		Filter that shit!
 
-File Author: networkerror
-File Revision: 41
-File Date: 2009-01-19T01:56:36Z
+File Author: @file-author@
+File Revision: @file-revision@
+File Date: @file-date-iso@
 
 Basic structure and code from crashmstr (wowzn@crashmstr.com)
 		which was ripped from TasteTheNaimbow (Thank you Guillotine!)
@@ -398,8 +398,8 @@ local function PreFilter_OnEvent(...)
 				an Out-Of-Zone channel ex: "General - Stormwind City" 
 		arg8:	channel number 
 	]]
-	local zoneID = select(7, ...)
-	local chanID = select(8, ...)
+	local zoneID = select(7, ...) or arg7 --Thank you Speedwaystar
+	local chanID = select(8, ...) or arg8 --Thank you Speedwaystar
 	--[[ Check for Trade Channel and User setting ]]--
 	if (zoneID == 2 and TradeFilter:IsFilterTrade() and arg2 ~= UnitName("Player")) then
 		TradeFilter:TradeFilter_OnEvent()
