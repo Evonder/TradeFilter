@@ -2,9 +2,9 @@
 TradeFilter
 		Filter that shit!
 
-File Author: @file-author@
-File Revision: @file-revision@
-File Date: @file-date-iso@
+File Author: networkerror
+File Revision: 41
+File Date: 2009-01-19T01:56:36Z
 
 
 Basic structure and code from crashmstr (wowzn@crashmstr.com)
@@ -415,7 +415,8 @@ local function PreFilter_OnEvent(...)
 				an Out-Of-Zone channel ex: "General - Stormwind City" 
 		arg8:	channel number 
 	]]
-	local zoneID = select(8, ...)
+	local zoneID = select(7, ...)
+	local chanID = select(8, ...)
 	--[[ Check for Trade Channel and User setting ]]--
 	if (zoneID == 2 and TradeFilter:IsFilterTrade() and arg2 ~= UnitName("Player")) then
 		TradeFilter:TradeFilter_OnEvent()
@@ -423,21 +424,21 @@ local function PreFilter_OnEvent(...)
 		filtered = false
 	end
 	--[[ Check for General Channel and User setting ]]--
-	if (zoneID == 1 and TradeFilter:IsFilterGeneral() and arg2 ~= UnitName("Player")) then
+	if (chanID == 1 and TradeFilter:IsFilterGeneral() and arg2 ~= UnitName("Player")) then
 		TradeFilter:TradeFilter_OnEvent()
-	elseif (zoneID == 1 and not TradeFilter:IsFilterGeneral()) then
+	elseif (chanID == 1 and not TradeFilter:IsFilterGeneral()) then
 		filtered = false
 	end
 	--[[ Check for LFG Channel and User setting ]]--
-	if (zoneID == 4 and TradeFilter:IsFilterLFG() and arg2 ~= UnitName("Player")) then
+	if (zoneID == 26 and TradeFilter:IsFilterLFG() and arg2 ~= UnitName("Player")) then
 		TradeFilter:TradeFilter_OnEvent()
-	elseif (zoneID == 4 and not TradeFilter:IsFilterLFG()) then
+	elseif (chanID == 26 and not TradeFilter:IsFilterLFG()) then
 		filtered = false
 	end
 	--[[ Check for SAY Channel and User setting ]]--
-	if (zoneID == 0 and TradeFilter:IsFilterSAY() and arg2 ~= UnitName("Player")) then
+	if (chanID == 0 and TradeFilter:IsFilterSAY() and arg2 ~= UnitName("Player")) then
 		TradeFilter:TradeFilter_OnEvent()
-	elseif (zoneID == 0 and not TradeFilter:IsFilterSAY()) then
+	elseif (chanID == 0 and not TradeFilter:IsFilterSAY()) then
 		filtered = false
 	end
 	return filtered
