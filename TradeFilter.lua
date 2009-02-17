@@ -329,7 +329,7 @@ local optionsTable = {
 end
 
  --[[ Locals ]]--
- local filtered = false
+ --local filtered = false
  local redirectFrame = nil
  local debugFrame = nil
  local lastArg1
