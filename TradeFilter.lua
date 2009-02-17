@@ -328,6 +328,11 @@ local optionsTable = {
 	self:SetConfigSlashCommand("/TradeFilter", "/Filter")
 end
 
+ --[[ Locals ]]--
+ local filtered = false
+ local redirectFrame = nil
+ local debugFrame = nil
+ local lastArg1
 
 --[[ Window Functions ]]--
 function TradeFilter:FindOrCreateChatWindow(window, create)
@@ -423,10 +428,7 @@ end
 
 --[[ Filter Func ]]--
 function TradeFilter:TradeFilter_OnEvent(...)
-	local redirectFrame = nil
-	local debugFrame = nil
-	local lastArg1
-	local lastArg2
+	local filtered = false
 	local filterFuncList = ChatFrame_GetMessageEventFilters("CHAT_MSG_CHANNEL")
 	if (TradeFilter:IsDebug() and debugFrame == nil) then
 		debugFrame = TradeFilter:FindOrCreateChatWindow("DEBUG", true)
@@ -436,7 +438,6 @@ function TradeFilter:TradeFilter_OnEvent(...)
 		redirectFrame = TradeFilter:FindOrCreateChatWindow("SPAM", true)
 		TradeFilter:SendMessageToChat(redirectFrame,"*** Redirect is ON ***")
 	end
-	local filtered = false
 	if (filterFuncList and TradeFilter:IsTurnOn()) then
 		filtered = true
 		if (TradeFilter:IsDebug()) then
@@ -473,7 +474,7 @@ function TradeFilter:TradeFilter_OnEvent(...)
 					TradeFilter:SendMessageToChat(debugFrame, "|cff00ff00*** NO Match - Redirected ***|r")
 				end
 				if (TradeFilter:IsRedirect()) then
-					TradeFilter:SendMessageToChat(redirectFrame, "zID" .. string.format(CHAT_CHANNEL_GET, arg7) .. ", cID" .. string.format(CHAT_CHANNEL_GET, arg8) .. "," .. string.format(CHAT_CHANNEL_GET, arg2) .. arg1)
+					TradeFilter:SendMessageToChat(redirectFrame, "zID" .. string.format(CHAT_CHANNEL_GET, arg7) .. " cID" .. string.format(CHAT_CHANNEL_GET, arg8) .. " " .. string.format(CHAT_CHANNEL_GET, arg2) .. arg1)
 				end
 				lastArg1, lastArg2 = arg1, arg2
 				return
