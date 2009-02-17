@@ -328,13 +328,6 @@ local optionsTable = {
 	self:SetConfigSlashCommand("/TradeFilter", "/Filter")
 end
 
---[[ Locals ]]--
-local _G = getfenv()
-local filtered = false
-local redirectFrame = nil
-local debugFrame = nil
-local lastArg1
-local lastArg2
 
 --[[ Window Functions ]]--
 function TradeFilter:FindOrCreateChatWindow(window, create)
@@ -398,29 +391,30 @@ local function PreFilter_OnEvent(...)
 				an Out-Of-Zone channel ex: "General - Stormwind City" 
 		arg8:	channel number 
 	]]
+	local filtered = false
 	local zoneID = select(7, ...) or arg7 --Thank you Speedwaystar
 	local chanID = select(8, ...) or arg8 --Thank you Speedwaystar
 	--[[ Check for Trade Channel and User setting ]]--
 	if (zoneID == 2 and TradeFilter:IsFilterTrade() and arg2 ~= UnitName("Player")) then
-		TradeFilter:TradeFilter_OnEvent()
+		filtered = TradeFilter:TradeFilter_OnEvent()
 	elseif (zoneID == 2 and not TradeFilter:IsFilterTrade()) then
 		filtered = false
 	end
 	--[[ Check for General Channel and User setting ]]--
 	if (chanID == 1 and TradeFilter:IsFilterGeneral() and arg2 ~= UnitName("Player")) then
-		TradeFilter:TradeFilter_OnEvent()
+		filtered = TradeFilter:TradeFilter_OnEvent()
 	elseif (chanID == 1 and not TradeFilter:IsFilterGeneral()) then
 		filtered = false
 	end
 	--[[ Check for LFG Channel and User setting ]]--
 	if (zoneID == 26 and TradeFilter:IsFilterLFG() and arg2 ~= UnitName("Player")) then
-		TradeFilter:TradeFilter_OnEvent()
+		filtered = TradeFilter:TradeFilter_OnEvent()
 	elseif (chanID == 26 and not TradeFilter:IsFilterLFG()) then
 		filtered = false
 	end
 	--[[ Check for SAY Channel and User setting ]]--
 	if (chanID == 0 and TradeFilter:IsFilterSAY() and arg2 ~= UnitName("Player")) then
-		TradeFilter:TradeFilter_OnEvent()
+		filtered = TradeFilter:TradeFilter_OnEvent()
 	elseif (chanID == 0 and not TradeFilter:IsFilterSAY()) then
 		filtered = false
 	end
@@ -429,6 +423,10 @@ end
 
 --[[ Filter Func ]]--
 function TradeFilter:TradeFilter_OnEvent(...)
+	local redirectFrame = nil
+	local debugFrame = nil
+	local lastArg1
+	local lastArg2
 	local filterFuncList = ChatFrame_GetMessageEventFilters("CHAT_MSG_CHANNEL")
 	if (TradeFilter:IsDebug() and debugFrame == nil) then
 		debugFrame = TradeFilter:FindOrCreateChatWindow("DEBUG", true)
@@ -438,6 +436,7 @@ function TradeFilter:TradeFilter_OnEvent(...)
 		redirectFrame = TradeFilter:FindOrCreateChatWindow("SPAM", true)
 		TradeFilter:SendMessageToChat(redirectFrame,"*** Redirect is ON ***")
 	end
+	local filtered = false
 	if (filterFuncList and TradeFilter:IsTurnOn()) then
 		filtered = true
 		if (TradeFilter:IsDebug()) then
@@ -474,7 +473,7 @@ function TradeFilter:TradeFilter_OnEvent(...)
 					TradeFilter:SendMessageToChat(debugFrame, "|cff00ff00*** NO Match - Redirected ***|r")
 				end
 				if (TradeFilter:IsRedirect()) then
-					TradeFilter:SendMessageToChat(redirectFrame, string.format(CHAT_CHANNEL_GET, arg8) .. string.format(CHAT_CHANNEL_GET, arg2) .. arg1)
+					TradeFilter:SendMessageToChat(redirectFrame, "zID" .. string.format(CHAT_CHANNEL_GET, arg7) .. ", cID" .. string.format(CHAT_CHANNEL_GET, arg8) .. "," .. string.format(CHAT_CHANNEL_GET, arg2) .. arg1)
 				end
 				lastArg1, lastArg2 = arg1, arg2
 				return
