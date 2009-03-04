@@ -477,7 +477,6 @@ function TradeFilter:TradeFilter_OnEvent(...)
 					TradeFilter:SendMessageToChat(redirectFrame, "zID" .. string.format(CHAT_CHANNEL_GET, arg7) .. " cID" .. string.format(CHAT_CHANNEL_GET, arg8) .. " " .. string.format(CHAT_CHANNEL_GET, arg2) .. arg1)
 				end
 				lastArg1, lastArg2 = arg1, arg2
-				return
 			end
 		end
 	end
