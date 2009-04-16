@@ -396,29 +396,42 @@ local function PreFilter_OnEvent(...)
 				an Out-Of-Zone channel ex: "General - Stormwind City" 
 		arg8:	channel number 
 	]]
+	  -- the arguments a1..a9 are all nil until Blizzard actually passes them
+    -- we're expected to use global variables which is generally a bad idea
+    -- global variables may not be available in a later patch so we have to do this:
 	local filtered = false
-	local zoneID = select(7, ...) or arg7 --Thank you Speedwaystar
-	local chanID = select(8, ...) or arg8 --Thank you Speedwaystar
+	local userID = arg2 or select(2, ...)
+	local zoneID = arg7 or select(7, ...)
+	local chanID = arg8 or select(8, ...)
+	--TradeFilter:SendMessageToChat(debugFrame,"userID, zoneID, chanID")
+	if (TradeFilter:IsDebug() and debugFrame == nil) then
+		debugFrame = TradeFilter:FindOrCreateChatWindow("DEBUG", true)
+		TradeFilter:SendMessageToChat(debugFrame,"*** Debug is ON: Passing PreFilter ***")
+	end
+	if (TradeFilter:IsRedirect() and redirectFrame == nil) then
+		redirectFrame = TradeFilter:FindOrCreateChatWindow("SPAM", true)
+		TradeFilter:SendMessageToChat(redirectFrame,"*** Redirect is ON: Passing PreFilter ***")
+	end
 	--[[ Check for Trade Channel and User setting ]]--
-	if (zoneID == 2 and TradeFilter:IsFilterTrade() and arg2 ~= UnitName("Player")) then
+	if (zoneID == 2 and TradeFilter:IsFilterTrade() and userID ~= UnitName("Player")) then
 		filtered = TradeFilter:TradeFilter_OnEvent()
 	elseif (zoneID == 2 and not TradeFilter:IsFilterTrade()) then
 		filtered = false
 	end
 	--[[ Check for General Channel and User setting ]]--
-	if (chanID == 1 and TradeFilter:IsFilterGeneral() and arg2 ~= UnitName("Player")) then
+	if (chanID == 1 and TradeFilter:IsFilterGeneral()and userID ~= UnitName("Player")) then
 		filtered = TradeFilter:TradeFilter_OnEvent()
 	elseif (chanID == 1 and not TradeFilter:IsFilterGeneral()) then
 		filtered = false
 	end
 	--[[ Check for LFG Channel and User setting ]]--
-	if (zoneID == 26 and TradeFilter:IsFilterLFG() and arg2 ~= UnitName("Player")) then
+	if (zoneID == 26 and TradeFilter:IsFilterLFG() and userID ~= UnitName("Player")) then
 		filtered = TradeFilter:TradeFilter_OnEvent()
 	elseif (chanID == 26 and not TradeFilter:IsFilterLFG()) then
 		filtered = false
 	end
 	--[[ Check for SAY Channel and User setting ]]--
-	if (chanID == 0 and TradeFilter:IsFilterSAY() and arg2 ~= UnitName("Player")) then
+	if (chanID == 0 and TradeFilter:IsFilterSAY() and userID ~= UnitName("Player")) then
 		filtered = TradeFilter:TradeFilter_OnEvent()
 	elseif (chanID == 0 and not TradeFilter:IsFilterSAY()) then
 		filtered = false

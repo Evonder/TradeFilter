@@ -1,4 +1,4 @@
-## Interface: 30000
+## Interface: 30100
 ## Title: Trade|cffffffffFilter|r 1.1
 ## Notes: Filter the shit outta trade channel.
 ## Author: @project-author@
