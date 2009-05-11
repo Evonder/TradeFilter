@@ -1,4 +1,4 @@
-package-as: TradeFilter
+package-as: TradeFilter3
 
 externals:
    libs/LibStub:
