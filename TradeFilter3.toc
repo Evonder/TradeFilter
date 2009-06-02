@@ -12,10 +12,6 @@
 ## Version: @project-version@
 ## Revision: @project-revision@
 ## SavedVariables: TradeFilter3DB
-## X-Curse-Packaged-Version: r55
-## X-Curse-Project-Name: TradeFilter3
-## X-Curse-Project-ID: trade-filter
-## X-Curse-Repository-ID: wow/trade-filter/mainline
 
 #@no-lib-strip@
 embeds.xml
