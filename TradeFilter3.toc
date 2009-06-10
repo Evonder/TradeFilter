@@ -1,5 +1,5 @@
 ## Interface: 30100
-## Title: Trade|cffffffffFilter|r 3.0
+## Title: Trade|cffffffffFilter|r3
 ## Notes: Filter the shit outta trade channel.
 ## Author: @project-author@
 ## Release Date: @project-date-iso@
@@ -13,6 +13,9 @@
 ## Revision: @project-revision@
 ## SavedVariables: TradeFilter3DB
 
+## LoadManagers: AddonLoader
+## X-LoadOn-Always: true
+
 #@no-lib-strip@
 embeds.xml
 #@end-no-lib-strip@
@@ -22,3 +25,4 @@ TradeFilter3Locale.lua
 
 ## Core ##
 TradeFilter3.lua
+TradeFilter3Options.lua

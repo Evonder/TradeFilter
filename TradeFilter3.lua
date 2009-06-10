@@ -35,7 +35,7 @@ Basic structure and code from crashmstr (wowzn@crashmstr.com)
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 --]]
 
-TradeFilter3 = LibStub("AceAddon-3.0"):NewAddon("TradeFilter3", "AceHook-3.0", "AceEvent-3.0", "AceConsole-3.0")
+TradeFilter3 = LibStub("AceAddon-3.0"):NewAddon("TradeFilter3", "AceConsole-3.0", "AceEvent-3.0")
 local TF3 = TradeFilter3
 
 local MAJOR_VERSION = "3.0"
@@ -43,64 +43,89 @@ local MINOR_VERSION = 000 + tonumber(("$Revision: @project-revision@ $"):match("
 TF3.version = MAJOR_VERSION .. "." .. MINOR_VERSION
 TF3.date = string.sub("$Date: @file-date-iso@ $", 8, 17)
 
---[[ Libraries ]]--
-local L =  LibStub("AceLocale-3.0"):GetLocale("TradeFilter3")
-local ACD = LibStub("AceConfigDialog-3.0")
+--[[ Locals ]]--
+local _G = _G
+local ipairs = _G.ipairs
+local find = _G.string.find
+local lower = _G.string.lower
+local formatIt = _G.string.format
+local filtered = false
+local redirectFrame = "SPAM"
+local debugFrame = "DEBUG"
+local lastArg1
+local lastArg2
+
+--[[ Database Defaults ]]--
+defaults = {
+	profile = {
+		turnOn = true,
+		redirect = false,
+		debug = false,
+		filterSAY = false,
+		filterLFG = false,
+		filterGeneral = false,
+		filterTrade = true,
+		addfilter_enable = false,
+		friendslist_populated = false,
+		friendslist = {},
+		filter = {
+			"CUSTOM FILTER 1",
+			"CUSTOM FILTER 2",
+			"CUSTOM FILTER 3",
+			"[lL][fF] [pP][oO][rR][tT]",
+			"[lL][fF][mM]",
+			"[bB][uU][yY][iI][nN][gG]",
+			"wt[bBsStT]",
+			"[lL][fF][wWeE]",
+			"[lL][fF][eE][nN][cC][hH][aA][nN][tT]",
+			"[lL][fF] [eE][nN][cC][hH][aA][nN][tT]",
+			"[lL][fF] [jJ][cC]",
+			"[lL][fF] [dD][pP][sS]",
+			"[lL][fF] [tT][aA][nN][kK]",
+			"[lL][fF] [hH][eE][aA][lL][eE][rR]",
+			"[lL][fF]%d[mM]?",
+			"[lL][fF][mM]?",
+			"[lL][fF][gG]",
+			"AH",
+			"looking for work",
+			"lockpick",
+			"[sS][eE][lL][lL][iI][nN][gG]",
+			"[bB][uU][yY][iI][nN][gG]",
+			"3[vV]3",
+			"5[vV]5",
+		},
+	}
+}
 
 function TF3:OnInitialize()
-	--[[ Database Defaults ]]--
-	local defaults = {
-		profile = {
-			turnOn = true,
-			redirect = false,
-			debug = false,
-			filterSAY = false,
-			filterLFG = false,
-			filterGeneral = false,
-			filterTrade = true,
-			addfilter = false,
-			addfilter1 = "[lL][fF] [pP][oO][rR][tT]",
-			addfilter2 = "[lL][fF][mM]",
-			addfilter3 = "[bB][uU][yY][iI][nN][gG]",
-			filter = {
-				{"[wW][tT][bBsStT]",true},
-				{"[lL][fF][wWeE]",true},
-				{"[lL][fF][eE][nN][cC][hH][aA][nN][tT]",true},
-				{"[lL][fF] [eE][nN][cC][hH][aA][nN][tT]",true},
-				{"[lL][fF] [jJ][cC]",true},
-				{"[lL][fF] [dD][pP][sS]",true},
-				{"[lL][fF] [tT][aA][nN][kK]",true},
-				{"[lL][fF] [hH][eE][aA][lL][eE][rR]",true},
-				{"[lL][fF]%d[mM]?",true},
-				{"[lL][fF][mM]?",true},
-				{"[lL][fF][gG]",true},
-				{"AH",true},
-				{"looking for work",true},
-				{"lockpick",true},
-				{"[sS][eE][lL][lL][iI][nN][gG]",true},
-				{"[bB][uU][yY][iI][nN][gG]",true},
-				{"3[vV]3",true},
-				{"5[vV]5",true},
-			},
-		}
-	}
+	--[[ Libraries ]]--
+	local L =  LibStub("AceLocale-3.0"):GetLocale("TradeFilter3")
+	local ACD = LibStub("AceConfigDialog-3.0")
 
-	self.db = LibStub("AceDB-3.0"):New("TradeFilter3DB", defaults, "Default");
+	self.db = LibStub("AceDB-3.0"):New("TradeFilter3DB", defaults);
 
-	local ACP = LibStub("AceDBOptions-3.0"):GetOptionsTable(self.db);
+	local ACP = LibStub("AceDBOptions-3.0"):GetOptionsTable(TradeFilter3.db);
 
-	self:RegisterChatCommand("filter", function() self:OpenOptions() end)
-	self:RegisterChatCommand("tradefilter", function() self:OpenOptions() end)
+	local AC = LibStub("AceConsole-3.0")
+	AC:RegisterChatCommand("filter", function() TF3:OpenOptions() end)
+	AC:RegisterChatCommand("tradefilter", function() TF3:OpenOptions() end)
+	AC:Print("|cFF33FF99TradeFilter3|r: " .. MAJOR_VERSION .. "." .. MINOR_VERSION .. " |cff00ff00Loaded!|r")
 
 	local ACR = LibStub("AceConfigRegistry-3.0")
 	ACR:RegisterOptionsTable("TradeFilter3", options)
 	ACR:RegisterOptionsTable("TradeFilter3P", ACP)
 
 	-- Set up options panels.
-	self.OptionsPanel = ACD:AddToBlizOptions(self.name, L["TFR"], nil, "general")
+	self.OptionsPanel = ACD:AddToBlizOptions(self.name, L["TFR"], nil, "generalGroup")
 	self.OptionsPanel.channel = ACD:AddToBlizOptions(self.name, L["channelGroup"], self.name, "channelGroup")
 	self.OptionsPanel.custom = ACD:AddToBlizOptions(self.name, L["addFilterGroup"], self.name, "addFilterGroup")
 	self.OptionsPanel.profiles = ACD:AddToBlizOptions("TradeFilter3P", L["Profiles"], self.name)
+	
+	if IsLoggedIn() then
+		TF3:IsLoggedIn()
+	else
+		TF3:RegisterEvent("PLAYER_LOGIN", "IsLoggedIn")
+	end
 end
 
 -- :OpenOptions(): Opens the options window.
@@ -108,277 +133,62 @@ function TF3:OpenOptions()
 	InterfaceOptionsFrame_OpenToCategory(self.OptionsPanel)
 end
 
---[[ Options Table ]]--
-function TF3:GetAddFilter()
-	return self.db.profile.addfilter
-end
-
-function TF3:SetAddFilter()
-	self.db.profile.addfilter = not self.db.profile.addfilter
-end
-
-function TF3:GetAddFilter1()
-	return self.db.profile.addfilter1
-end
-
-function TF3:SetAddFilter1(v)
-	self.db.profile.addfilter1 = ""..v..""
-end
-
-function TF3:GetAddFilter2()
-	return self.db.profile.addfilter2
-end
-
-function TF3:SetAddFilter2(v)
-	self.db.profile.addfilter2 = ""..v..""
-end
-
-function TF3:GetAddFilter3()
-	return self.db.profile.addfilter3
-end
-
-function TF3:SetAddFilter3(v)
-	self.db.profile.addfilter3 = ""..v..""
-end
-
-function TF3:IsFilterSAY()
-	return self.db.profile.filterSAY
-end
-
-function TF3:ToggleFilterSAY()
-	self.db.profile.filterSAY = not self.db.profile.filterSAY
-end
-
-function TF3:IsFilterLFG()
-	return self.db.profile.filterLFG
-end
-
-function TF3:ToggleFilterLFG()
-	self.db.profile.filterLFG = not self.db.profile.filterLFG
-end
-
-function TF3:IsFilterGeneral()
-	return self.db.profile.filtergeneral
-end
-
-function TF3:ToggleFilterGeneral()
-	self.db.profile.filtergeneral = not self.db.profile.filtergeneral
-end
-
-function TF3:IsFilterTrade()
-	return self.db.profile.filtertrade
-end
-
-function TF3:ToggleFilterTrade()
-	self.db.profile.filtertrade = not self.db.profile.filtertrade
-end
-
-function TF3:IsDebug()
-	return self.db.profile.debug
-end
-
-function TF3:ToggleDebug()
-	self.db.profile.debug = not self.db.profile.debug
-end
-
-function TF3:IsRedirect()
-	return self.db.profile.redirect
-end
-
-function TF3:ToggleRedirect()
-	self.db.profile.redirect = not self.db.profile.redirect
-end
-
-function TF3:IsTurnOn()
-	return self.db.profile.turnOn
-end
-
-function TF3:ToggleTurnOn()
-	if (self.db.profile.turnOn == false) then
-		print("|cFF33FF99TradeFilter3|r: " .. TF3.version .. " |cff00ff00Enabled|r")
-		self.db.profile.turnOn = not self.db.profile.turnOn
+--[[ Friends Functions ]]--
+function TF3:IsLoggedIn()
+	if (self.db.profile.friendslist_populated == false) then
+		TF3:PopulateFriendsList()
 	else
-		print("|cFF33FF99TradeFilter3|r: " .. TF3.version .. " |cffff8080Disabled|r")
-		self.db.profile.turnOn = not self.db.profile.turnOn
+		TF3:RegisterEvent("FRIENDLIST_UPDATE", "UpdateFriendsList")
 	end
+TF3:UnregisterEvent("PLAYER_LOGIN")
 end
 
-options = {
-		type='group',
-		name = TF3.name,
-		handler = TF3,
-		args = {
-			general = {
-				type = "group",
-				name = TF3.name,
-				args = {
-					turnOn = {
-						type = 'toggle',
-						order = 1,
-						width = "double",
-						name = L["TurnOn"],
-						desc = L["TurnOnDesc"],
-						get = "IsTurnOn",
-						set = "ToggleTurnOn",
-					},
-					redirect = {
-						type = 'toggle',
-						order = 2,
-						width = "full",
-						name = L["Redir"],
-						desc = L["RedirDesc"],
-						get = "IsRedirect",
-						set = "ToggleRedirect",
-					},
-					debug = {
-						type = 'toggle',
-						order = 3,
-						width = "full",
-						disabled = false,
-						hidden = false,
-						name = L["Debug"],
-						desc = L["DebugDesc"],
-						get = "IsDebug",
-						set = "ToggleDebug",
-					},
-					reload = {
-						type = 'execute',
-						name = L["RUI"],
-						desc = L["RUID"],
-						func = function()
-							_G.ReloadUI()
-						end,
-						disabled = function()
-							if not TF3:IsRedirect() or not TF3:IsDebug() then
-								return false
-							end
-							return true
-						end,
-						order = -1,
-					},
-				},
-			},
-			channelGroup = {
-				type = 'group',
-				order = 1,
-				width = "double",
-				disabled = false,
-				name = "Channel Selection",
-				desc = "Channel Selection",
-				args = {
-					tradeChannel = {
-						type = 'toggle',
-						order = 1,
-						width = "double",
-						disabled = false,
-						name = L["TC"],
-						desc = L["TCD"],
-						get = "IsFilterTrade",
-						set = "ToggleFilterTrade",
-					},
-					generalChannel = {
-						type = 'toggle',
-						order = 2,
-						width = "double",
-						disabled = false,
-						name = L["GC"],
-						desc = L["GCD"],
-						get = "IsFilterGeneral",
-						set = "ToggleFilterGeneral",
-					},
-					LFGChannel = {
-						type = 'toggle',
-						order = 3,
-						width = "double",
-						disabled = false,
-						name = L["LFGC"],
-						desc = L["LFGCD"],
-						get = "IsFilterLFG",
-						set = "ToggleFilterLFG",
-					},
-					SAYChannel = {
-						type = 'toggle',
-						order = 4,
-						width = "double",
-						disabled = false,
-						name = L["SAYC"],
-						desc = L["SAYCD"],
-						get = "IsFilterSAY",
-						set = "ToggleFilterSAY",
-					},
-				},
-			},
-			addFilterGroup = {
-				type = 'group',
-				disabled = false,
-				name = L["AddFilterG"],
-				desc = L["AddFilterGD"],
-				args = {
-					addFilter = {
-						type = 'toggle',
-						order = 1,
-						width = "double",
-						name = L["AddFilter"],
-						desc = L["AddFilterD"],
-						get = "GetAddFilter",
-						set = "SetAddFilter",
-					},
-					addFilter1 = {
-						type = 'input',
-						disabled = function()
-							return not TF3:GetAddFilter()
-						end,
-						order = 2,
-						width = "double",
-						name = L["AddFilter1"],
-						desc = L["AddFilter1D"],
-						get = "GetAddFilter1",
-						set = "SetAddFilter1",
-						usage = L["AddFilterUsage"],
-					},
-					addFilter2 = {
-						type = 'input',
-						disabled = function()
-							return not TF3:GetAddFilter()
-						end,
-						order = 3,
-						width = "double",
-						name = L["AddFilter2"],
-						desc = L["AddFilter1D"],
-						get = "GetAddFilter2",
-						set = "SetAddFilter2",
-						usage = L["AddFilterUsage"],
-					},
-					addFilter3 = {
-						type = 'input',
-						disabled = function()
-							return not TF3:GetAddFilter()
-						end,
-						order = 4,
-						width = "double",
-						name = L["AddFilter3"],
-						desc = L["AddFilter1D"],
-						get = "GetAddFilter3",
-						set = "SetAddFilter3",
-						usage = L["AddFilterUsage"],
-					},
-				},
-			},
-		},
-	}
+function TF3:PopulateFriendsList()
+  for i=1, GetNumFriends() do
+    if TF3:HelperFunc(self.db.profile.friendslist, GetFriendInfo(i)) == 0 then
+      self.db.profile.friendslist[i] = GetFriendInfo(i)
+			self.db.profile.friendslist_populated = true
+    end
+  end
+end
 
- --[[ Locals ]]--
- local _G = _G
- --local filtered = false
- local redirectFrame = "SPAM"
- local debugFrame = "DEBUG"
- local lastArg1
- local lastArg2
+function TF3:UpdateFriendsList()
+local temp = {}
+  for i=1, GetNumFriends() do
+    temp[i] = GetFriendInfo(i)
+  end
+  for i=1, table.getn(self.db.profile.friendslist) do
+    if TF3:HelperFunc(temp, self.db.profile.friendslist[i]) == 0 then
+      self.db.profile.friendslist[i] = temp[i]
+			table.remove(self.db.profile.friendslist)
+    end
+  end
+end
+
+function TF3:HelperFunc(array, value)
+  for i,v in ipairs(array) do
+    if (v == value) then
+--~ 			TF3:Print("[Debug]Return 1: " .. v .. " - " .. value)
+      return 1
+    end
+--~ 		TF3:Print("[Debug]Return 0: " .. v .. " - " .. value)
+  end
+  return 0
+end
+
+function TF3:IsFriend(name)
+	for i,v in ipairs(self.db.profile.friendslist) do
+		if (name == v) then
+			return true
+		end
+	end
+	return false
+end
 
 --[[ Window and Chat Functions ]]--
 function TF3:FindFrame(toFrame, msg)
 	for i=1,NUM_CHAT_WINDOWS do
-	local name,_,_,_,_,_,_,_,_ = GetChatWindowInfo(i)
+	local name = GetChatWindowInfo(i)
 		if (toFrame == name) then
 			toFrame = _G["ChatFrame" .. i]
 			toFrame:AddMessage(msg)
@@ -393,7 +203,7 @@ function TF3:CreateFrame(newFrame)
 end
 
 --[[ PreFilter ]]--
-local function PreFilter_OnEvent(...)
+local function PreFilterFunc(...)
 --[[----------------------------------------------------------------------------------
 Taken from SpamMeNot
 			arg1:	chat message
@@ -412,73 +222,91 @@ Taken from SpamMeNot
 	local zoneID = arg7 or select(7, ...)
 	local chanID = arg8 or select(8, ...)
 	--[[ Check for Trade Channel and User setting ]]--
-	if (zoneID == 2 and TF3:IsFilterTrade() and userID ~= UnitName("Player")) then
-		filtered = TF3:TF3_OnEvent()
-	elseif (zoneID == 2 and not TF3:IsFilterTrade()) then
+	if (zoneID == 2 and TF3.db.profile.filtertrade and userID ~= UnitName("Player") and TF3:IsFriend(userID) == false) then
+		filtered = TF3:FilterFunc()
+	elseif (zoneID == 2 and not TF3.db.profile.filtertrade) then
 		filtered = false
 	end
 	--[[ Check for General Channel and User setting ]]--
-	if (chanID == 1 and TF3:IsFilterGeneral()and userID ~= UnitName("Player")) then
-		filtered = TF3:TF3_OnEvent()
-	elseif (chanID == 1 and not TF3:IsFilterGeneral()) then
+	if (chanID == 1 and TF3.db.profile.filtergeneral and userID ~= UnitName("Player") and TF3:IsFriend(userID) == false) then
+		filtered = TF3:FilterFunc()
+	elseif (chanID == 1 and not TF3.db.profile.filtergeneral) then
 		filtered = false
 	end
 	--[[ Check for LFG Channel and User setting ]]--
-	if (zoneID == 26 and TF3:IsFilterLFG() and userID ~= UnitName("Player")) then
-		filtered = TF3:TF3_OnEvent()
-	elseif (chanID == 26 and not TF3:IsFilterLFG()) then
+	if (zoneID == 26 and TF3.db.profile.filterLFG and userID ~= UnitName("Player") and TF3:IsFriend(userID) == false) then
+		filtered = TF3:FilterFunc()
+	elseif (chanID == 26 and not TF3.db.profile.filterLFG) then
 		filtered = false
 	end
 	--[[ Check for SAY Channel and User setting ]]--
-	if (chanID == 0 and TF3:IsFilterSAY() and userID ~= UnitName("Player")) then
-		filtered = TF3:TF3_OnEvent()
-	elseif (chanID == 0 and not TF3:IsFilterSAY()) then
+	if (event == "CHAT_MSG_SAY" and TF3.db.profile.filterSAY and userID ~= UnitName("Player") and TF3:IsFriend(userID) == false) then
+		filtered = TF3:FilterFunc()
+	elseif (event == "CHAT_MSG_SAY" and not TF3.db.profile.filterSAY) then
+		filtered = false
+	end
+	--[[ Check for YELL Channel and User setting ]]--
+	if (event == "CHAT_MSG_YELL" and TF3.db.profile.filterYELL and userID ~= UnitName("Player") and TF3:IsFriend(userID) == false) then
+		filtered = TF3:FilterFunc()
+	elseif (event == "CHAT_MSG_YELL" and not TF3.db.profile.filterYELL) then
 		filtered = false
 	end
 	return filtered
 end
 
 --[[ Filter Func ]]--
-function TF3:TF3_OnEvent(...)
-	local filtered = false
+function TF3:FilterFunc(...)
 	local filterFuncList = ChatFrame_GetMessageEventFilters("CHAT_MSG_CHANNEL")
-	if (filterFuncList and TF3:IsTurnOn()) then
+	local arg1 = lower(arg1)
+	if (filterFuncList and self.db.profile.turnOn) then
 		filtered = true
-		if (TF3:IsDebug()) then
+		--@debug@
+		if (self.db.profile.debug) then
 			TF3:FindFrame(debugFrame, "arg1: " .. arg1 .. " arg2: " .. arg2)
 		end
-		for i, matchIt in ipairs(TF3.db.profile.filter) do
-			if (TF3:IsDebug() and not TF3:GetAddFilter()) then
-				TF3:FindFrame(debugFrame, "Checking for Match with " .. matchIt[1])
-			elseif (TF3:IsDebug() and TF3:GetAddFilter()) then
-				TF3:FindFrame(debugFrame, "Checking for Match with " .. matchIt[1])
-				TF3:FindFrame(debugFrame, TF3.db.profile.addfilter1)
-				TF3:FindFrame(debugFrame, TF3.db.profile.addfilter2)
-				TF3:FindFrame(debugFrame, TF3.db.profile.addfilter3)
-			end
-			if(not TF3:GetAddFilter()) then
-				if matchIt[2] and string.find(arg1, matchIt[1]) then
-					if (TF3:IsDebug()) then
+		--@end-debug@
+		if (self.db.profile.addfilter_enable) then
+			for i, matchIt in ipairs(self.db.profile.filter) do
+				--@debug@
+				if (self.db.profile.debug) then
+					TF3:FindFrame(debugFrame, "Checking for Match with " .. matchIt)
+				end
+				--@end-debug@
+				if (find(arg1, matchIt)) then
+					--@debug@
+					if (self.db.profile.debug) then
 						TF3:FindFrame(debugFrame, "|cff00ff00**** Matched ***|r")
 					end
-					filtered = false
-				end
-			elseif(TF3:GetAddFilter()) then
-				if matchIt[2] and string.find(arg1, matchIt[1]) or string.find(arg1, TF3.db.profile.addfilter1) or string.find(arg1, TF3.db.profile.addfilter2) or string.find(arg1, TF3.db.profile.addfilter3) then
-					if (TF3:IsDebug()) then
-						TF3:FindFrame(debugFrame, "|cff00ff00**** Matched ***|r")
-					end
-					filtered = false
+					--@end-debug@
+				filtered = false
 				end
 			end
+		else
+			for i=4,#self.db.profile.filter do
+				--@debug@
+				if (self.db.profile.debug) then
+					TF3:FindFrame(debugFrame, "Checking for Match with " .. self.db.profile.filter[i])
+				end
+				--@end-debug@
+				if (find(arg1, self.db.profile.filter[i])) then
+					--@debug@
+					if (self.db.profile.debug) then
+						TF3:FindFrame(debugFrame, "|cff00ff00**** Matched ***|r")
+					end
+					--@end-debug@
+				filtered = false
+				end
+			end	
 		end
-		if filtered == true then
-			if lastArg1 ~= arg1 or lastArg2 ~= arg2 then
-				if (TF3:IsDebug()) then
+		if (filtered == true) then
+			if (lastArg1 ~= arg1 or lastArg2 ~= arg2) then
+				--@debug@
+				if (self.db.profile.debug) then
 					TF3:FindFrame(debugFrame, "|cff00ff00*** NO Match - Redirected ***|r")
 				end
-				if (TF3:IsRedirect()) then
-					TF3:FindFrame(redirectFrame, "zID:" .. string.format(CHAT_CHANNEL_GET, arg7) .. " cID:" .. string.format(CHAT_CHANNEL_GET, arg8) .. " - " .. string.format(CHAT_CHANNEL_GET, arg2) .. arg1)
+				--@end-debug@
+				if (self.db.profile.redirect) then
+					TF3:FindFrame(redirectFrame, "zID:" .. formatIt(CHAT_CHANNEL_GET, arg7) .. " cID:" .. formatIt(CHAT_CHANNEL_GET, arg8) .. " - " .. formatIt(CHAT_CHANNEL_GET, arg2) .. arg1)
 				end
 				lastArg1, lastArg2 = arg1, arg2
 			end
@@ -488,5 +316,6 @@ function TF3:TF3_OnEvent(...)
 end
 
 --[[ Pass ALL chat messages to PreFilter function ]]--
-ChatFrame_AddMessageEventFilter("CHAT_MSG_SAY", PreFilter_OnEvent)
-ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", PreFilter_OnEvent)
+ChatFrame_AddMessageEventFilter("CHAT_MSG_SAY", PreFilterFunc)
+ChatFrame_AddMessageEventFilter("CHAT_MSG_YELL", PreFilterFunc)
+ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", PreFilterFunc)
