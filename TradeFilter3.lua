@@ -36,6 +36,7 @@ Basic structure and code from crashmstr (wowzn@crashmstr.com)
 --]]
 
 TradeFilter3 = LibStub("AceAddon-3.0"):NewAddon("TradeFilter3", "AceConsole-3.0", "AceEvent-3.0")
+local friends = LibStub("LibFriends-1.0")
 local TF3 = TradeFilter3
 
 local MAJOR_VERSION = "3.0"
@@ -66,7 +67,6 @@ defaults = {
 		filterGeneral = false,
 		filterTrade = true,
 		addfilter_enable = false,
-		friendslist_populated = false,
 		friendslist = {},
 		filter = {
 			"CUSTOM FILTER 1",
@@ -133,52 +133,60 @@ function TF3:OpenOptions()
 	InterfaceOptionsFrame_OpenToCategory(self.OptionsPanel)
 end
 
---[[ Friends Functions ]]--
 function TF3:IsLoggedIn()
-	if (self.db.profile.friendslist_populated == false) then
-		TF3:PopulateFriendsList()
-	else
-		TF3:RegisterEvent("FRIENDLIST_UPDATE", "UpdateFriendsList")
-	end
+TF3:RegisterEvent("FRIENDLIST_UPDATE", "GetFriends")
+friends.RegisterCallback(self, "Added")
+friends.RegisterCallback(self, "Removed")
 TF3:UnregisterEvent("PLAYER_LOGIN")
 end
 
-function TF3:PopulateFriendsList()
-  for i=1, GetNumFriends() do
-    if TF3:HelperFunc(self.db.profile.friendslist, GetFriendInfo(i)) == 0 then
-      self.db.profile.friendslist[i] = GetFriendInfo(i)
-			self.db.profile.friendslist_populated = true
-    end
-  end
+--[[ Friends Functions - Stolen from AuldLangSyne Sync module ]]--
+local friendCache = {}
+local currentFriend
+function TF3:GetFriends()
+	local friends = self.db.profile.friendslist
+	local numFriends = GetNumFriends()
+	if #friendCache ~= numFriends then
+		for i=1, numFriends do
+			local name = GetFriendInfo(i)
+			if name then
+				friends[name] = true
+			end
+		end
+	end
+	self:StopGet()
 end
 
-function TF3:UpdateFriendsList()
-local temp = {}
-  for i=1, GetNumFriends() do
-    temp[i] = GetFriendInfo(i)
-  end
-  for i=1, table.getn(self.db.profile.friendslist) do
-    if TF3:HelperFunc(temp, self.db.profile.friendslist[i]) == 0 then
-      self.db.profile.friendslist[i] = temp[i]
-			table.remove(self.db.profile.friendslist)
-    end
-  end
+function TF3:StopGet()
+	for name in pairs(friendCache) do
+		friendCache[name] = nil
+	end
+	currentFriend = nil
 end
 
-function TF3:HelperFunc(array, value)
-  for i,v in ipairs(array) do
-    if (v == value) then
---~ 			TF3:Print("[Debug]Return 1: " .. v .. " - " .. value)
-      return 1
-    end
---~ 		TF3:Print("[Debug]Return 0: " .. v .. " - " .. value)
-  end
-  return 0
+function TF3:Added(event, name)
+	if name ~= UnitName("player") then
+		self.db.profile.friendslist[name] = true
+	end
+	if currentFriend then
+		self:GetFriends()
+	end
 end
 
-function TF3:IsFriend(name)
-	for i,v in ipairs(self.db.profile.friendslist) do
-		if (name == v) then
+function TF3:Removed(event, name)
+	if self.db.profile.friendslist[name] ~= nil then
+		self.db.profile.friendslist[name] = nil
+	end
+	if currentFriend then
+		self:GetFriends()
+	end
+end
+
+--[[ IsFriend Func ]]--
+function TF3:IsFriend(userID)
+	local friends = self.db.profile.friendslist
+	for name in pairs(friends) do
+		if (userID == name) then
 			return true
 		end
 	end
@@ -222,19 +230,19 @@ Taken from SpamMeNot
 	local zoneID = arg7 or select(7, ...)
 	local chanID = arg8 or select(8, ...)
 	--[[ Check for Trade Channel and User setting ]]--
-	if (zoneID == 2 and TF3.db.profile.filtertrade and userID ~= UnitName("Player") and TF3:IsFriend(userID) == false) then
+	if (zoneID == 2 and TF3.db.profile.filtertrade and userID ~= UnitName("Player") --[[and TF3:IsFriend(userID) == false]]) then
 		filtered = TF3:FilterFunc()
 	elseif (zoneID == 2 and not TF3.db.profile.filtertrade) then
 		filtered = false
 	end
 	--[[ Check for General Channel and User setting ]]--
-	if (chanID == 1 and TF3.db.profile.filtergeneral and userID ~= UnitName("Player") and TF3:IsFriend(userID) == false) then
+	if (chanID == 1 and TF3.db.profile.filtergeneral and userID ~= UnitName("Player") --[[and TF3:IsFriend(userID) == false]]) then
 		filtered = TF3:FilterFunc()
 	elseif (chanID == 1 and not TF3.db.profile.filtergeneral) then
 		filtered = false
 	end
 	--[[ Check for LFG Channel and User setting ]]--
-	if (zoneID == 26 and TF3.db.profile.filterLFG and userID ~= UnitName("Player") and TF3:IsFriend(userID) == false) then
+	if (zoneID == 26 and TF3.db.profile.filterLFG and userID ~= UnitName("Player") --[[and TF3:IsFriend(userID) == false]]) then
 		filtered = TF3:FilterFunc()
 	elseif (chanID == 26 and not TF3.db.profile.filterLFG) then
 		filtered = false
@@ -246,7 +254,7 @@ Taken from SpamMeNot
 		filtered = false
 	end
 	--[[ Check for YELL Channel and User setting ]]--
-	if (event == "CHAT_MSG_YELL" and TF3.db.profile.filterYELL and userID ~= UnitName("Player") and TF3:IsFriend(userID) == false) then
+	if (event == "CHAT_MSG_YELL" and TF3.db.profile.filterYELL and userID ~= UnitName("Player") --[[and TF3:IsFriend(userID) == false]]) then
 		filtered = TF3:FilterFunc()
 	elseif (event == "CHAT_MSG_YELL" and not TF3.db.profile.filterYELL) then
 		filtered = false

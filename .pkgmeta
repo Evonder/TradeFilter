@@ -31,5 +31,8 @@ externals:
  libs/AceAddon-3.0:
   url: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceAddon-3.0
   tag: latest
+ libs/LibFriends-1.0:
+  url: svn://svn.wowace.com/wow/libfriends-1-0/mainline/trunk/LibFriends-1.0
+  tag: latest
 
 license-output: License.txt
