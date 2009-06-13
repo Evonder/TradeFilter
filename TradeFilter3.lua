@@ -6,9 +6,6 @@ File Author: @file-author@
 File Revision: @file-revision@
 File Date: @file-date-iso@
 
-Basic structure and code from crashmstr (wowzn@crashmstr.com)
-		which was ripped from TasteTheNaimbow (Thank you Guillotine!)
-
 * Copyright (c) 2008, Evonder
 * All rights reserved.
 *
@@ -50,6 +47,8 @@ local ipairs = _G.ipairs
 local find = _G.string.find
 local lower = _G.string.lower
 local formatIt = _G.string.format
+local friendCache = {}
+local currentFriend
 local filtered = false
 local redirectFrame = "SPAM"
 local debugFrame = "DEBUG"
@@ -122,27 +121,26 @@ function TF3:OnInitialize()
 	self.OptionsPanel.profiles = ACD:AddToBlizOptions("TradeFilter3P", L["Profiles"], self.name)
 	
 	if IsLoggedIn() then
-		TF3:IsLoggedIn()
+		self:IsLoggedIn()
 	else
-		TF3:RegisterEvent("PLAYER_LOGIN", "IsLoggedIn")
+		self:RegisterEvent("PLAYER_LOGIN", "IsLoggedIn")
 	end
 end
 
 -- :OpenOptions(): Opens the options window.
 function TF3:OpenOptions()
+	InterfaceOptionsFrame_OpenToCategory(self.OptionsPanel.profiles)
 	InterfaceOptionsFrame_OpenToCategory(self.OptionsPanel)
 end
 
 function TF3:IsLoggedIn()
-TF3:RegisterEvent("FRIENDLIST_UPDATE", "GetFriends")
+self:RegisterEvent("FRIENDLIST_UPDATE", "GetFriends")
 friends.RegisterCallback(self, "Added")
 friends.RegisterCallback(self, "Removed")
-TF3:UnregisterEvent("PLAYER_LOGIN")
+self:UnregisterEvent("PLAYER_LOGIN")
 end
 
 --[[ Friends Functions - Stolen from AuldLangSyne Sync module ]]--
-local friendCache = {}
-local currentFriend
 function TF3:GetFriends()
 	local friends = self.db.profile.friendslist
 	local numFriends = GetNumFriends()
@@ -230,19 +228,19 @@ Taken from SpamMeNot
 	local zoneID = arg7 or select(7, ...)
 	local chanID = arg8 or select(8, ...)
 	--[[ Check for Trade Channel and User setting ]]--
-	if (zoneID == 2 and TF3.db.profile.filtertrade and userID ~= UnitName("Player") --[[and TF3:IsFriend(userID) == false]]) then
+	if (zoneID == 2 and TF3.db.profile.filtertrade and userID ~= UnitName("Player") and TF3:IsFriend(userID) == false) then
 		filtered = TF3:FilterFunc()
 	elseif (zoneID == 2 and not TF3.db.profile.filtertrade) then
 		filtered = false
 	end
 	--[[ Check for General Channel and User setting ]]--
-	if (chanID == 1 and TF3.db.profile.filtergeneral and userID ~= UnitName("Player") --[[and TF3:IsFriend(userID) == false]]) then
+	if (chanID == 1 and TF3.db.profile.filtergeneral and userID ~= UnitName("Player") and TF3:IsFriend(userID) == false) then
 		filtered = TF3:FilterFunc()
 	elseif (chanID == 1 and not TF3.db.profile.filtergeneral) then
 		filtered = false
 	end
 	--[[ Check for LFG Channel and User setting ]]--
-	if (zoneID == 26 and TF3.db.profile.filterLFG and userID ~= UnitName("Player") --[[and TF3:IsFriend(userID) == false]]) then
+	if (zoneID == 26 and TF3.db.profile.filterLFG and userID ~= UnitName("Player") and TF3:IsFriend(userID) == false) then
 		filtered = TF3:FilterFunc()
 	elseif (chanID == 26 and not TF3.db.profile.filterLFG) then
 		filtered = false
@@ -254,7 +252,7 @@ Taken from SpamMeNot
 		filtered = false
 	end
 	--[[ Check for YELL Channel and User setting ]]--
-	if (event == "CHAT_MSG_YELL" and TF3.db.profile.filterYELL and userID ~= UnitName("Player") --[[and TF3:IsFriend(userID) == false]]) then
+	if (event == "CHAT_MSG_YELL" and TF3.db.profile.filterYELL and userID ~= UnitName("Player") and TF3:IsFriend(userID) == false) then
 		filtered = TF3:FilterFunc()
 	elseif (event == "CHAT_MSG_YELL" and not TF3.db.profile.filterYELL) then
 		filtered = false
@@ -268,51 +266,51 @@ function TF3:FilterFunc(...)
 	local arg1 = lower(arg1)
 	if (filterFuncList and self.db.profile.turnOn) then
 		filtered = true
-		--@debug@
+		--[===[@debug@
 		if (self.db.profile.debug) then
 			TF3:FindFrame(debugFrame, "arg1: " .. arg1 .. " arg2: " .. arg2)
 		end
-		--@end-debug@
+		--@end-debug@]===]
 		if (self.db.profile.addfilter_enable) then
 			for i, matchIt in ipairs(self.db.profile.filter) do
-				--@debug@
+				--[===[@debug@
 				if (self.db.profile.debug) then
 					TF3:FindFrame(debugFrame, "Checking for Match with " .. matchIt)
 				end
-				--@end-debug@
+				--@end-debug@]===]
 				if (find(arg1, matchIt)) then
-					--@debug@
+					--[===[@debug@
 					if (self.db.profile.debug) then
 						TF3:FindFrame(debugFrame, "|cff00ff00**** Matched ***|r")
 					end
-					--@end-debug@
+					--@end-debug@]===]
 				filtered = false
 				end
 			end
 		else
 			for i=4,#self.db.profile.filter do
-				--@debug@
+				--[===[@debug@
 				if (self.db.profile.debug) then
 					TF3:FindFrame(debugFrame, "Checking for Match with " .. self.db.profile.filter[i])
 				end
-				--@end-debug@
+				--@end-debug@]===]
 				if (find(arg1, self.db.profile.filter[i])) then
-					--@debug@
+					--[===[@debug@
 					if (self.db.profile.debug) then
 						TF3:FindFrame(debugFrame, "|cff00ff00**** Matched ***|r")
 					end
-					--@end-debug@
+					--@end-debug@]===]
 				filtered = false
 				end
 			end	
 		end
 		if (filtered == true) then
 			if (lastArg1 ~= arg1 or lastArg2 ~= arg2) then
-				--@debug@
+				--[===[@debug@
 				if (self.db.profile.debug) then
 					TF3:FindFrame(debugFrame, "|cff00ff00*** NO Match - Redirected ***|r")
 				end
-				--@end-debug@
+				--@end-debug@]===]
 				if (self.db.profile.redirect) then
 					TF3:FindFrame(redirectFrame, "zID:" .. formatIt(CHAT_CHANNEL_GET, arg7) .. " cID:" .. formatIt(CHAT_CHANNEL_GET, arg8) .. " - " .. formatIt(CHAT_CHANNEL_GET, arg2) .. arg1)
 				end
