@@ -49,7 +49,6 @@ local lower = _G.string.lower
 local formatIt = _G.string.format
 local friendCache = {}
 local currentFriend
-local filtered = false
 local redirectFrame = "SPAM"
 local debugFrame = "DEBUG"
 local lastArg1
@@ -72,11 +71,9 @@ defaults = {
 			"CUSTOM FILTER 2",
 			"CUSTOM FILTER 3",
 			"[lL][fF] [pP][oO][rR][tT]",
-			"[lL][fF][mM]",
 			"[bB][uU][yY][iI][nN][gG]",
-			"wt[bBsStT]",
-			"[lL][fF][wWeE]",
-			"[lL][fF][eE][nN][cC][hH][aA][nN][tT]",
+			"[wW][tT][bBsStT]",
+			"[lL][fF][wWeEmM]",
 			"[lL][fF] [eE][nN][cC][hH][aA][nN][tT]",
 			"[lL][fF] [jJ][cC]",
 			"[lL][fF] [dD][pP][sS]",
@@ -90,6 +87,7 @@ defaults = {
 			"lockpick",
 			"[sS][eE][lL][lL][iI][nN][gG]",
 			"[bB][uU][yY][iI][nN][gG]",
+			"2[vV]2",
 			"3[vV]3",
 			"5[vV]5",
 		},
@@ -100,6 +98,7 @@ function TF3:OnInitialize()
 	--[[ Libraries ]]--
 	local L =  LibStub("AceLocale-3.0"):GetLocale("TradeFilter3")
 	local ACD = LibStub("AceConfigDialog-3.0")
+	local LAP = LibStub("LibAboutPanel")
 
 	self.db = LibStub("AceDB-3.0"):New("TradeFilter3DB", defaults);
 
@@ -119,6 +118,7 @@ function TF3:OnInitialize()
 	self.OptionsPanel.channel = ACD:AddToBlizOptions(self.name, L["channelGroup"], self.name, "channelGroup")
 	self.OptionsPanel.custom = ACD:AddToBlizOptions(self.name, L["addFilterGroup"], self.name, "addFilterGroup")
 	self.OptionsPanel.profiles = ACD:AddToBlizOptions("TradeFilter3P", L["Profiles"], self.name)
+	self.OptionsPanel.about = LAP.new(self.name, self.name)
 	
 	if IsLoggedIn() then
 		self:IsLoggedIn()
@@ -266,51 +266,51 @@ function TF3:FilterFunc(...)
 	local arg1 = lower(arg1)
 	if (filterFuncList and self.db.profile.turnOn) then
 		filtered = true
-		--[===[@debug@
+		--@alpha@
 		if (self.db.profile.debug) then
 			TF3:FindFrame(debugFrame, "arg1: " .. arg1 .. " arg2: " .. arg2)
 		end
-		--@end-debug@]===]
+		--@end-alpha@
 		if (self.db.profile.addfilter_enable) then
 			for i, matchIt in ipairs(self.db.profile.filter) do
-				--[===[@debug@
+				--@alpha@
 				if (self.db.profile.debug) then
 					TF3:FindFrame(debugFrame, "Checking for Match with " .. matchIt)
 				end
-				--@end-debug@]===]
+				--@end-alpha@
 				if (find(arg1, matchIt)) then
-					--[===[@debug@
+					--@alpha@
 					if (self.db.profile.debug) then
 						TF3:FindFrame(debugFrame, "|cff00ff00**** Matched ***|r")
 					end
-					--@end-debug@]===]
+					--@end-alpha@
 				filtered = false
 				end
 			end
 		else
 			for i=4,#self.db.profile.filter do
-				--[===[@debug@
+				--@alpha@
 				if (self.db.profile.debug) then
 					TF3:FindFrame(debugFrame, "Checking for Match with " .. self.db.profile.filter[i])
 				end
-				--@end-debug@]===]
+				--@end-alpha@
 				if (find(arg1, self.db.profile.filter[i])) then
-					--[===[@debug@
+					--@alpha@
 					if (self.db.profile.debug) then
 						TF3:FindFrame(debugFrame, "|cff00ff00**** Matched ***|r")
 					end
-					--@end-debug@]===]
+					--@end-alpha@
 				filtered = false
 				end
 			end	
 		end
 		if (filtered == true) then
 			if (lastArg1 ~= arg1 or lastArg2 ~= arg2) then
-				--[===[@debug@
+				--@alpha@
 				if (self.db.profile.debug) then
 					TF3:FindFrame(debugFrame, "|cff00ff00*** NO Match - Redirected ***|r")
 				end
-				--@end-debug@]===]
+				--@end-alpha@
 				if (self.db.profile.redirect) then
 					TF3:FindFrame(redirectFrame, "zID:" .. formatIt(CHAT_CHANNEL_GET, arg7) .. " cID:" .. formatIt(CHAT_CHANNEL_GET, arg8) .. " - " .. formatIt(CHAT_CHANNEL_GET, arg2) .. arg1)
 				end

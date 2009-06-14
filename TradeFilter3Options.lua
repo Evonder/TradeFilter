@@ -43,7 +43,7 @@ options = {
 					get = function() return TF3.db.profile.redirect end,
 					set = function() TF3.db.profile.redirect = not TF3.db.profile.redirect end,
 				},
-				--@debug@
+				--@alpha@
 				debug = {
 					type = 'toggle',
 					order = 3,
@@ -55,7 +55,7 @@ options = {
 					get = function() return TF3.db.profile.debug end,
 					set = function() TF3.db.profile.debug = not TF3.db.profile.debug end,
 				},
-				--@end-debug@
+				--@end-alpha@
 				reload = {
 					type = 'execute',
 					name = L["RUI"],

@@ -2,8 +2,8 @@
 ## Title: Trade|cffffffffFilter|r3
 ## Notes: Filter the shit outta trade channel.
 ## Author: @project-author@
-## Release Date: @project-date-iso@
-## Inspired By: crashmstr(wowzn AT crashmstr DOT com)
+## X-Date: @project-date-iso@
+## X-Credits: crashmstr(wowzn AT crashmstr DOT com)
 ## X-eMail: evonder AT gmail DOT com
 ## X-Website: 
 ## X-Category: Chat & Communication
@@ -28,6 +28,7 @@ libs\AceGUI-3.0\AceGUI-3.0.xml
 libs\AceLocale-3.0\AceLocale-3.0.xml
 libs\AceConfig-3.0\AceConfig-3.0.xml
 libs\LibFriends-1.0\lib.xml
+libs\LibAboutPanel\LibAboutPanel.lua
 #@end-no-lib-strip@
 
 ## Locale ##
