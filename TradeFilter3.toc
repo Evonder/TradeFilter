@@ -3,9 +3,9 @@
 ## Notes: Filter the shit outta trade channel.
 ## Author: @project-author@
 ## X-Date: @project-date-iso@
-## X-Credits: crashmstr(wowzn AT crashmstr DOT com)
+## X-Credits: crashmstr
 ## X-eMail: evonder AT gmail DOT com
-## X-Website: 
+## X-Website: http://www.wowace.com/projects/trade-filter/
 ## X-Category: Chat & Communication
 ## OptionalDeps: Ace3
 ## X-License: BSD

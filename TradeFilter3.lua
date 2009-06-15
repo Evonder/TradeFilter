@@ -105,8 +105,8 @@ function TF3:OnInitialize()
 	local ACP = LibStub("AceDBOptions-3.0"):GetOptionsTable(TradeFilter3.db);
 
 	local AC = LibStub("AceConsole-3.0")
+	AC:RegisterChatCommand("tf", function() TF3:OpenOptions() end)
 	AC:RegisterChatCommand("filter", function() TF3:OpenOptions() end)
-	AC:RegisterChatCommand("tradefilter", function() TF3:OpenOptions() end)
 	AC:Print("|cFF33FF99TradeFilter3|r: " .. MAJOR_VERSION .. "." .. MINOR_VERSION .. " |cff00ff00Loaded!|r")
 
 	local ACR = LibStub("AceConfigRegistry-3.0")
@@ -208,8 +208,7 @@ function TF3:CreateFrame(newFrame)
 	--Need to find the proper way to create a new chatframe that is docked to the default frame
 end
 
---[[ PreFilter ]]--
-local function PreFilterFunc(...)
+--[[ PreFilter Functions ]]--
 --[[----------------------------------------------------------------------------------
 Taken from SpamMeNot
 			arg1:	chat message
@@ -223,38 +222,56 @@ Taken from SpamMeNot
 	we're expected to use global variables which is generally a bad idea
 	global variables may not be available in a later patch so we have to do this:
 ------------------------------------------------------------------------------------]]
+local function PreFilterFunc_Say(self, event, ...)
 	local filtered = false
+	local userID = arg2 or select(2, ...)
+	local zoneID = arg7 or select(7, ...)
+	local chanID = arg8 or select(8, ...)
+	--[[ Check for SAY Channel and User setting ]]--
+	if (TF3.db.profile.filterSAY and userID ~= UnitName("Player") and TF3:IsFriend(userID) == false) then
+		filtered = TF3:FilterFunc(...)
+	elseif (event == "CHAT_MSG_SAY" and not TF3.db.profile.filterSAY) then
+		filtered = false
+	end
+	return filtered
+end
+
+local function PreFilterFunc_Yell(self, event, ...)
+	local filtered = false
+	local userID = arg2 or select(2, ...)
+	local zoneID = arg7 or select(7, ...)
+	local chanID = arg8 or select(8, ...)
+	--[[ Check for SAY Channel and User setting ]]--
+	if (TF3.db.profile.filterYELL and userID ~= UnitName("Player") and TF3:IsFriend(userID) == false) then
+		filtered = TF3:FilterFunc(...)
+	elseif (event == "CHAT_MSG_YELL" and not TF3.db.profile.filterYELL) then
+		filtered = false
+	end
+	return filtered
+end
+
+local function PreFilterFunc(self, event, ...)
+	local filtered = false
+	local msg = arg1 or select(1, ...)
 	local userID = arg2 or select(2, ...)
 	local zoneID = arg7 or select(7, ...)
 	local chanID = arg8 or select(8, ...)
 	--[[ Check for Trade Channel and User setting ]]--
 	if (zoneID == 2 and TF3.db.profile.filtertrade and userID ~= UnitName("Player") and TF3:IsFriend(userID) == false) then
-		filtered = TF3:FilterFunc()
+		filtered = TF3:FilterFunc(...)
 	elseif (zoneID == 2 and not TF3.db.profile.filtertrade) then
 		filtered = false
 	end
 	--[[ Check for General Channel and User setting ]]--
 	if (chanID == 1 and TF3.db.profile.filtergeneral and userID ~= UnitName("Player") and TF3:IsFriend(userID) == false) then
-		filtered = TF3:FilterFunc()
+		filtered = TF3:FilterFunc(...)
 	elseif (chanID == 1 and not TF3.db.profile.filtergeneral) then
 		filtered = false
 	end
 	--[[ Check for LFG Channel and User setting ]]--
 	if (zoneID == 26 and TF3.db.profile.filterLFG and userID ~= UnitName("Player") and TF3:IsFriend(userID) == false) then
-		filtered = TF3:FilterFunc()
+		filtered = TF3:FilterFunc(...)
 	elseif (chanID == 26 and not TF3.db.profile.filterLFG) then
-		filtered = false
-	end
-	--[[ Check for SAY Channel and User setting ]]--
-	if (event == "CHAT_MSG_SAY" and TF3.db.profile.filterSAY and userID ~= UnitName("Player") and TF3:IsFriend(userID) == false) then
-		filtered = TF3:FilterFunc()
-	elseif (event == "CHAT_MSG_SAY" and not TF3.db.profile.filterSAY) then
-		filtered = false
-	end
-	--[[ Check for YELL Channel and User setting ]]--
-	if (event == "CHAT_MSG_YELL" and TF3.db.profile.filterYELL and userID ~= UnitName("Player") and TF3:IsFriend(userID) == false) then
-		filtered = TF3:FilterFunc()
-	elseif (event == "CHAT_MSG_YELL" and not TF3.db.profile.filterYELL) then
 		filtered = false
 	end
 	return filtered
