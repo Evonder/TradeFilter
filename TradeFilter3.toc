@@ -7,7 +7,7 @@
 ## X-eMail: evonder AT gmail DOT com
 ## X-Website: http://www.wowace.com/projects/trade-filter/
 ## X-Category: Chat & Communication
-## OptionalDeps: Ace3
+## OptionalDeps: Ace3, LibStub, CallbackHandler-1.0, AceLocale-3.0, AceConfig-3.0, AceConsole-3.0, AceDBOptions-3.0, AceEvent-3.0, AceDB-3.0, AceGUI-3.0, AceAddon-3.0, LibAboutPanel, LibAboutPanel
 ## X-License: BSD
 ## Version: @project-version@
 ## Revision: @project-revision@
