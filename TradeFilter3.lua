@@ -222,12 +222,11 @@ Taken from SpamMeNot
 	we're expected to use global variables which is generally a bad idea
 	global variables may not be available in a later patch so we have to do this:
 ------------------------------------------------------------------------------------]]
+
+--[[ Check for SAY Channel and User setting ]]--
 local function PreFilterFunc_Say(self, event, ...)
 	local filtered = false
 	local userID = arg2 or select(2, ...)
-	local zoneID = arg7 or select(7, ...)
-	local chanID = arg8 or select(8, ...)
-	--[[ Check for SAY Channel and User setting ]]--
 	if (TF3.db.profile.filterSAY and userID ~= UnitName("Player") and TF3:IsFriend(userID) == false) then
 		filtered = TF3:FilterFunc(...)
 	elseif (event == "CHAT_MSG_SAY" and not TF3.db.profile.filterSAY) then
@@ -236,12 +235,10 @@ local function PreFilterFunc_Say(self, event, ...)
 	return filtered
 end
 
+--[[ Check for SAY Channel and User setting ]]--
 local function PreFilterFunc_Yell(self, event, ...)
 	local filtered = false
 	local userID = arg2 or select(2, ...)
-	local zoneID = arg7 or select(7, ...)
-	local chanID = arg8 or select(8, ...)
-	--[[ Check for SAY Channel and User setting ]]--
 	if (TF3.db.profile.filterYELL and userID ~= UnitName("Player") and TF3:IsFriend(userID) == false) then
 		filtered = TF3:FilterFunc(...)
 	elseif (event == "CHAT_MSG_YELL" and not TF3.db.profile.filterYELL) then
@@ -252,7 +249,6 @@ end
 
 local function PreFilterFunc(self, event, ...)
 	local filtered = false
-	local msg = arg1 or select(1, ...)
 	local userID = arg2 or select(2, ...)
 	local zoneID = arg7 or select(7, ...)
 	local chanID = arg8 or select(8, ...)
@@ -339,6 +335,6 @@ function TF3:FilterFunc(...)
 end
 
 --[[ Pass ALL chat messages to PreFilter function ]]--
-ChatFrame_AddMessageEventFilter("CHAT_MSG_SAY", PreFilterFunc)
-ChatFrame_AddMessageEventFilter("CHAT_MSG_YELL", PreFilterFunc)
+ChatFrame_AddMessageEventFilter("CHAT_MSG_SAY", PreFilterFunc_Say)
+ChatFrame_AddMessageEventFilter("CHAT_MSG_YELL", PreFilterFunc_Yell)
 ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", PreFilterFunc)
