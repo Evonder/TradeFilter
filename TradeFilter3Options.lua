@@ -12,6 +12,7 @@ options = {
 	type="group",
 	name = TF3.name,
 	handler = TF3,
+	childGroups = "tab",
 	args = {
 		generalGroup = {
 			type = "group",
@@ -71,137 +72,147 @@ options = {
 					--end,
 					order = -1,
 				},
-			},
-		},
-		channelGroup = {
-			type = "group",
-			handler = TF3,
-			order = 1,
-			width = "double",
-			disabled = false,
-			name = "Channel Selection",
-			desc = "Channel Selection",
-			args = {
-				tradeChannel = {
-					type = 'toggle',
+				channelGroup = {
+					type = "group",
+					handler = TF3,
 					order = 1,
 					width = "double",
 					disabled = false,
-					name = L["TC"],
-					desc = L["TCD"],
-					get = function() return TF3.db.profile.filtertrade end,
-					set = function() TF3.db.profile.filtertrade = not TF3.db.profile.filtertrade end,
+					name = "Channel Selection",
+					desc = "Channel Selection",
+					args = {
+						optionsHeader1 = {
+							type	= "header",
+							order	= 1,
+							name	= L["channelGroup"],
+						},
+						tradeChannel = {
+							type = 'toggle',
+							order = 2,
+							width = "double",
+							disabled = false,
+							name = L["TC"],
+							desc = L["TCD"],
+							get = function() return TF3.db.profile.filtertrade end,
+							set = function() TF3.db.profile.filtertrade = not TF3.db.profile.filtertrade end,
+						},
+						generalChannel = {
+							type = 'toggle',
+							order = 3,
+							width = "double",
+							disabled = false,
+							name = L["GC"],
+							desc = L["GCD"],
+							get = function() return TF3.db.profile.filtergeneral end,
+							set = function() TF3.db.profile.filtergeneral = not TF3.db.profile.filtergeneral end,
+						},
+						LFGChannel = {
+							type = 'toggle',
+							order = 4,
+							width = "double",
+							disabled = false,
+							name = L["LFGC"],
+							desc = L["LFGCD"],
+							get = function() return TF3.db.profile.filterLFG end,
+							set = function() TF3.db.profile.filterLFG = not TF3.db.profile.filterLFG end,
+						},
+						SAYChannel = {
+							type = 'toggle',
+							order = 5,
+							width = "double",
+							disabled = false,
+							name = L["SAYC"],
+							desc = L["SAYCD"],
+							get = function() return TF3.db.profile.filterSAY end,
+							set = function() TF3.db.profile.filterSAY = not TF3.db.profile.filterSAY end,
+						},
+						YELLChannel = {
+							type = 'toggle',
+							order = 6,
+							width = "double",
+							disabled = false,
+							name = L["YELLC"],
+							desc = L["YELLCD"],
+							get = function() return TF3.db.profile.filterYELL end,
+							set = function() TF3.db.profile.filterYELL = not TF3.db.profile.filterYELL end,
+						},
+					},
 				},
-				generalChannel = {
-					type = 'toggle',
-					order = 2,
-					width = "double",
+				addFilterGroup = {
+					type = "group",
 					disabled = false,
-					name = L["GC"],
-					desc = L["GCD"],
-					get = function() return TF3.db.profile.filtergeneral end,
-					set = function() TF3.db.profile.filtergeneral = not TF3.db.profile.filtergeneral end,
-				},
-				LFGChannel = {
-					type = 'toggle',
-					order = 3,
-					width = "double",
-					disabled = false,
-					name = L["LFGC"],
-					desc = L["LFGCD"],
-					get = function() return TF3.db.profile.filterLFG end,
-					set = function() TF3.db.profile.filterLFG = not TF3.db.profile.filterLFG end,
-				},
-				SAYChannel = {
-					type = 'toggle',
-					order = 4,
-					width = "double",
-					disabled = false,
-					name = L["SAYC"],
-					desc = L["SAYCD"],
-					get = function() return TF3.db.profile.filterSAY end,
-					set = function() TF3.db.profile.filterSAY = not TF3.db.profile.filterSAY end,
-				},
-				YELLChannel = {
-					type = 'toggle',
-					order = 4,
-					width = "double",
-					disabled = false,
-					name = L["YELLC"],
-					desc = L["YELLCD"],
-					get = function() return TF3.db.profile.filterYELL end,
-					set = function() TF3.db.profile.filterYELL = not TF3.db.profile.filterYELL end,
-				},
-			},
-		},
-		addFilterGroup = {
-			type = "group",
-			disabled = false,
-			name = L["AddFilterG"],
-			desc = L["AddFilterGD"],
-			args = {
-				addfilter_enable = {
-					type = 'toggle',
-					order = 1,
-					width = "double",
-					name = L["AddFilter"],
-					desc = L["AddFilterD"],
-					get = function() return TF3.db.profile.addfilter_enable end,
-					set = function() TF3.db.profile.addfilter_enable = not TF3.db.profile.addfilter_enable end,
-				},
-				addfilter1 = {
-					type = 'input',
-					disabled = function()
-						return not TF3.db.profile.addfilter_enable
-					end,
-					order = 2,
-					width = "double",
-					name = L["AddFilter1"],
-					desc = L["AddFilter1D"],
-					get = function(info)
-						return TF3.db.profile.filter[1]
-					end,
-					set = function(info, value)
-						TF3.db.profile.filter[1] = value
-						print("The " .. TF3.db.profile.filter[1] .. " was set to: " .. tostring(value))
-					end,
-					usage = L["AddFilterUsage"],
-				},
-				addfilter2 = {
-					type = 'input',
-					disabled = function()
-						return not TF3.db.profile.addfilter_enable
-					end,
-					order = 3,
-					width = "double",
-					name = L["AddFilter2"],
-					desc = L["AddFilter1D"],
-					get = function(info)
-						return TF3.db.profile.filter[2]
-					end,
-					set = function(info, value)
-						TF3.db.profile.filter[2] = value
-						print("The " .. TF3.db.profile.filter[2] .. " was set to: " .. tostring(value))
-					end,
-					usage = L["AddFilterUsage"],
-				},
-				addfilter3 = {
-					type = 'input',
-					disabled = function()
-						return not TF3.db.profile.addfilter_enable
-					end,
-					order = 4,
-					width = "double",
-					name = L["AddFilter3"],
-					desc = L["AddFilter1D"],
-					get = function(info)
-						return TF3.db.profile.filter[3]
-					end,
-					set = function(info, value)
-						TF3.db.profile.filter[3] = value
-						print("The " .. TF3.db.profile.filter[3] .. " was set to: " .. tostring(value))
-					end,
-					usage = L["AddFilterUsage"],
+					name = L["addFilterGroup"],
+					desc = L["AddFilterGD"],
+					args = {
+						optionsHeader2 = {
+							type	= "header",
+							order	= 1,
+							name	= L["AddFilter"],
+						},
+						addfilter_enable = {
+							type = 'toggle',
+							order = 2,
+							width = "double",
+							name = L["AddFilter"],
+							desc = L["AddFilterD"],
+							get = function() return TF3.db.profile.addfilter_enable end,
+							set = function() TF3.db.profile.addfilter_enable = not TF3.db.profile.addfilter_enable end,
+						},
+						addfilter1 = {
+							type = 'input',
+							disabled = function()
+								return not TF3.db.profile.addfilter_enable
+							end,
+							order = 3,
+							width = "double",
+							name = L["AddFilter1"],
+							desc = L["AddFilter1D"],
+							get = function(info)
+								return TF3.db.profile.filter[1]
+							end,
+							set = function(info, value)
+								TF3.db.profile.filter[1] = value
+								print("The " .. TF3.db.profile.filter[1] .. " was set to: " .. tostring(value))
+							end,
+							usage = L["AddFilterUsage"],
+						},
+						addfilter2 = {
+							type = 'input',
+							disabled = function()
+								return not TF3.db.profile.addfilter_enable
+							end,
+							order = 4,
+							width = "double",
+							name = L["AddFilter2"],
+							desc = L["AddFilter1D"],
+							get = function(info)
+								return TF3.db.profile.filter[2]
+							end,
+							set = function(info, value)
+								TF3.db.profile.filter[2] = value
+								print("The " .. TF3.db.profile.filter[2] .. " was set to: " .. tostring(value))
+							end,
+							usage = L["AddFilterUsage"],
+						},
+						addfilter3 = {
+							type = 'input',
+							disabled = function()
+								return not TF3.db.profile.addfilter_enable
+							end,
+							order = 5,
+							width = "double",
+							name = L["AddFilter3"],
+							desc = L["AddFilter1D"],
+							get = function(info)
+								return TF3.db.profile.filter[3]
+							end,
+							set = function(info, value)
+								TF3.db.profile.filter[3] = value
+								print("The " .. TF3.db.profile.filter[3] .. " was set to: " .. tostring(value))
+							end,
+							usage = L["AddFilterUsage"],
+						},
+					},
 				},
 			},
 		},
