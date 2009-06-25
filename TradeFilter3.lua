@@ -276,6 +276,15 @@ end
 --[[ Filter Func ]]--
 function TF3:FilterFunc(...)
 	local filterFuncList = ChatFrame_GetMessageEventFilters("CHAT_MSG_CHANNEL")
+	if (arg8 == 1) then
+		chan = "1. General"
+	elseif (arg7 == 2) then
+		chan = "2. Trade"
+	elseif (arg7 == 26) then
+		chan = "26. LFG"
+	else
+		chan = "0. Say/Yell"
+	end
 	local arg1 = lower(arg1)
 	if (filterFuncList and self.db.profile.turnOn) then
 		filtered = true
@@ -325,7 +334,7 @@ function TF3:FilterFunc(...)
 				end
 				--@end-alpha@
 				if (self.db.profile.redirect) then
-					TF3:FindFrame(redirectFrame, "zID:" .. formatIt(CHAT_CHANNEL_GET, arg7) .. " cID:" .. formatIt(CHAT_CHANNEL_GET, arg8) .. " - " .. formatIt(CHAT_CHANNEL_GET, arg2) .. arg1)
+					TF3:FindFrame(redirectFrame, "|cFFC08080[" .. chan .. "]|r |cFFD9D9D9[" .. arg2 .. "]:|r |cFFC08080" .. arg1 .. "|r")
 				end
 				lastArg1, lastArg2 = arg1, arg2
 			end
