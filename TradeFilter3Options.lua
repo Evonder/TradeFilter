@@ -35,49 +35,13 @@ options = {
 						end
 					end,
 				},
-				redirect = {
-					type = 'toggle',
-					order = 2,
-					width = "full",
-					name = L["Redir"],
-					desc = L["RedirDesc"],
-					get = function() return TF3.db.profile.redirect end,
-					set = function() TF3.db.profile.redirect = not TF3.db.profile.redirect end,
-				},
-				--@alpha@
-				debug = {
-					type = 'toggle',
-					order = 3,
-					width = "full",
-					disabled = false,
-					hidden = false,
-					name = L["Debug"],
-					desc = L["DebugDesc"],
-					get = function() return TF3.db.profile.debug end,
-					set = function() TF3.db.profile.debug = not TF3.db.profile.debug end,
-				},
-				--@end-alpha@
-				reload = {
-					type = 'execute',
-					name = L["RUI"],
-					desc = L["RUID"],
-					func = function()
-						_G.ReloadUI()
-					end,
-					--disabled = function()
-					--	if not TF3:IsRedirect() or not TF3:IsDebug() then
-					--		return false
-					--	end
-					--	return true
-					--end,
-					order = -1,
-				},
 				channelGroup = {
 					type = "group",
 					handler = TF3,
 					order = 1,
-					width = "double",
-					disabled = false,
+					disabled = function()
+						return not TF3.db.profile.turnOn
+					end,
 					name = "Channel Selection",
 					desc = "Channel Selection",
 					args = {
@@ -140,7 +104,11 @@ options = {
 				},
 				addFilterGroup = {
 					type = "group",
-					disabled = false,
+					handler = TF3,
+					order = 2,
+					disabled = function()
+						return not TF3.db.profile.turnOn
+					end,
 					name = L["addFilterGroup"],
 					desc = L["AddFilterGD"],
 					args = {
@@ -172,7 +140,7 @@ options = {
 							end,
 							set = function(info, value)
 								TF3.db.profile.filter[1] = value
-								print("The " .. TF3.db.profile.filter[1] .. " was set to: " .. tostring(value))
+								print(format("%s added to filter expression list.", value))
 							end,
 							usage = L["AddFilterUsage"],
 						},
@@ -190,7 +158,7 @@ options = {
 							end,
 							set = function(info, value)
 								TF3.db.profile.filter[2] = value
-								print("The " .. TF3.db.profile.filter[2] .. " was set to: " .. tostring(value))
+								print(format("%s added to filter expression list.", value))
 							end,
 							usage = L["AddFilterUsage"],
 						},
@@ -208,9 +176,65 @@ options = {
 							end,
 							set = function(info, value)
 								TF3.db.profile.filter[3] = value
-								print("The " .. TF3.db.profile.filter[3] .. " was set to: " .. tostring(value))
+								print(format("%s added to filter expression list.", value))
 							end,
 							usage = L["AddFilterUsage"],
+						},
+					},
+				},
+				outputGroup = {
+					type = "group",
+					handler = TF3,
+					order = 3,
+					disabled = function()
+						return not TF3.db.profile.turnOn
+					end,
+					name = L["OUTPUT"],
+					desc = L["OUTPUT"],
+					args = {
+							optionsHeader3 = {
+							type	= "header",
+							order	= 1,
+							name	= L["OUTPUT"],
+							desc = L["OUTPUT"],
+						},
+							redirect = {
+							type = 'toggle',
+							order = 2,
+							width = "full",
+							name = L["Redir"],
+							desc = L["RedirDesc"],
+							get = function() return TF3.db.profile.redirect end,
+							set = function() TF3.db.profile.redirect = not TF3.db.profile.redirect end,
+						},
+						--@alpha@
+						debug = {
+							type = 'toggle',
+							order = 3,
+							width = "full",
+							disabled = false,
+							hidden = false,
+							name = L["Debug"],
+							desc = L["DebugDesc"],
+							get = function() return TF3.db.profile.debug end,
+							set = function() TF3.db.profile.debug = not TF3.db.profile.debug end,
+						},
+						--@end-alpha@
+						optionsHeader4 = {
+							type	= "header",
+							order	= 4,
+							name	= L["FSELF"],
+							desc = L["FSELFD"],
+						},
+						filterSELF = {
+							type = 'toggle',
+							order = 5,
+							width = "double",
+							disabled = false,
+							name = L["FSELF"],
+							desc = L["FSELFD"],
+							get = function() return TF3.db.profile.filterSELF end,
+							set = function() TF3.db.profile.filterSELF = not TF3.db.profile.filterSELF end,
 						},
 					},
 				},

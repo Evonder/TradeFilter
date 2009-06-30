@@ -61,6 +61,8 @@ defaults = {
 		redirect = false,
 		debug = false,
 		filterSAY = false,
+		filterYELL = false,
+		filterSELF = false,
 		filterLFG = false,
 		filterGeneral = false,
 		filterTrade = true,
@@ -89,16 +91,16 @@ defaults = {
 			"[bB][uU][yY][iI][nN][gG]",
 			"2[vV]2",
 			"3[vV]3",
-			"5[vV]5",
-		},
+			"5[vV]5"
+    }
 	}
 }
 
 function TF3:OnInitialize()
 	--[[ Libraries ]]--
-	local L =  LibStub("AceLocale-3.0"):GetLocale("TradeFilter3")
 	local ACD = LibStub("AceConfigDialog-3.0")
 	local LAP = LibStub("LibAboutPanel")
+	local L =  LibStub("AceLocale-3.0"):GetLocale("TradeFilter3")
 
 	self.db = LibStub("AceDB-3.0"):New("TradeFilter3DB", defaults);
 
@@ -115,8 +117,6 @@ function TF3:OnInitialize()
 
 	-- Set up options panels.
 	self.OptionsPanel = ACD:AddToBlizOptions(self.name, L["TFR"], nil, "generalGroup")
---~ 	self.OptionsPanel.channel = ACD:AddToBlizOptions(self.name, L["channelGroup"], self.name, "channelGroup")
---~ 	self.OptionsPanel.custom = ACD:AddToBlizOptions(self.name, L["addFilterGroup"], self.name, "addFilterGroup")
 	self.OptionsPanel.profiles = ACD:AddToBlizOptions("TradeFilter3P", L["Profiles"], self.name)
 	self.OptionsPanel.about = LAP.new(self.name, self.name)
 	
@@ -227,8 +227,12 @@ Taken from SpamMeNot
 local function PreFilterFunc_Say(self, event, ...)
 	local filtered = false
 	local userID = arg2 or select(2, ...)
-	if (TF3.db.profile.filterSAY and userID ~= UnitName("Player") and TF3:IsFriend(userID) == false) then
-		filtered = TF3:FilterFunc(...)
+	if (TF3.db.profile.filterSAY and TF3:IsFriend(userID) == false) then
+		if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false) then
+			filtered = false
+		else
+			filtered = TF3:FilterFunc(...)
+		end
 	elseif (event == "CHAT_MSG_SAY" and not TF3.db.profile.filterSAY) then
 		filtered = false
 	end
@@ -239,8 +243,12 @@ end
 local function PreFilterFunc_Yell(self, event, ...)
 	local filtered = false
 	local userID = arg2 or select(2, ...)
-	if (TF3.db.profile.filterYELL and userID ~= UnitName("Player") and TF3:IsFriend(userID) == false) then
-		filtered = TF3:FilterFunc(...)
+	if (TF3.db.profile.filterYELL and TF3:IsFriend(userID) == false) then
+		if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false) then
+			filtered = false
+		else
+			filtered = TF3:FilterFunc(...)
+		end
 	elseif (event == "CHAT_MSG_YELL" and not TF3.db.profile.filterYELL) then
 		filtered = false
 	end
@@ -253,20 +261,32 @@ local function PreFilterFunc(self, event, ...)
 	local zoneID = arg7 or select(7, ...)
 	local chanID = arg8 or select(8, ...)
 	--[[ Check for Trade Channel and User setting ]]--
-	if (zoneID == 2 and TF3.db.profile.filtertrade and userID ~= UnitName("Player") and TF3:IsFriend(userID) == false) then
-		filtered = TF3:FilterFunc(...)
+	if (zoneID == 2 and TF3.db.profile.filtertrade and TF3:IsFriend(userID) == false) then
+		if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false) then
+			filtered = false
+		else
+			filtered = TF3:FilterFunc(...)
+		end
 	elseif (zoneID == 2 and not TF3.db.profile.filtertrade) then
 		filtered = false
 	end
 	--[[ Check for General Channel and User setting ]]--
-	if (chanID == 1 and TF3.db.profile.filtergeneral and userID ~= UnitName("Player") and TF3:IsFriend(userID) == false) then
-		filtered = TF3:FilterFunc(...)
+	if (chanID == 1 and TF3.db.profile.filtergeneral and TF3:IsFriend(userID) == false) then
+		if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false) then
+			filtered = false
+		else
+			filtered = TF3:FilterFunc(...)
+		end
 	elseif (chanID == 1 and not TF3.db.profile.filtergeneral) then
 		filtered = false
 	end
 	--[[ Check for LFG Channel and User setting ]]--
-	if (zoneID == 26 and TF3.db.profile.filterLFG and userID ~= UnitName("Player") and TF3:IsFriend(userID) == false) then
-		filtered = TF3:FilterFunc(...)
+	if (zoneID == 26 and TF3.db.profile.filterLFG and TF3:IsFriend(userID) == false) then
+		if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false) then
+			filtered = false
+		else
+			filtered = TF3:FilterFunc(...)
+		end
 	elseif (chanID == 26 and not TF3.db.profile.filterLFG) then
 		filtered = false
 	end

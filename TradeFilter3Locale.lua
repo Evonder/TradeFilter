@@ -31,3 +31,9 @@ if L then
 --@localization(locale="zhTW", format="lua_additive_table", same-key-is-true=true, handle-subnamespaces="concat")@
 if GetLocale() == "zhTW" then return end
 end
+
+local L =  LibStub("AceLocale-3.0"):NewLocale("TradeFilter3", "frFR", true, debug)
+if L then
+--@localization(locale="frFR", format="lua_additive_table", same-key-is-true=true, handle-subnamespaces="concat")@
+if GetLocale() == "frFR" then return end
+end
