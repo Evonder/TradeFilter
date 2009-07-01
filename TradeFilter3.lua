@@ -100,7 +100,7 @@ function TF3:OnInitialize()
 	--[[ Libraries ]]--
 	local ACD = LibStub("AceConfigDialog-3.0")
 	local LAP = LibStub("LibAboutPanel")
-	local L =  LibStub("AceLocale-3.0"):GetLocale("TradeFilter3")
+	local L =  LibStub("AceLocale-3.0"):GetLocale("TradeFilter3", true)
 
 	self.db = LibStub("AceDB-3.0"):New("TradeFilter3DB", defaults);
 
@@ -314,13 +314,13 @@ function TF3:FilterFunc(...)
 		end
 		--@end-alpha@
 		if (self.db.profile.addfilter_enable) then
-			for i, matchIt in ipairs(self.db.profile.filter) do
+			for i,v in ipairs(self.db.profile.filter) do
 				--@alpha@
 				if (self.db.profile.debug) then
-					TF3:FindFrame(debugFrame, "Checking for Match with " .. matchIt)
+					TF3:FindFrame(debugFrame, "Checking for Match with " .. v)
 				end
 				--@end-alpha@
-				if (find(arg1, matchIt)) then
+				if (find(arg1,v)) then
 					--@alpha@
 					if (self.db.profile.debug) then
 						TF3:FindFrame(debugFrame, "|cff00ff00**** Matched ***|r")
