@@ -3,18 +3,18 @@
 ## Title: Trade|cffffffffFilter|r3 SVN: @project-revision@
 #@end-alpha@
 ## Title: @localization(locale="enUS", key="Title", namespace="ToC")@
-## Title: @localization(locale="deDE", key="Title", namespace="ToC")@
-## Title: @localization(locale="zhCN", key="Title", namespace="ToC")@
-## Title: @localization(locale="zhTW", key="Title", namespace="ToC")@
-## Title: @localization(locale="frFR", key="Title", namespace="ToC")@
+## Title-deDE: @localization(locale="deDE", key="Title", namespace="ToC")@
+## Title-zhCN: @localization(locale="zhCN", key="Title", namespace="ToC")@
+## Title-zhTW: @localization(locale="zhTW", key="Title", namespace="ToC")@
+## Title-frFR: @localization(locale="frFR", key="Title", namespace="ToC")@
 #@alpha@
 ## Notes: Filter the shit outta trade channel. SVN: @project-revision@
 #@end-alpha@
 ## Notes: @localization(locale="enUS", key="Notes", namespace="TOC")@
-## Notes: @localization(locale="deDE", key="Notes", namespace="TOC")@
-## Notes: @localization(locale="zhCN", key="Notes", namespace="TOC")@
-## Notes: @localization(locale="zhTW", key="Notes", namespace="TOC")@
-## Notes: @localization(locale="frFR", key="Notes", namespace="TOC")@
+## Notes-deDE: @localization(locale="deDE", key="Notes", namespace="TOC")@
+## Notes-zhCN: @localization(locale="zhCN", key="Notes", namespace="TOC")@
+## Notes-zhTW: @localization(locale="zhTW", key="Notes", namespace="TOC")@
+## Notes-frFR: @localization(locale="frFR", key="Notes", namespace="TOC")@
 ## Author: @project-author@
 ## X-Date: @project-date-iso@
 ## X-Credits: crashmstr
