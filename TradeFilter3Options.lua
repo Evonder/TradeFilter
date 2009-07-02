@@ -136,11 +136,16 @@ options = {
 							name = L["AddFilter1"],
 							desc = L["AddFilter1D"],
 							get = function(info)
-								return TF3.db.profile.filter[1]
+								return TF3.db.profile.filter["20"]
 							end,
 							set = function(info, value)
-								TF3.db.profile.filter[1] = value
-								print(format("%s added to filter expression list.", value))
+								if (value == "") then
+									TF3.db.profile.filter["20"] = nil
+									print("Expression removed from custom filter list.")
+								else
+									TF3.db.profile.filter["20"] = value
+									print(format("%s added to filter expression list.", value))
+								end
 							end,
 							usage = L["AddFilterUsage"],
 						},
@@ -154,11 +159,16 @@ options = {
 							name = L["AddFilter2"],
 							desc = L["AddFilter1D"],
 							get = function(info)
-								return TF3.db.profile.filter[2]
+								return TF3.db.profile.filter["21"]
 							end,
 							set = function(info, value)
-								TF3.db.profile.filter[2] = value
-								print(format("%s added to filter expression list.", value))
+								if (value == "") then
+									TF3.db.profile.filter["21"] = nil
+									print("Expression removed from custom filter list.")
+								else
+									TF3.db.profile.filter["21"] = value
+									print(format("%s added to filter expression list.", value))
+								end
 							end,
 							usage = L["AddFilterUsage"],
 						},
@@ -172,11 +182,16 @@ options = {
 							name = L["AddFilter3"],
 							desc = L["AddFilter1D"],
 							get = function(info)
-								return TF3.db.profile.filter[3]
+								return TF3.db.profile.filter["22"]
 							end,
 							set = function(info, value)
-								TF3.db.profile.filter[3] = value
-								print(format("%s added to filter expression list.", value))
+								if (value == "") then
+									TF3.db.profile.filter["22"] = nil
+									print("Expression removed from custom filter list.")
+								else
+									TF3.db.profile.filter["22"] = value
+									print(format("%s added to filter expression list.", value))
+								end
 							end,
 							usage = L["AddFilterUsage"],
 						},

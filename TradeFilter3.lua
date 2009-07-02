@@ -33,6 +33,7 @@ File Date: @file-date-iso@
 --]]
 
 TradeFilter3 = LibStub("AceAddon-3.0"):NewAddon("TradeFilter3", "AceConsole-3.0", "AceEvent-3.0")
+local L =  LibStub("AceLocale-3.0"):GetLocale("TradeFilter3", true)
 local friends = LibStub("LibFriends-1.0")
 local TF3 = TradeFilter3
 
@@ -68,31 +69,7 @@ defaults = {
 		filterTrade = true,
 		addfilter_enable = false,
 		friendslist = {},
-		filter = {
-			"CUSTOM FILTER 1",
-			"CUSTOM FILTER 2",
-			"CUSTOM FILTER 3",
-			"[lL][fF] [pP][oO][rR][tT]",
-			"[bB][uU][yY][iI][nN][gG]",
-			"[wW][tT][bBsStT]",
-			"[lL][fF][wWeEmM]",
-			"[lL][fF] [eE][nN][cC][hH][aA][nN][tT]",
-			"[lL][fF] [jJ][cC]",
-			"[lL][fF] [dD][pP][sS]",
-			"[lL][fF] [tT][aA][nN][kK]",
-			"[lL][fF] [hH][eE][aA][lL][eE][rR]",
-			"[lL][fF]%d[mM]?",
-			"[lL][fF][mM]?",
-			"[lL][fF][gG]",
-			"AH",
-			"looking for work",
-			"lockpick",
-			"[sS][eE][lL][lL][iI][nN][gG]",
-			"[bB][uU][yY][iI][nN][gG]",
-			"2[vV]2",
-			"3[vV]3",
-			"5[vV]5"
-    }
+		filter = L.FILTER
 	}
 }
 
@@ -100,7 +77,6 @@ function TF3:OnInitialize()
 	--[[ Libraries ]]--
 	local ACD = LibStub("AceConfigDialog-3.0")
 	local LAP = LibStub("LibAboutPanel")
-	local L =  LibStub("AceLocale-3.0"):GetLocale("TradeFilter3", true)
 
 	self.db = LibStub("AceDB-3.0"):New("TradeFilter3DB", defaults);
 
@@ -313,38 +289,20 @@ function TF3:FilterFunc(...)
 			TF3:FindFrame(debugFrame, "arg1: " .. arg1 .. " arg2: " .. arg2)
 		end
 		--@end-alpha@
-		if (self.db.profile.addfilter_enable) then
-			for i,v in ipairs(self.db.profile.filter) do
-				--@alpha@
-				if (self.db.profile.debug) then
-					TF3:FindFrame(debugFrame, "Checking for Match with " .. v)
-				end
-				--@end-alpha@
-				if (find(arg1,v)) then
-					--@alpha@
-					if (self.db.profile.debug) then
-						TF3:FindFrame(debugFrame, "|cff00ff00**** Matched ***|r")
-					end
-					--@end-alpha@
-				filtered = false
-				end
+		for i,v in pairs(self.db.profile.filter) do
+			--@alpha@
+			if (self.db.profile.debug) then
+				TF3:FindFrame(debugFrame, "Checking for Match with " .. v)
 			end
-		else
-			for i=4,#self.db.profile.filter do
+			--@end-alpha@
+			if (find(arg1,v)) then
 				--@alpha@
 				if (self.db.profile.debug) then
-					TF3:FindFrame(debugFrame, "Checking for Match with " .. self.db.profile.filter[i])
+					TF3:FindFrame(debugFrame, "|cff00ff00**** Matched ***|r")
 				end
 				--@end-alpha@
-				if (find(arg1, self.db.profile.filter[i])) then
-					--@alpha@
-					if (self.db.profile.debug) then
-						TF3:FindFrame(debugFrame, "|cff00ff00**** Matched ***|r")
-					end
-					--@end-alpha@
-				filtered = false
-				end
-			end	
+			filtered = false
+			end
 		end
 		if (filtered == true) then
 			if (lastArg1 ~= arg1 or lastArg2 ~= arg2) then
