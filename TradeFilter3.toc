@@ -17,10 +17,11 @@
 ## Notes-frFR: @localization(locale="frFR", key="Notes", namespace="TOC")@
 ## Author: @project-author@
 ## X-Date: @project-date-iso@
-## X-Credits: crashmstr
+## X-Credits: Inspiration: crashmstr  Translations: wowuicn, Contiki and Erreka
 ## X-eMail: evonder AT gmail DOT com
 ## X-Website: http://www.wowace.com/projects/trade-filter/
 ## X-Category: Chat & Communication
+## X-Localizations: enUS, frFR, zhCN, zhTW, deDE
 ## OptionalDeps: Ace3, LibAboutPanel
 ## X-License: BSD
 ## Version: @project-version@
