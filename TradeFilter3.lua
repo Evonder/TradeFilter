@@ -235,7 +235,7 @@ local function PreFilterFunc_Say(self, event, ...)
 	local msg = arg1 or select(1, ...)
 	local userID = arg2 or select(2, ...)
 	if (TF3.db.profile.filterSAY and TF3:IsFriend(userID) == false) then
-		if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false and TF3:WhiteList(msg) == true) then
+		if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false or TF3:WhiteList(msg) == true) then
 			filtered = false
 		elseif (TF3:BlackList(msg) == true) then
 			filtered = true
@@ -254,7 +254,7 @@ local function PreFilterFunc_Yell(self, event, ...)
 	local msg = arg1 or select(1, ...)
 	local userID = arg2 or select(2, ...)
 	if (TF3.db.profile.filterYELL and TF3:IsFriend(userID) == false) then
-		if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false and TF3:WhiteList(msg) == true) then
+		if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false or TF3:WhiteList(msg) == true) then
 			filtered = false
 		elseif (TF3:BlackList(msg) == true) then
 			filtered = true
@@ -275,7 +275,7 @@ local function PreFilterFunc(self, event, ...)
 	local chanID = arg8 or select(8, ...)
 	--[[ Check for Trade Channel and User setting ]]--
 	if (zoneID == 2 and TF3.db.profile.filtertrade and TF3:IsFriend(userID) == false) then
-		if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false and TF3:WhiteList(msg) == true) then
+		if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false or TF3:WhiteList(msg) == true) then
 			filtered = false
 		elseif (TF3:BlackList(msg) == true) then
 			filtered = true
@@ -287,7 +287,7 @@ local function PreFilterFunc(self, event, ...)
 	end
 	--[[ Check for General Channel and User setting ]]--
 	if (chanID == 1 and TF3.db.profile.filtergeneral and TF3:IsFriend(userID) == false) then
-		if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false and TF3:WhiteList(msg) == true) then
+		if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false or TF3:WhiteList(msg) == true) then
 			filtered = false
 		elseif (TF3:BlackList(msg) == true) then
 			filtered = true
@@ -299,7 +299,7 @@ local function PreFilterFunc(self, event, ...)
 	end
 	--[[ Check for LFG Channel and User setting ]]--
 	if (zoneID == 26 and TF3.db.profile.filterLFG and TF3:IsFriend(userID) == false) then
-		if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false and TF3:WhiteList(msg) == true) then
+		if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false or TF3:WhiteList(msg) == true) then
 			filtered = false
 		elseif (TF3:BlackList(msg) == true) then
 			filtered = true
