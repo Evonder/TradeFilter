@@ -1,5 +1,15 @@
 package-as: TradeFilter3
 
+license-output: LICENSE.txt
+
+ignore:
+ - .pkgmeta
+ - .docmeta
+ - Docs
+
+tools-used:
+ - fprof
+
 externals:
  libs/LibStub:
   url: svn://svn.wowace.com/wow/libstub/mainline/trunk
@@ -38,4 +48,4 @@ externals:
   url: git://git.curseforge.net/wow/libaboutpanel/mainline.git
   tag: latest
 
-license-output: License.txt
+

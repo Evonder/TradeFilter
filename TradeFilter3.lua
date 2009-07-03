@@ -267,6 +267,7 @@ local function PreFilterFunc_Yell(self, event, ...)
 	return filtered
 end
 
+--[[ Check for Trade/General/LFG Channel and User setting ]]--
 local function PreFilterFunc(self, event, ...)
 	local filtered = false
 	local msg = arg1 or select(1, ...)
