@@ -197,6 +197,28 @@ options = {
 						},
 					},
 				},
+				listsGroup = {
+					type = "group",
+					handler = TF3,
+					order = 2,
+					disabled = function()
+						return not TF3.db.profile.turnOn
+					end,
+					name = L["listsGroup"],
+					desc = L["listsGD"],
+					args = {
+						optionsHeader3 = {
+							type	= "header",
+							order	= 1,
+							name	= L["bLists"],
+						},
+						optionsHeader4 = {
+							type	= "header",
+							order	= 1,
+							name	= L["wLists"],
+						},
+					},
+				},
 				outputGroup = {
 					type = "group",
 					handler = TF3,

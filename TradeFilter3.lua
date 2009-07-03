@@ -69,6 +69,8 @@ defaults = {
 		filterTrade = true,
 		addfilter_enable = false,
 		friendslist = {},
+		whitelist = L.WHITELIST,
+		blacklist = L.BLACKLIST,
 		filter = L.FILTER
 	}
 }
@@ -167,6 +169,30 @@ function TF3:IsFriend(userID)
 	return false
 end
 
+--[[ IsFriend Func ]]--
+function TF3:IsFriend(userID)
+	local friends = self.db.profile.friendslist
+	for name in pairs(friends) do
+		if (userID == name) then
+			return true
+		end
+	end
+	return false
+end
+
+--[[ BlackList Func ]]--
+--[[ Base blacklist words stolen from BadBoy(Funkydude) ]]--
+function TF3:BlackList(msg)
+	local blword = self.db.profile.blacklist
+	msg = lower(msg)
+	for _,word in pairs(blword) do
+		if (msg == word) then -- if msg contains a blword then toss the whole msg out
+			return true
+		end
+	end
+	return false
+end
+
 --[[ Window and Chat Functions ]]--
 function TF3:FindFrame(toFrame, msg)
 	for i=1,NUM_CHAT_WINDOWS do
@@ -202,7 +228,13 @@ Taken from SpamMeNot
 --[[ Check for SAY Channel and User setting ]]--
 local function PreFilterFunc_Say(self, event, ...)
 	local filtered = false
+	local msg = arg1 or select(1, ...)
 	local userID = arg2 or select(2, ...)
+	if (TF3:BlackList(msg) == true) then
+		return true
+	elseif (TF3:WhiteList(msg) == true) then
+		return false
+	end
 	if (TF3.db.profile.filterSAY and TF3:IsFriend(userID) == false) then
 		if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false) then
 			filtered = false
@@ -218,7 +250,13 @@ end
 --[[ Check for SAY Channel and User setting ]]--
 local function PreFilterFunc_Yell(self, event, ...)
 	local filtered = false
+	local msg = arg1 or select(1, ...)
 	local userID = arg2 or select(2, ...)
+	if (TF3:BlackList(msg) == true) then
+		return true
+	elseif (TF3:WhiteList(msg) == true) then
+		return false
+	end
 	if (TF3.db.profile.filterYELL and TF3:IsFriend(userID) == false) then
 		if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false) then
 			filtered = false
@@ -233,9 +271,15 @@ end
 
 local function PreFilterFunc(self, event, ...)
 	local filtered = false
+	local msg = arg1 or select(1, ...)
 	local userID = arg2 or select(2, ...)
 	local zoneID = arg7 or select(7, ...)
 	local chanID = arg8 or select(8, ...)
+	if (TF3:BlackList(msg) == true) then
+		return true
+	elseif (TF3:WhiteList(msg) == true) then
+		return false
+	end
 	--[[ Check for Trade Channel and User setting ]]--
 	if (zoneID == 2 and TF3.db.profile.filtertrade and TF3:IsFriend(userID) == false) then
 		if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false) then
