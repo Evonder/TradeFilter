@@ -42,6 +42,6 @@ Adding a set, ie [xXyY], will attempt to find a match for any character given in
 === Supported Translations
 //Please help localize this project// [[http://www.wowace.com/projects/trade-filter/localization/|HERE]]
 
-German - 73.0% ([[http://www.wowace.com/profiles/Contiki/|Contiki]])\\
-Simplified Chinese - 48.6% ([[http://www.wowace.com/profiles/wowuicn/|wowuicn]])\\
-French - 39.2% ([[http://www.wowace.com/profiles/Erreka/|Erreka]])
+German - 98.6%\\
+Simplified Chinese - 48.6%\\
+French - 39.2%
