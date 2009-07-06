@@ -7,6 +7,33 @@ local TradeFilter3 = LibStub("AceAddon-3.0"):GetAddon("TradeFilter3")
 local L = LibStub("AceLocale-3.0"):GetLocale("TradeFilter3")
 local TF3 = TradeFilter3
 
+function TF3:Del(t)
+	wipe(t)
+	setmetatable(t, nil)
+	pool[t] = true
+	return nil
+end
+
+function TF3:ClearTable(t, recursively)
+	if t ~= nil and type(t) == 'table' then
+		if not recursively then
+			wipe(t)
+		else
+			for k, v in pairs(t) do
+				if type(v) == 'table' then
+					TF3:ClearTable(v, true);
+					t[k] = TF3:Del(v);
+				else
+					t[k] = nil;
+				end
+			end
+		end
+		return t;
+		else
+			return {};
+	end
+end
+
 --[[ Options Table ]]--
 options = {
 	type="group",
@@ -102,105 +129,102 @@ options = {
 						},
 					},
 				},
-				addFilterGroup = {
+				editFilterGroup = {
 					type = "group",
 					handler = TF3,
 					order = 2,
 					disabled = function()
 						return not TF3.db.profile.turnOn
 					end,
-					name = L["addFilterGroup"],
-					desc = L["AddFilterGD"],
+					name = L["EditFilterGroup"],
+					desc = L["EditFilterGD"],
 					args = {
 						optionsHeader2 = {
 							type	= "header",
 							order	= 1,
-							name	= L["AddFilter"],
+							name	= L["EditFilter"],
 						},
-						addfilter_enable = {
+						editfilter_enable = {
 							type = 'toggle',
 							order = 2,
 							width = "double",
-							name = L["AddFilter"],
-							desc = L["AddFilterD"],
+							name = L["EditFilter"],
+							desc = L["EditFilterD"],
 							get = function() return TF3.db.profile.addfilter_enable end,
 							set = function() TF3.db.profile.addfilter_enable = not TF3.db.profile.addfilter_enable end,
 						},
-						addfilter1 = {
+						tradefilters = {
 							type = 'input',
 							disabled = function()
 								return not TF3.db.profile.addfilter_enable
 							end,
-							order = 3,
+							multiline = 8,
+							order = 7,
 							width = "double",
-							name = L["AddFilter1"],
-							desc = L["AddFilter1D"],
+							name = L["BTF"],
+--~ 							desc = L["BTF"],
 							get = function(info)
-								return TF3.db.profile.filter["20"]
-							end,
+								local ret = '';
+									for k, v in pairs(TF3.db.profile.tradefilters) do
+										if ret == '' then
+											ret = k..' = '..v;
+										else
+											ret = ret..'\n'..k..' = '..v;
+										end
+									end
+									return ret;
+								end,
 							set = function(info, value)
-								if (value == "") then
-									TF3.db.profile.filter["20"] = nil
-									print("Expression removed from custom filter list.")
-								else
-									TF3.db.profile.filter["20"] = value
-									print(format("%s added to filter expression list.", value))
+								TF3:ClearTable(TF3.db.profile.tradefilters)
+								local tbl = { strsplit('\n', value) };
+								local type, val;
+								for i, str in pairs(tbl) do
+									type, val = strsplit('=', str);
+									type = strtrim(type);
+									val = strtrim(val);
+									TF3.db.profile.tradefilters[type] = val;
 								end
 							end,
-							usage = L["AddFilterUsage"],
 						},
-						addfilter2 = {
+						basefilters = {
 							type = 'input',
 							disabled = function()
 								return not TF3.db.profile.addfilter_enable
 							end,
-							order = 4,
+							multiline = 8,
+							order = 8,
 							width = "double",
-							name = L["AddFilter2"],
-							desc = L["AddFilter1D"],
+							name = L["BCF"],
+--~ 							desc = L["BCF"],
 							get = function(info)
-								return TF3.db.profile.filter["21"]
-							end,
+								local ret = '';
+									for k, v in pairs(TF3.db.profile.basefilters) do
+										if ret == '' then
+											ret = k..' = '..v;
+										else
+											ret = ret..'\n'..k..' = '..v;
+										end
+									end
+									return ret;
+								end,
 							set = function(info, value)
-								if (value == "") then
-									TF3.db.profile.filter["21"] = nil
-									print("Expression removed from custom filter list.")
-								else
-									TF3.db.profile.filter["21"] = value
-									print(format("%s added to filter expression list.", value))
+								TF3:ClearTable(TF3.db.profile.basefilters)
+								local tbl = { strsplit('\n', value) };
+								local type, val;
+								for i, str in pairs(tbl) do
+									type, val = strsplit('=', str);
+									type = strtrim(type);
+									val = strtrim(val);
+									TF3.db.profile.basefilters[type] = val;
 								end
 							end,
-							usage = L["AddFilterUsage"],
-						},
-						addfilter3 = {
-							type = 'input',
-							disabled = function()
-								return not TF3.db.profile.addfilter_enable
-							end,
-							order = 5,
-							width = "double",
-							name = L["AddFilter3"],
-							desc = L["AddFilter1D"],
-							get = function(info)
-								return TF3.db.profile.filter["22"]
-							end,
-							set = function(info, value)
-								if (value == "") then
-									TF3.db.profile.filter["22"] = nil
-									print("Expression removed from custom filter list.")
-								else
-									TF3.db.profile.filter["22"] = value
-									print(format("%s added to filter expression list.", value))
-								end
-							end,
-							usage = L["AddFilterUsage"],
 						},
 					},
 				},
 				listsGroup = {
 					type = "group",
 					handler = TF3,
-					order = 2,
+					order = 3,
 					disabled = function()
 						return not TF3.db.profile.turnOn
 					end,
@@ -210,19 +234,89 @@ options = {
 						optionsHeader3 = {
 							type	= "header",
 							order	= 1,
-							name	= L["bLists"],
+							name	= L["bwLists"],
 						},
-						optionsHeader4 = {
-							type	= "header",
-							order	= 1,
-							name	= L["wLists"],
+						editlists_enable = {
+							type = 'toggle',
+							order = 2,
+							width = "double",
+							name = L["EditLists"],
+							desc = L["EditLists"],
+							get = function() return TF3.db.profile.editlists_enable end,
+							set = function() TF3.db.profile.editlists_enable = not TF3.db.profile.editlists_enable end,
+						},
+						blist = {
+							type = 'input',
+							disabled = function()
+								return not TF3.db.profile.editlists_enable
+							end,
+							multiline = 8,
+							order = 3,
+							width = "double",
+							name = L["bLists"],
+--~ 							desc = L["bLists"],
+							get = function(info)
+								local ret = '';
+									for k, v in pairs(TF3.db.profile.blacklist) do
+										if ret == '' then
+											ret = k..' = '..v;
+										else
+											ret = ret..'\n'..k..' = '..v;
+										end
+									end
+									return ret;
+								end,
+							set = function(info, value)
+								TF3:ClearTable(TF3.db.profile.blacklist)
+								local tbl = { strsplit('\n', value) };
+								local type, val;
+								for i, str in pairs(tbl) do
+									type, val = strsplit('=', str);
+									type = strtrim(type);
+									val = strtrim(val);
+									TF3.db.profile.blacklist[type] = val;
+								end
+							end,
+						},
+						wlist = {
+							type = 'input',
+							disabled = function()
+								return not TF3.db.profile.editlists_enable
+							end,
+							multiline = 8,
+							order = 4,
+							width = "double",
+							name = L["wLists"],
+--~ 							desc = L["wLists"],
+							get = function(info)
+								local ret = '';
+									for k, v in pairs(TF3.db.profile.whitelist) do
+										if ret == '' then
+											ret = k..' = '..v;
+										else
+											ret = ret..'\n'..k..' = '..v;
+										end
+									end
+									return ret;
+								end,
+							set = function(info, value)
+								TF3:ClearTable(TF3.db.profile.whitelist)
+								local tbl = { strsplit('\n', value) };
+								local type, val;
+								for i, str in pairs(tbl) do
+									type, val = strsplit('=', str);
+									type = strtrim(type);
+									val = strtrim(val);
+									TF3.db.profile.whitelist[type] = val;
+								end
+							end,
 						},
 					},
 				},
 				outputGroup = {
 					type = "group",
 					handler = TF3,
-					order = 3,
+					order = 4,
 					disabled = function()
 						return not TF3.db.profile.turnOn
 					end,

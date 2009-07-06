@@ -38,9 +38,9 @@ local friends = LibStub("LibFriends-1.0")
 local TF3 = TradeFilter3
 
 local MAJOR_VERSION = "3.0"
-local MINOR_VERSION = 000 + tonumber(("$Revision: @project-revision@ $"):match("%d+"))
+local MINOR_VERSION = 000 + tonumber(("$Revision: 120 $"):match("%d+"))
 TF3.version = MAJOR_VERSION .. "." .. MINOR_VERSION
-TF3.date = string.sub("$Date: @file-date-iso@ $", 8, 17)
+TF3.date = string.sub("$Date: 2009-07-03T15:59:07Z $", 8, 17)
 
 --[[ Locals ]]--
 local _G = _G
@@ -68,12 +68,15 @@ defaults = {
 		filterLFG = false,
 		filterGeneral = false,
 		filterTrade = true,
-		addfilter_enable = false,
+		editfilter_enable = false,
+		editlists_enable = false,
 		friendslist = {},
 		whitelist = L.WHITELIST,
 		blacklist = L.BLACKLIST,
-		filter = L.FILTER
-	}
+		filters = L.FILTERS,
+		basefilters = L.FILTERS.BASE,
+		tradefilters = L.FILTERS.TRADE,
+	},
 }
 
 function TF3:OnInitialize()
@@ -204,14 +207,14 @@ function TF3:FindFrame(toFrame, msg)
 		if (toFrame == name) then
 			toFrame = _G["ChatFrame" .. i]
 			toFrame:AddMessage(msg)
-		else
-			--TF3:CreateFrame(toFrame)
+		elseif (toFrame ~= name) then
+--~ 			TF3:CreateFrame(toFrame)
 		end
 	end
 end
 
 function TF3:CreateFrame(newFrame)
-	--Need to find the proper way to create a new chatframe that is docked to the default frame
+--~ 	Looking for the proper solution
 end
 
 --[[ PreFilter Functions ]]--
@@ -283,7 +286,7 @@ local function PreFilterFunc(self, event, ...)
 		else
 			filtered = TF3:FilterFunc(...)
 		end
-	elseif (zoneID == 2 and not TF3.db.profile.filtertrade) then
+	elseif (zoneID == 2 and not TF3.db.profile.filterTrade) then
 		filtered = false
 	end
 	--[[ Check for General Channel and User setting ]]--
@@ -295,7 +298,7 @@ local function PreFilterFunc(self, event, ...)
 		else
 			filtered = TF3:FilterFunc(...)
 		end
-	elseif (chanID == 1 and not TF3.db.profile.filtergeneral) then
+	elseif (chanID == 1 and not TF3.db.profile.filterGeneral) then
 		filtered = false
 	end
 	--[[ Check for LFG Channel and User setting ]]--
@@ -326,26 +329,44 @@ function TF3:FilterFunc(...)
 		chan = "0. Say/Yell"
 	end
 	local arg1 = lower(arg1)
-	if (filterFuncList and self.db.profile.turnOn) then
-		filtered = true
-		--@alpha@
-		if (self.db.profile.debug) then
-			TF3:FindFrame(debugFrame, "arg1: " .. arg1 .. " arg2: " .. arg2)
-		end
-		--@end-alpha@
-		for i,v in pairs(self.db.profile.filter) do
+		if (filterFuncList and self.db.profile.turnOn) then
+			filtered = true
 			--@alpha@
 			if (self.db.profile.debug) then
-				TF3:FindFrame(debugFrame, "Checking for Match with " .. v)
+				TF3:FindFrame(debugFrame, "arg1: " .. arg1 .. " arg2: " .. arg2)
 			end
 			--@end-alpha@
-			if (find(arg1,v)) then
+			if (arg7 == 26) then
+			for i,v in pairs(self.db.profile.basefilters) do
 				--@alpha@
 				if (self.db.profile.debug) then
-					TF3:FindFrame(debugFrame, "|cff00ff00**** Matched ***|r")
+					TF3:FindFrame(debugFrame, "Checking for Match with " .. v)
 				end
 				--@end-alpha@
-			filtered = false
+				if (find(arg1,v)) then
+					--@alpha@
+					if (self.db.profile.debug) then
+						TF3:FindFrame(debugFrame, "|cff00ff00**** Matched ***|r")
+					end
+					--@end-alpha@
+				filtered = false
+				end
+			end
+		else
+			for i,v in pairs(self.db.profile.tradefilters) do
+				--@alpha@
+				if (self.db.profile.debug) then
+					TF3:FindFrame(debugFrame, "Checking for Match with " .. v)
+				end
+				--@end-alpha@
+				if (find(arg1,v)) then
+					--@alpha@
+					if (self.db.profile.debug) then
+						TF3:FindFrame(debugFrame, "|cff00ff00**** Matched ***|r")
+					end
+					--@end-alpha@
+				filtered = false
+				end
 			end
 		end
 		if (filtered == true) then

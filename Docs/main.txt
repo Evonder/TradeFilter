@@ -30,14 +30,18 @@ Adding a set, ie [xXyY], will attempt to find a match for any character given in
 <<code php>>/tf or /filter<</code>>
 
 === To Do ===
+
+
+==== ChangeLog
+<<code php>>
+r122
  - Distinguish between Trade channel and LFG/General for the ability to have differant filter tables for pattern matching.\\
  - Ability to edit //entire// filter tables rather than having static lists.
-==== ChangeLog
-===== r82
-++TradeFilter also will not filter any messages from your friends, they must be on your current characters friends list for this functionality to work.++
-
-===== r111
-++TradeFilter now contains a Black/White list, though not yet configurable through the GUI.++
+r111
+ - TradeFilter now contains a Black/White list, though not yet configurable through the GUI.
+r82
+ - TradeFilter also will not filter any messages from your friends, they must be on your current characters friends list for this functionality to work.
+<</code>>
 
 === Supported Translations
 //Please help localize this project// [[http://www.wowace.com/projects/trade-filter/localization/|HERE]]
