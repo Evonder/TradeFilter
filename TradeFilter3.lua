@@ -71,11 +71,11 @@ defaults = {
 		editfilter_enable = false,
 		editlists_enable = false,
 		friendslist = {},
-		whitelist = L.WHITELIST,
-		blacklist = L.BLACKLIST,
-		filters = L.FILTERS,
-		basefilters = L.FILTERS.BASE,
-		tradefilters = L.FILTERS.TRADE,
+		whitelist = {},
+		blacklist = {},
+		filters = {},
+		basefilters = {},
+		tradefilters = {},
 	},
 }
 
@@ -102,6 +102,11 @@ function TF3:OnInitialize()
 	self.OptionsPanel.profiles = ACD:AddToBlizOptions("TradeFilter3P", L["Profiles"], self.name)
 	self.OptionsPanel.about = LAP.new(self.name, self.name)
 	
+	if (TF3.db.profile.firstlogin == true) then
+		TF3:FirstLogin()
+		TF3.db.profile.firstlogin = false
+	end
+	
 	if IsLoggedIn() then
 		self:IsLoggedIn()
 	else
@@ -113,6 +118,12 @@ end
 function TF3:OpenOptions()
 	InterfaceOptionsFrame_OpenToCategory(self.OptionsPanel.profiles)
 	InterfaceOptionsFrame_OpenToCategory(self.OptionsPanel)
+end
+
+function TF3:FirstLogin()
+	TF3.db.profile.whitelist = L.WHITELIST
+	TF3.db.profile.blacklist = L.BLACKLIST
+	TF3.db.profile.filters = L.FILTERS
 end
 
 function TF3:IsLoggedIn()

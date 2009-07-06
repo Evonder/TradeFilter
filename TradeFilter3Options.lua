@@ -165,7 +165,7 @@ options = {
 --~ 							desc = L["BTF"],
 							get = function(info)
 								local ret = '';
-									for k, v in pairs(TF3.db.profile.tradefilters) do
+									for k, v in pairs(TF3.db.profile.filters.TRADE) do
 										if ret == '' then
 											ret = k..' = '..v;
 										else
@@ -175,14 +175,14 @@ options = {
 									return ret;
 								end,
 							set = function(info, value)
-								TF3:ClearTable(TF3.db.profile.tradefilters)
+								TF3:ClearTable(TF3.db.profile.filters.TRADE)
 								local tbl = { strsplit('\n', value) };
 								local type, val;
 								for i, str in pairs(tbl) do
 									type, val = strsplit('=', str);
 									type = strtrim(type);
 									val = strtrim(val);
-									TF3.db.profile.tradefilters[type] = val;
+									TF3.db.profile.filters.TRADE[type] = val;
 								end
 							end,
 						},
@@ -198,7 +198,7 @@ options = {
 --~ 							desc = L["BCF"],
 							get = function(info)
 								local ret = '';
-									for k, v in pairs(TF3.db.profile.basefilters) do
+									for k, v in pairs(TF3.db.profile.filters.BASE) do
 										if ret == '' then
 											ret = k..' = '..v;
 										else
@@ -208,14 +208,14 @@ options = {
 									return ret;
 								end,
 							set = function(info, value)
-								TF3:ClearTable(TF3.db.profile.basefilters)
+								TF3:ClearTable(TF3.db.profile.filters.BASE)
 								local tbl = { strsplit('\n', value) };
 								local type, val;
 								for i, str in pairs(tbl) do
 									type, val = strsplit('=', str);
 									type = strtrim(type);
 									val = strtrim(val);
-									TF3.db.profile.basefilters[type] = val;
+									TF3.db.profile.filters.BASE[type] = val;
 								end
 							end,
 						},
