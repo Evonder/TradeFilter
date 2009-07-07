@@ -170,8 +170,7 @@ options = {
 							type = 'execute',
 							order = 3,
 							width = "double",
-							name = "Reset Trade Filter",
-							desc = "Reset Trade Filter",
+							name = L["RTF"],
 							func = function() TF3.db.profile.filters.TRADE = TF3:CopyTable(L.FILTER.TRADE, true); end,
 						},
 						tradefilters = {
@@ -211,11 +210,9 @@ options = {
 							type = 'execute',
 							order = 5,
 							width = "double",
-							name = "Reset Base Filter",
-							desc = "Reset Base Filter",
+							name = L["RBF"],
 							func = function() TF3.db.profile.filters.BASE = TF3:CopyTable(L.FILTER.BASE, true); end,
 						},
-
 						basefilters = {
 							type = 'input',
 							disabled = function()
@@ -279,8 +276,7 @@ options = {
 							type = 'execute',
 							order = 3,
 							width = "double",
-							name = "Reset Lists",
-							desc = "Reset Lists",
+							name = L["RBWL"],
 							func = function() TF3.db.profile.blacklist = TF3:CopyTable(L.BLACKLIST, true); TF3.db.profile.whitelist = TF3:CopyTable(L.WHITELIST, true) end,
 						},
 						blist = {
