@@ -22,16 +22,16 @@ function TF3:ClearTable(t, recursive)
 		else
 			for k, v in pairs(t) do
 				if type(v) == 'table' then
-					TF3:ClearTable(v, true);
-					t[k] = TF3:Del(v);
+					TF3:ClearTable(v, true)
+					t[k] = TF3:Del(v)
 				else
-					t[k] = nil;
+					t[k] = nil
 				end
 			end
 		end
-		return t;
+		return t
 		else
-			return {};
+			return {}
 	end
 end
 
@@ -170,8 +170,9 @@ options = {
 							type = 'execute',
 							order = 3,
 							width = "double",
-							name = L["RTF"],
-							func = function() TF3.db.profile.filters.TRADE = TF3:CopyTable(L.FILTER.TRADE, true); end,
+							name = "Reset Trade Filter",
+							desc = "Reset Trade Filter",
+							func = function() TF3.db.profile.filters.TRADE = TF3:CopyTable(L.FILTER.TRADE, true) end,
 						},
 						tradefilters = {
 							type = 'input',
@@ -184,25 +185,25 @@ options = {
 							name = L["BTF"],
 --~ 							desc = L["BTF"],
 							get = function(info)
-								local ret = '';
+								local ret = ''
 									for k, v in pairs(TF3.db.profile.filters.TRADE) do
 										if ret == '' then
-											ret = k..' = '..v;
+											ret = k..' = '..v
 										else
-											ret = ret..'\n'..k..' = '..v;
+											ret = ret..'\n'..k..' = '..v
 										end
 									end
-									return ret;
+									return ret
 								end,
 							set = function(info, value)
 								TF3:ClearTable(TF3.db.profile.filters.TRADE)
-								local tbl = { strsplit('\n', value) };
-								local type, val;
+								local tbl = { strsplit('\n', value) }
+								local type, val
 								for i, str in pairs(tbl) do
-									type, val = strsplit('=', str);
-									type = strtrim(type);
-									val = strtrim(val);
-									TF3.db.profile.filters.TRADE[type] = val;
+									type, val = strsplit('=', str)
+									type = strtrim(type)
+									val = strtrim(val)
+									TF3.db.profile.filters.TRADE[type] = val
 								end
 							end,
 						},
@@ -210,9 +211,11 @@ options = {
 							type = 'execute',
 							order = 5,
 							width = "double",
-							name = L["RBF"],
-							func = function() TF3.db.profile.filters.BASE = TF3:CopyTable(L.FILTER.BASE, true); end,
+							name = "Reset Base Filter",
+							desc = "Reset Base Filter",
+							func = function() TF3.db.profile.filters.BASE = TF3:CopyTable(L.FILTER.BASE, true) end,
 						},
+
 						basefilters = {
 							type = 'input',
 							disabled = function()
@@ -224,25 +227,25 @@ options = {
 							name = L["BCF"],
 --~ 							desc = L["BCF"],
 							get = function(info)
-								local ret = '';
+								local ret = ''
 									for k, v in pairs(TF3.db.profile.filters.BASE) do
 										if ret == '' then
-											ret = k..' = '..v;
+											ret = k..' = '..v
 										else
-											ret = ret..'\n'..k..' = '..v;
+											ret = ret..'\n'..k..' = '..v
 										end
 									end
-									return ret;
+									return ret
 								end,
 							set = function(info, value)
 								TF3:ClearTable(TF3.db.profile.filters.BASE)
-								local tbl = { strsplit('\n', value) };
-								local type, val;
+								local tbl = { strsplit('\n', value) }
+								local type, val
 								for i, str in pairs(tbl) do
-									type, val = strsplit('=', str);
-									type = strtrim(type);
-									val = strtrim(val);
-									TF3.db.profile.filters.BASE[type] = val;
+									type, val = strsplit('=', str)
+									type = strtrim(type)
+									val = strtrim(val)
+									TF3.db.profile.filters.BASE[type] = val
 								end
 							end,
 						},
@@ -276,7 +279,8 @@ options = {
 							type = 'execute',
 							order = 3,
 							width = "double",
-							name = L["RBWL"],
+							name = "Reset Lists",
+							desc = "Reset Lists",
 							func = function() TF3.db.profile.blacklist = TF3:CopyTable(L.BLACKLIST, true); TF3.db.profile.whitelist = TF3:CopyTable(L.WHITELIST, true) end,
 						},
 						blist = {
@@ -290,25 +294,25 @@ options = {
 							name = L["bLists"],
 --~ 							desc = L["bLists"],
 							get = function(info)
-								local ret = '';
+								local ret = ''
 									for k, v in pairs(TF3.db.profile.blacklist) do
 										if ret == '' then
-											ret = k..' = '..v;
+											ret = k..' = '..v
 										else
-											ret = ret..'\n'..k..' = '..v;
+											ret = ret..'\n'..k..' = '..v
 										end
 									end
-									return ret;
+									return ret
 								end,
 							set = function(info, value)
 								TF3:ClearTable(TF3.db.profile.blacklist)
-								local tbl = { strsplit('\n', value) };
-								local type, val;
+								local tbl = { strsplit('\n', value) }
+								local type, val
 								for i, str in pairs(tbl) do
-									type, val = strsplit('=', str);
-									type = strtrim(type);
-									val = strtrim(val);
-									TF3.db.profile.blacklist[type] = val;
+									type, val = strsplit('=', str)
+									type = strtrim(type)
+									val = strtrim(val)
+									TF3.db.profile.blacklist[type] = val
 								end
 							end,
 						},
@@ -323,25 +327,25 @@ options = {
 							name = L["wLists"],
 --~ 							desc = L["wLists"],
 							get = function(info)
-								local ret = '';
+								local ret = ''
 									for k, v in pairs(TF3.db.profile.whitelist) do
 										if ret == '' then
-											ret = k..' = '..v;
+											ret = k..' = '..v
 										else
-											ret = ret..'\n'..k..' = '..v;
+											ret = ret..'\n'..k..' = '..v
 										end
 									end
-									return ret;
+									return ret
 								end,
 							set = function(info, value)
 								TF3:ClearTable(TF3.db.profile.whitelist)
-								local tbl = { strsplit('\n', value) };
-								local type, val;
+								local tbl = { strsplit('\n', value) }
+								local type, val
 								for i, str in pairs(tbl) do
-									type, val = strsplit('=', str);
-									type = strtrim(type);
-									val = strtrim(val);
-									TF3.db.profile.whitelist[type] = val;
+									type, val = strsplit('=', str)
+									type = strtrim(type)
+									val = strtrim(val)
+									TF3.db.profile.whitelist[type] = val
 								end
 							end,
 						},
