@@ -340,54 +340,54 @@ function TF3:FilterFunc(...)
 		chan = "0. Say/Yell"
 	end
 	local arg1 = lower(arg1)
-		if (filterFuncList and self.db.profile.turnOn) then
+		if (filterFuncList and TF3.db.profile.turnOn) then
 			filtered = true
 			--@alpha@
-			if (self.db.profile.debug) then
+			if (TF3.db.profile.debug) then
 				TF3:FindFrame(debugFrame, "arg1: " .. arg1 .. " arg2: " .. arg2)
 			end
 			--@end-alpha@
-			if (arg7 == 26) then
-			for i,v in pairs(self.db.profile.basefilters) do
-				--@alpha@
-				if (self.db.profile.debug) then
-					TF3:FindFrame(debugFrame, "Checking for Match with " .. v)
-				end
-				--@end-alpha@
-				if (find(arg1,v)) then
+			if (arg7 == 2) then
+				for i,v in pairs(TF3.db.profile.filters.TRADE) do
 					--@alpha@
-					if (self.db.profile.debug) then
-						TF3:FindFrame(debugFrame, "|cff00ff00**** Matched ***|r")
+					if (TF3.db.profile.debug) then
+						TF3:FindFrame(debugFrame, "Checking for Match with " .. v)
 					end
 					--@end-alpha@
-				filtered = false
+					if (find(arg1,v)) then
+						--@alpha@
+						if (TF3.db.profile.debug) then
+							TF3:FindFrame(debugFrame, "|cff00ff00**** Matched ***|r")
+						end
+						--@end-alpha@
+					filtered = false
+					end
 				end
-			end
-		else
-			for i,v in pairs(self.db.profile.tradefilters) do
-				--@alpha@
-				if (self.db.profile.debug) then
-					TF3:FindFrame(debugFrame, "Checking for Match with " .. v)
-				end
-				--@end-alpha@
-				if (find(arg1,v)) then
+			else
+				for i,v in pairs(TF3.db.profile.filters.BASE) do
 					--@alpha@
-					if (self.db.profile.debug) then
-						TF3:FindFrame(debugFrame, "|cff00ff00**** Matched ***|r")
+					if (TF3.db.profile.debug) then
+						TF3:FindFrame(debugFrame, "Checking for Match with " .. v)
 					end
 					--@end-alpha@
-				filtered = false
+					if (find(arg1,v)) then
+						--@alpha@
+						if (TF3.db.profile.debug) then
+							TF3:FindFrame(debugFrame, "|cff00ff00**** Matched ***|r")
+						end
+						--@end-alpha@
+					filtered = false
 				end
 			end
 		end
 		if (filtered == true) then
 			if (lastArg1 ~= arg1 or lastArg2 ~= arg2) then
 				--@alpha@
-				if (self.db.profile.debug) then
+				if (TF3.db.profile.debug) then
 					TF3:FindFrame(debugFrame, "|cff00ff00*** NO Match - Redirected ***|r")
 				end
 				--@end-alpha@
-				if (self.db.profile.redirect) then
+				if (TF3.db.profile.redirect) then
 					TF3:FindFrame(redirectFrame, "|cFFC08080[" .. chan .. "]|r |cFFD9D9D9[" .. arg2 .. "]:|r |cFFC08080" .. arg1 .. "|r")
 				end
 				lastArg1, lastArg2 = arg1, arg2
