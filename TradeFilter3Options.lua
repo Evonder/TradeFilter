@@ -7,6 +7,7 @@ local TradeFilter3 = LibStub("AceAddon-3.0"):GetAddon("TradeFilter3")
 local L = LibStub("AceLocale-3.0"):GetLocale("TradeFilter3")
 local TF3 = TradeFilter3
 
+--[[ DB Functions ]]--
 function TF3:Del(t)
 	wipe(t)
 	setmetatable(t, nil)
@@ -14,9 +15,9 @@ function TF3:Del(t)
 	return nil
 end
 
-function TF3:ClearTable(t, recursively)
+function TF3:ClearTable(t, recursive)
 	if t ~= nil and type(t) == 'table' then
-		if not recursively then
+		if not recursive then
 			wipe(t)
 		else
 			for k, v in pairs(t) do
@@ -32,6 +33,18 @@ function TF3:ClearTable(t, recursively)
 		else
 			return {};
 	end
+end
+
+function TF3:CopyTable(t, recursive)
+  local ret = {}
+  for k, v in pairs(t) do
+    if (type(v) == "table") and recursive and not v.GetObjectType then
+      ret[k] = copyTable(v)
+    else
+      ret[k] = v
+    end
+  end
+  return ret
 end
 
 --[[ Options Table ]]--
@@ -153,13 +166,21 @@ options = {
 							get = function() return TF3.db.profile.addfilter_enable end,
 							set = function() TF3.db.profile.addfilter_enable = not TF3.db.profile.addfilter_enable end,
 						},
+						reset_tradefilters = {
+							type = 'execute',
+							order = 3,
+							width = "double",
+							name = "Reset Trade Filter",
+							desc = "Reset Trade Filter",
+							func = function() TF3.db.profile.filters.TRADE = TF3:CopyTable(L.FILTER.TRADE, true); end,
+						},
 						tradefilters = {
 							type = 'input',
 							disabled = function()
 								return not TF3.db.profile.addfilter_enable
 							end,
 							multiline = 8,
-							order = 7,
+							order = 4,
 							width = "double",
 							name = L["BTF"],
 --~ 							desc = L["BTF"],
@@ -186,13 +207,22 @@ options = {
 								end
 							end,
 						},
+						reset_basefilters = {
+							type = 'execute',
+							order = 5,
+							width = "double",
+							name = "Reset Base Filter",
+							desc = "Reset Base Filter",
+							func = function() TF3.db.profile.filters.BASE = TF3:CopyTable(L.FILTER.BASE, true); end,
+						},
+
 						basefilters = {
 							type = 'input',
 							disabled = function()
 								return not TF3.db.profile.addfilter_enable
 							end,
 							multiline = 8,
-							order = 8,
+							order = 6,
 							width = "double",
 							name = L["BCF"],
 --~ 							desc = L["BCF"],
@@ -245,13 +275,21 @@ options = {
 							get = function() return TF3.db.profile.editlists_enable end,
 							set = function() TF3.db.profile.editlists_enable = not TF3.db.profile.editlists_enable end,
 						},
+						reset_lists = {
+							type = 'execute',
+							order = 3,
+							width = "double",
+							name = "Reset Lists",
+							desc = "Reset Lists",
+							func = function() TF3.db.profile.blacklist = TF3:CopyTable(L.BLACKLIST, true); TF3.db.profile.whitelist = TF3:CopyTable(L.WHITELIST, true) end,
+						},
 						blist = {
 							type = 'input',
 							disabled = function()
 								return not TF3.db.profile.editlists_enable
 							end,
 							multiline = 8,
-							order = 3,
+							order = 4,
 							width = "double",
 							name = L["bLists"],
 --~ 							desc = L["bLists"],
@@ -284,7 +322,7 @@ options = {
 								return not TF3.db.profile.editlists_enable
 							end,
 							multiline = 8,
-							order = 4,
+							order = 5,
 							width = "double",
 							name = L["wLists"],
 --~ 							desc = L["wLists"],
