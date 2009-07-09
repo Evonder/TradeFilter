@@ -351,23 +351,61 @@ options = {
 						},
 					},
 				},
-				outputGroup = {
+				repeatGroup = {
 					type = "group",
 					handler = TF3,
 					order = 4,
 					disabled = function()
 						return not TF3.db.profile.turnOn
 					end,
+					name = L["REPEAT"],
+					desc = L["REPEAT"],
+					args = {
+						optionsHeader3 = {
+							type	= "header",
+							order	= 1,
+							name	= L["REPEAT"],
+							desc = L["REPEAT"],
+						},
+						num_repeats = {
+							type = 'input',
+							order = 2,
+							width = "double",
+							name = L["#RPT"],
+							desc = L["#RPTD"],
+							usage = L["RPTU"],
+							get = function(info) return TF3.db.profile.num_repeats end,
+							set = function(info, value) TF3.db.profile.num_repeats = value end,
+						},
+						time_repeats = {
+							type = 'input',
+							order = 3,
+							width = "double",
+							name = L["TRPT"],
+							desc = L["TRPTD"],
+							usage = L["RPTU"],
+							get = function(info) return TF3.db.profile.time_repeats end,
+							set = function(info, value) TF3.db.profile.time_repeats = value end,
+						},
+					},
+				},
+				outputGroup = {
+					type = "group",
+					handler = TF3,
+					order = 5,
+					disabled = function()
+						return not TF3.db.profile.turnOn
+					end,
 					name = L["OUTPUT"],
 					desc = L["OUTPUT"],
 					args = {
-							optionsHeader3 = {
+						optionsHeader3 = {
 							type	= "header",
 							order	= 1,
 							name	= L["OUTPUT"],
 							desc = L["OUTPUT"],
 						},
-							redirect = {
+						redirect = {
 							type = 'toggle',
 							order = 2,
 							width = "full",
