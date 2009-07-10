@@ -40,6 +40,11 @@ Adding a set, ie [xXyY], will attempt to find a match for any character given in
 Nothing planned
 
 ==== ChangeLog
+*r132
+**++Typo causing reset buttons to error out fixed++\\
+**++Added all strings to locale++\\
+**++Keys are no longer necessary when adding filter or list patterns++\\
+**++Cleaned up debugging output, will now show what pattern that was matched to allow it to not be filtered++\\
 *r131
 **++Repeat filtration++\\
 **++Configurable number of repeats before filtered++\\
