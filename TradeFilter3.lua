@@ -38,9 +38,9 @@ local friends = LibStub("LibFriends-1.0")
 local TF3 = TradeFilter3
 
 local MAJOR_VERSION = "3.0"
-local MINOR_VERSION = 000 + tonumber(("$Revision: 120 $"):match("%d+"))
+local MINOR_VERSION = 000 + tonumber(("$Revision: @project-revision@ $"):match("%d+"))
 TF3.version = MAJOR_VERSION .. "." .. MINOR_VERSION
-TF3.date = string.sub("$Date: 2009-07-03T15:59:07Z $", 8, 17)
+TF3.date = string.sub("$Date: @file-date-iso@ $", 8, 17)
 
 --[[ Locals ]]--
 local _G = _G
@@ -52,8 +52,8 @@ local formatIt = _G.string.format
 local friendCache = {}
 local repeatdata = {}
 local currentFriend
-local redirectFrame = "SPAM"
-local debugFrame = "DEBUG"
+local redirectFrame = L["redirectFrame"]
+local debugFrame = L["debugFrame"]
 local lastmsg
 local lastuserID
 
@@ -95,7 +95,7 @@ function TF3:OnInitialize()
 	local AC = LibStub("AceConsole-3.0")
 	AC:RegisterChatCommand("tf", function() TF3:OpenOptions() end)
 	AC:RegisterChatCommand("filter", function() TF3:OpenOptions() end)
-	AC:Print("|cFF33FF99TradeFilter3|r: " .. MAJOR_VERSION .. "." .. MINOR_VERSION .. " |cff00ff00Loaded!|r")
+	AC:Print(L.TOC.Title .. " " .. MAJOR_VERSION .. "." .. MINOR_VERSION .. " " .. L["LOADED"])
 
 	local ACR = LibStub("AceConfigRegistry-3.0")
 	ACR:RegisterOptionsTable("TradeFilter3", options)
@@ -135,6 +135,7 @@ function TF3:IsLoggedIn()
 	friends.RegisterCallback(self, "Added")
 	friends.RegisterCallback(self, "Removed")
 	self:UnregisterEvent("PLAYER_LOGIN")
+	self:UnregisterEvent("FRIENDLIST_UPDATE")
 end
 
 --[[ Friends Functions - Stolen from AuldLangSyne Sync module ]]--
@@ -146,6 +147,7 @@ function TF3:GetFriends()
 			local name = GetFriendInfo(i)
 			if name then
 				friends[name] = true
+				print(name .. " " .. L["FADD"])
 			end
 		end
 	end
@@ -162,6 +164,7 @@ end
 function TF3:Added(event, name)
 	if name ~= UnitName("player") then
 		self.db.profile.friendslist[name] = true
+		print(name .. " " .. L["FADD"])
 	end
 	if currentFriend then
 		self:GetFriends()
@@ -171,6 +174,7 @@ end
 function TF3:Removed(event, name)
 	if self.db.profile.friendslist[name] ~= nil then
 		self.db.profile.friendslist[name] = nil
+		print(name .. " " .. L["FREM"])
 	end
 	if currentFriend then
 		self:GetFriends()
@@ -363,32 +367,32 @@ function TF3:FilterFunc(...)
 	local chanID = arg8 or select(8, ...)
 	local msg = lower(msg)
 	if (chanID == 1) then
-		chan = "1. General"
+		chan = "1. " .. L["General"]
 	elseif (zoneID == 2) then
-		chan = "2. Trade"
+		chan = "2. " .. L["Trade"]
 	elseif (zoneID == 26) then
-		chan = "26. LFG"
+		chan = "26. " .. L["LFG"]
 	else
-		chan = "0. Say/Yell"
+		chan = "0. " .. L["Say/Yell"]
 	end
 	if (filterFuncList and TF3.db.profile.turnOn) then
 		filtered = true
 		--@alpha@
 		if (TF3.db.profile.debug) then
-			TF3:FindFrame(debugFrame, "arg1: " .. msg .. " userID: " .. userID)
+			TF3:FindFrame(debugFrame, "|cFFC08080[" .. chan .. "]|r |cFFD9D9D9[" .. userID .. "]:|r |cFFC08080" .. msg .. "|r")
 		end
 		--@end-alpha@
 		if (zoneID == 2) then
 			for i,v in pairs(TF3.db.profile.filters.TRADE) do
 				--@alpha@
 				if (TF3.db.profile.debug) then
-					TF3:FindFrame(debugFrame, "Checking for Match with " .. v)
+					TF3:FindFrame(debugFrame, L["CFM"] .. " " .. v)
 				end
 				--@end-alpha@
 				if (find(msg,v)) then
 					--@alpha@
 					if (TF3.db.profile.debug) then
-						TF3:FindFrame(debugFrame, "|cff00ff00**** Matched ***|r")
+						TF3:FindFrame(debugFrame, L["MATCHED"] .. " |cffff8080" .. v .. "|r")
 					end
 				--@end-alpha@
 					filtered = false
@@ -398,13 +402,13 @@ function TF3:FilterFunc(...)
 			for i,v in pairs(TF3.db.profile.filters.BASE) do
 				--@alpha@
 				if (TF3.db.profile.debug) then
-					TF3:FindFrame(debugFrame, "Checking for Match with " .. v)
+					TF3:FindFrame(debugFrame, L["CFM"] .. " " .. v)
 				end
 				--@end-alpha@
 				if (find(msg,v)) then
 					--@alpha@
 					if (TF3.db.profile.debug) then
-						TF3:FindFrame(debugFrame, "|cff00ff00**** Matched ***|r")
+						TF3:FindFrame(debugFrame, L["MATCHED"] .. " |cffff8080" .. v .. "|r")
 					end
 					--@end-alpha@
 					filtered = false
@@ -415,7 +419,7 @@ function TF3:FilterFunc(...)
 			if (lastmsg ~= msg or lastuserID ~= userID) then
 				--@alpha@
 				if (TF3.db.profile.debug) then
-					TF3:FindFrame(debugFrame, "|cff00ff00*** NO Match - Redirected ***|r")
+					TF3:FindFrame(debugFrame, L["NOMATCH"])
 				end
 				--@end-alpha@
 				if (TF3.db.profile.redirect) then
