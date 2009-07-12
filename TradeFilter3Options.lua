@@ -355,9 +355,21 @@ options = {
 							name	= L["REPEAT"],
 							desc = L["REPEAT"],
 						},
+						repeat_enable = {
+							type = 'toggle',
+							order = 2,
+							width = "double",
+							name = L["RPTENABLE"],
+							desc = L["RPTENABLED"],
+							get = function() return TF3.db.profile.repeat_enable end,
+							set = function() TF3.db.profile.repeat_enable = not TF3.db.profile.repeat_enable end,
+						},
 						num_repeats = {
 							type = 'input',
-							order = 2,
+							disabled = function()
+								return not TF3.db.profile.repeat_enable
+							end,
+							order = 3,
 							width = "double",
 							name = L["#RPT"],
 							desc = L["#RPTD"],
@@ -367,13 +379,33 @@ options = {
 						},
 						time_repeats = {
 							type = 'input',
-							order = 3,
+							disabled = function()
+								return not TF3.db.profile.repeat_enable
+							end,
+							order = 4,
 							width = "double",
 							name = L["TRPT"],
 							desc = L["TRPTD"],
 							usage = L["RPTU"],
 							get = function(info) return TF3.db.profile.time_repeats end,
 							set = function(info, value) TF3.db.profile.time_repeats = value end,
+						},
+						repeats_blocked = {
+							type = 'input',
+							disabled = true,
+							order = 5,
+							width = "half",
+							name = L["RPTBLOCKED"],
+							desc = L["RPTBLOCKEDD"],
+							get = function(info) return tostring(TF3.db.profile.repeats_blocked) end,
+						},
+						reset_repeats_blocked = {
+							type = 'execute',
+							order = 6,
+							width = "half",
+							name = L["RPTRESET"],
+							desc = L["RPTRESETD"],
+							func = function() TF3.db.profile.repeats_blocked = 0 end,
 						},
 					},
 				},

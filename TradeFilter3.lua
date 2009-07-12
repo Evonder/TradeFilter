@@ -54,8 +54,10 @@ local repeatdata = {}
 local currentFriend
 local redirectFrame = L["redirectFrame"]
 local debugFrame = L["debugFrame"]
+local repeatFrame = L["repeatFrame"]
 local lastmsg
 local lastuserID
+local last_msg = ""
 
 --[[ Database Defaults ]]--
 defaults = {
@@ -72,8 +74,10 @@ defaults = {
 		filterTrade = true,
 		editfilter_enable = false,
 		editlists_enable = false,
+		repeat_enable = false,
 		num_repeats = "2",
 		time_repeats = "30",
+		repeats_blocked =  0,
 		friendslist = {},
 		whitelist = {},
 		blacklist = {},
@@ -138,7 +142,7 @@ function TF3:IsLoggedIn()
 	self:UnregisterEvent("FRIENDLIST_UPDATE")
 end
 
---[[ Friends Functions - Stolen from AuldLangSyne Sync module ]]--
+--[[ Friends Functions - Borrowed from AuldLangSyne Sync module ]]--
 function TF3:GetFriends()
 	local friends = self.db.profile.friendslist
 	local numFriends = GetNumFriends()
@@ -193,14 +197,14 @@ function TF3:IsFriend(userID)
 end
 
 --[[ BlackList Func ]]--
---[[ Base blacklist words stolen from BadBoy(Funkydude) ]]--
+--[[ Base blacklist words borrowed from BadBoy(Funkydude) ]]--
 function TF3:BlackList(msg)
 	local blword = self.db.profile.blacklist
-	local msg = lower(msg) --lower all text
-	local msg = sub(msg, " ", "") --Remove spaces
+	local msg = lower(msg)
+	local msg = sub(msg, " ", "")
 	for _,word in pairs(blword) do
 		if find(msg,word) then
-			return true -- if msg contains a blword then return true
+			return true
 		end
 	end
 	return false
@@ -209,11 +213,11 @@ end
 --[[ WhiteList Func ]]--
 function TF3:WhiteList(msg)
 	local wlword = self.db.profile.whitelist
-	local msg = lower(msg) --lower all text
-	local msg = sub(msg, " ", "") --Remove spaces
+	local msg = lower(msg)
+	local msg = sub(msg, " ", "")
 	for _,word in pairs(wlword) do
 		if find(msg,word) then
-			return true -- if msg contains a wlword then return true
+			return true
 		end
 	end
 	return false
@@ -231,21 +235,22 @@ function TF3:FindRepeat(userID, msg)
 		if (msg == repeatdata[userID].lastmsg and gtime - repeatdata[userID].lastIndex < tonumber(TF3.db.profile.time_repeats)) then
 			repeatdata[userID].repeats = repeatdata[userID].repeats + 1
 			if (repeatdata[userID].repeats >= tonumber(TF3.db.profile.num_repeats)) then
+				TF3.db.profile.repeats_blocked = TF3.db.profile.repeats_blocked + 1
 				return true
 			end
 	  elseif (msg ~= repeatdata[userID].lastmsg) then
 	    repeatdata[userID].repeats = 0
 	  end
+		repeatdata[userID].lastmsg = msg
+		repeatdata[userID].lastIndex  = gtime
 	end
-	repeatdata[userID].lastmsg = msg
-	repeatdata[userID].lastIndex = gtime
 	return false
 end
 
 --[[ Window and Chat Functions ]]--
 function TF3:FindFrame(toFrame, msg)
 	for i=1,NUM_CHAT_WINDOWS do
-	local name = GetChatWindowInfo(i)
+		local name = GetChatWindowInfo(i)
 		if (toFrame == name) then
 			toFrame = _G["ChatFrame" .. i]
 			toFrame:AddMessage(msg)
@@ -279,30 +284,43 @@ local function PreFilterFunc_Say(self, event, ...)
 	local filtered = false
 	local msg = arg1 or select(1, ...)
 	local userID = arg2 or select(2, ...)
-	if (TF3.db.profile.filterSAY and TF3:IsFriend(userID) == false) then
+	if (event == "CHAT_MSG_SAY" and TF3.db.profile.filterSAY and TF3:IsFriend(userID) == false) then
 		if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false or TF3:WhiteList(msg) == true) then
 			filtered = false
-		elseif (TF3:BlackList(msg) == true or TF3:FindRepeat(userID, msg) == true) then
+		elseif (TF3:BlackList(msg) == true) then
 			filtered = true
+		elseif (TF3.db.profile.repeat_enable) then
+			if (TF3:FindRepeat(userID, msg) == true) then
+				filtered = true
+			else
+				filtered = TF3:FilterFunc(...)
+			end
 		else
 			filtered = TF3:FilterFunc(...)
 		end
-	elseif (event == "CHAT_MSG_SAY" and not TF3.db.profile.filterSAY) then
+	else
 		filtered = false
 	end
 	return filtered
 end
 
---[[ Check for SAY Channel and User setting ]]--
+
+--[[ Check for YELL Channel and User setting ]]--
 local function PreFilterFunc_Yell(self, event, ...)
 	local filtered = false
 	local msg = arg1 or select(1, ...)
 	local userID = arg2 or select(2, ...)
-	if (TF3.db.profile.filterYELL and TF3:IsFriend(userID) == false) then
+	if (event == "CHAT_MSG_YELL" and TF3.db.profile.filterYELL and TF3:IsFriend(userID) == false) then
 		if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false or TF3:WhiteList(msg) == true) then
 			filtered = false
-		elseif (TF3:BlackList(msg) == true or TF3:FindRepeat(userID, msg) == true) then
+		elseif (TF3:BlackList(msg) == true) then
 			filtered = true
+		elseif (TF3.db.profile.repeat_enable) then
+			if (TF3:FindRepeat(userID, msg) == true) then
+				filtered = true
+			else
+				filtered = TF3:FilterFunc(...)
+			end
 		else
 			filtered = TF3:FilterFunc(...)
 		end
@@ -323,8 +341,14 @@ local function PreFilterFunc(self, event, ...)
 	if (zoneID == 2 and TF3.db.profile.filtertrade and TF3:IsFriend(userID) == false) then
 		if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false or TF3:WhiteList(msg) == true) then
 			filtered = false
-		elseif (TF3:BlackList(msg) == true or TF3:FindRepeat(userID, msg) == true) then
+		elseif (TF3:BlackList(msg) == true) then
 			filtered = true
+		elseif (TF3.db.profile.repeat_enable) then
+			if (TF3:FindRepeat(userID, msg) == true) then
+				filtered = true
+			else
+				filtered = TF3:FilterFunc(...)
+			end
 		else
 			filtered = TF3:FilterFunc(...)
 		end
@@ -335,8 +359,14 @@ local function PreFilterFunc(self, event, ...)
 	if (chanID == 1 and TF3.db.profile.filtergeneral and TF3:IsFriend(userID) == false) then
 		if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false or TF3:WhiteList(msg) == true) then
 			filtered = false
-		elseif (TF3:BlackList(msg) == true or TF3:FindRepeat(userID, msg) == true) then
+		elseif (TF3:BlackList(msg) == true) then
 			filtered = true
+		elseif (TF3.db.profile.repeat_enable) then
+			if (TF3:FindRepeat(userID, msg) == true) then
+				filtered = true
+			else
+				filtered = TF3:FilterFunc(...)
+			end
 		else
 			filtered = TF3:FilterFunc(...)
 		end
@@ -347,8 +377,14 @@ local function PreFilterFunc(self, event, ...)
 	if (zoneID == 26 and TF3.db.profile.filterLFG and TF3:IsFriend(userID) == false) then
 		if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false or TF3:WhiteList(msg) == true) then
 			filtered = false
-		elseif (TF3:BlackList(msg) == true or TF3:FindRepeat(userID, msg) == true) then
+		elseif (TF3:BlackList(msg) == true) then
 			filtered = true
+		elseif (TF3.db.profile.repeat_enable) then
+			if (TF3:FindRepeat(userID, msg) == true) then
+				filtered = true
+			else
+				filtered = TF3:FilterFunc(...)
+			end
 		else
 			filtered = TF3:FilterFunc(...)
 		end
@@ -379,14 +415,19 @@ function TF3:FilterFunc(...)
 		filtered = true
 		--@alpha@
 		if (TF3.db.profile.debug) then
-			TF3:FindFrame(debugFrame, "|cFFC08080[" .. chan .. "]|r |cFFD9D9D9[" .. userID .. "]:|r |cFFC08080" .. msg .. "|r")
+			if (msg ~= last_msg) then
+				TF3:FindFrame(debugFrame, "|cFFC08080[" .. chan .. "]|r |cFFD9D9D9[" .. userID .. "]:|r |cFFC08080" .. msg .. "|r")
+			end
 		end
 		--@end-alpha@
 		if (zoneID == 2) then
 			for i,v in pairs(TF3.db.profile.filters.TRADE) do
 				--@alpha@
 				if (TF3.db.profile.debug) then
-					TF3:FindFrame(debugFrame, L["CFM"] .. " " .. v)
+					if (msg ~= last_msg) then
+						TF3:FindFrame(debugFrame, L["CFM"] .. " " .. v)
+						last_msg = msg
+					end
 				end
 				--@end-alpha@
 				if (find(msg,v)) then
@@ -401,14 +442,17 @@ function TF3:FilterFunc(...)
 		else
 			for i,v in pairs(TF3.db.profile.filters.BASE) do
 				--@alpha@
-				if (TF3.db.profile.debug) then
-					TF3:FindFrame(debugFrame, L["CFM"] .. " " .. v)
-				end
+					if (msg ~= last_msg) then
+						TF3:FindFrame(debugFrame, L["CFM"] .. " " .. v)
+					end
 				--@end-alpha@
 				if (find(msg,v)) then
 					--@alpha@
 					if (TF3.db.profile.debug) then
-						TF3:FindFrame(debugFrame, L["MATCHED"] .. " |cffff8080" .. v .. "|r")
+						if (msg ~= last_msg) then
+							TF3:FindFrame(debugFrame, L["MATCHED"] .. " |cffff8080" .. v .. "|r")
+							last_msg = msg
+						end
 					end
 					--@end-alpha@
 					filtered = false

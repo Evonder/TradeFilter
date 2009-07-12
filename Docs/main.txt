@@ -3,14 +3,15 @@
 
 TradeFilter does not only filter trade but has the ability to filter General, LookingforGroup, Say and Yell channels all which are configurable through the blizzard options panel. 
 
-TradeFilter has a base set of patterns that it will match against and ignore if found in a chat message. The user also has the ability to add a few patterns of their own to be matched against. The base pattern list is as follows:\\
+=== Channel Filters
+TradeFilter has a set of patterns for trade channel and separate set of patterns for all other channels, or "base" channels as we will call them. This allows the user to define what patterns may be good for trade but not other channels and vise versa. The user also has the ability to add patterns of their own to be matched against for both trade and "base" channel filters.\\
 
 ##Trade Filters##:
 <<code php>>
 lf port,
 buying,
 wt[bBsStT],
-lf[wWeEmM],
+lf[wWeE],
 lf enchant,
 lf jc,
 AH,
@@ -19,7 +20,7 @@ lockpick,
 selling,
 buying,
 <</code>>
-##Channel Filters##:
+##Base Channel Filters##:
 <<code php>>
 lf dps,
 lf tank,
@@ -31,7 +32,13 @@ lfg,
 3v3,
 5v5
 <</code>>
-Adding a set, ie [xXyY], will attempt to find a match for any character given in a set. Example: lf[wWeEmM] will match for lfw, lfe and lfm.
+Adding a set, e.g. [xXyY], will attempt to find a match for any character given in a set. Example: lf[wWeEmM] will match for lfw, lfe and lfm.
+
+=== Black and White Lists
+TradeFilter also has a build in Black and White list. A sentence, or "string". that contains a black list match will cease to be checked any more and be filtered out completely. A string found that contains a white list match will also cease to be checked and will be allowed to passed un-filtered.
+
+=== Filtering Priorities
+The filtering priorities are as follows: Add-on is ON ->  is NOT friend -> is NOT self(unless filtering self for debugging) -> White list check -> Black list check -> Repeat check -> Filter
 
 === Configuration
 <<code php>>/tf or /filter<</code>>
@@ -61,6 +68,7 @@ Nothing planned
 
 === Supported Translations
 //Please help localize this project// [[http://www.wowace.com/projects/trade-filter/localization/|HERE]]\\
-German -60.3%\\
-Simplified Chinese - 37%\\
-French - 28.8%
+German - 93.3%\\
+Simplified Chinese - 46.7%\\
+Traditional Chinese - 24.8%\\
+French - 27.6%
