@@ -189,7 +189,7 @@ end
 function TF3:IsFriend(userID)
 	local friends = self.db.profile.friendslist
 	for name in pairs(friends) do
-		if (userID == name) then
+		if find(userID,name) then
 			return true
 		end
 	end
@@ -235,7 +235,11 @@ function TF3:FindRepeat(userID, msg)
 		if (msg == repeatdata[userID].lastmsg and gtime - repeatdata[userID].lastIndex < tonumber(TF3.db.profile.time_repeats)) then
 			repeatdata[userID].repeats = repeatdata[userID].repeats + 1
 			if (repeatdata[userID].repeats >= tonumber(TF3.db.profile.num_repeats)) then
-				TF3.db.profile.repeats_blocked = TF3.db.profile.repeats_blocked + 1
+					if (msg ~= last_msg) then
+						TF3:FindFrame(repeatFrame, "|cFFD9D9D9[" .. userID .. "]:|r |cFFC08080" .. msg .. "|r")
+						TF3.db.profile.repeats_blocked = TF3.db.profile.repeats_blocked + 1
+						last_msg = msg
+					end
 				return true
 			end
 	  elseif (msg ~= repeatdata[userID].lastmsg) then
@@ -324,7 +328,7 @@ local function PreFilterFunc_Yell(self, event, ...)
 		else
 			filtered = TF3:FilterFunc(...)
 		end
-	elseif (event == "CHAT_MSG_YELL" and not TF3.db.profile.filterYELL) then
+	else
 		filtered = false
 	end
 	return filtered
@@ -426,14 +430,16 @@ function TF3:FilterFunc(...)
 				if (TF3.db.profile.debug) then
 					if (msg ~= last_msg) then
 						TF3:FindFrame(debugFrame, L["CFM"] .. " " .. v)
-						last_msg = msg
 					end
 				end
 				--@end-alpha@
 				if (find(msg,v)) then
 					--@alpha@
 					if (TF3.db.profile.debug) then
-						TF3:FindFrame(debugFrame, L["MATCHED"] .. " |cffff8080" .. v .. "|r")
+						if (msg ~= last_msg) then
+							TF3:FindFrame(debugFrame, L["MATCHED"] .. " |cffff8080" .. v .. "|r")
+							last_msg = msg
+						end
 					end
 				--@end-alpha@
 					filtered = false
@@ -470,6 +476,7 @@ function TF3:FilterFunc(...)
 					TF3:FindFrame(redirectFrame, "|cFFC08080[" .. chan .. "]|r |cFFD9D9D9[" .. userID .. "]:|r |cFFC08080" .. msg .. "|r")
 				end
 				lastmsg, lastuserID = msg, userID
+				last_msg = msg
 			end
 		end
 	end
