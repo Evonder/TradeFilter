@@ -496,6 +496,7 @@ function TF3:FilterFunc(...)
 					TF3:FindFrame(redirectFrame, "|cFFC08080[" .. chan .. "]|r |cFFD9D9D9[" .. userID .. "]:|r |cFFC08080" .. msg .. "|r")
 				end
 				lastmsg, lastuserID = msg, userID
+				last_msg = msg
 			end
 		end
 	end
