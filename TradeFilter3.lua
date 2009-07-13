@@ -205,11 +205,9 @@ function TF3:BlackList(userID, msg)
 	for _,word in pairs(blword) do
 		if find(msg,word) then
 			--@alpha@
-			if (TF3.db.profile.debug) then
-				if (msg ~= last_msg) then
-					TF3:FindFrame(debugFrame, "|cFFFF0000[" .. L["bLists"] .. "]|r |cFFD9D9D9[" .. userID .. "]:|r |cFFC08080" .. msg .. "|r")
-					last_msg = msg
-				end
+			if (TF3.db.profile.debug and msg ~= last_msg) then
+				TF3:FindFrame(debugFrame, "|cFFFF0000[" .. L["bLists"] .. "]|r |cFFD9D9D9[" .. userID .. "]:|r |cFFC08080" .. msg .. "|r")
+				last_msg = msg
 			end
 			--@end-alpha@
 			return true
@@ -226,11 +224,9 @@ function TF3:WhiteList(userID, msg)
 	for _,word in pairs(wlword) do
 		if find(msg,word) then
 			--@alpha@
-			if (TF3.db.profile.debug) then
-				if (msg ~= last_msg) then
-					TF3:FindFrame(debugFrame, "|cFFFFFF80[" .. L["wLists"] .. "]|r |cFFD9D9D9[" .. userID .. "]:|r |cFFC08080" .. msg .. "|r")
-					last_msg = msg
-				end
+			if (TF3.db.profile.debug and msg ~= last_msg) then
+				TF3:FindFrame(debugFrame, "|cFFFFFF80[" .. L["wLists"] .. "]|r |cFFD9D9D9[" .. userID .. "]:|r |cFFC08080" .. msg .. "|r")
+				last_msg = msg
 			end
 			--@end-alpha@
 			return true
@@ -251,17 +247,14 @@ function TF3:FindRepeat(userID, msg)
 		if (msg == repeatdata[userID].lastmsg and gtime - repeatdata[userID].lastIndex < tonumber(TF3.db.profile.time_repeats)) then
 			repeatdata[userID].repeats = repeatdata[userID].repeats + 1
 			if (repeatdata[userID].repeats >= tonumber(TF3.db.profile.num_repeats)) then
-				if (TF3.db.profile.debug) then
-					if (msg ~= last_msg) then
+				if (msg ~= last_msg) then
+					--@alpha@
+					if (TF3.db.profile.debug) then
 						TF3:FindFrame(repeatFrame, "|cFFFF8C00[" .. L["#RPT"] .. "]|r |cFFD9D9D9[" .. userID .. "]:|r |cFFC08080" .. msg .. "|r")
-						TF3.db.profile.repeats_blocked = TF3.db.profile.repeats_blocked + 1
-						last_msg = msg
-					end
-				else
-					if (msg ~= last_msg) then
-						TF3.db.profile.repeats_blocked = TF3.db.profile.repeats_blocked + 1
-						last_msg = msg
-					end
+					end	
+					--@end-alpha@
+					TF3.db.profile.repeats_blocked = TF3.db.profile.repeats_blocked + 1
+					last_msg = msg
 				end
 				return true
 			end

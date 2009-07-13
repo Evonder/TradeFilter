@@ -390,6 +390,7 @@ options = {
 							get = function(info) return TF3.db.profile.time_repeats end,
 							set = function(info, value) TF3.db.profile.time_repeats = value end,
 						},
+						--@alpha@
 						repeats_blocked = {
 							type = 'input',
 							disabled = true,
@@ -407,6 +408,7 @@ options = {
 							desc = L["RPTRESETD"],
 							func = function() TF3.db.profile.repeats_blocked = 0 end,
 						},
+						--@end-alpha@
 					},
 				},
 				outputGroup = {
