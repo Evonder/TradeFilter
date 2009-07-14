@@ -32,6 +32,12 @@ if L then
 if GetLocale() == "zhTW" then return end
 end
 
+local L =  LibStub("AceLocale-3.0"):NewLocale("TradeFilter3", "koKR")
+if L then
+--@localization(locale="koKR", format="lua_additive_table", same-key-is-true=true, handle-subnamespaces="subtable")@
+if GetLocale() == "koKR" then return end
+end
+
 local L =  LibStub("AceLocale-3.0"):NewLocale("TradeFilter3", "frFR")
 if L then
 --@localization(locale="frFR", format="lua_additive_table", same-key-is-true=true, handle-subnamespaces="subtable")@
