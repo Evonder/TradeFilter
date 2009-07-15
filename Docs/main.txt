@@ -47,6 +47,11 @@ The filtering priorities are as follows: Add-on is ON ->  is NOT friend -> is NO
 Nothing planned
 
 ==== ChangeLog
+*r144
+**++Further Debug output cleanup++\\
+**++Better repeat detection++\\
+**++Whitelisted strings still have to pass repeat test++\\
+**++Whitelisted strings also needs to pass Blacklist++\\
 *r132
 **++Typo causing reset buttons to error out fixed++\\
 **++Added all strings to locale++\\
