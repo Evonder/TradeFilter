@@ -1,3 +1,8 @@
-type: creole
-input-file: Docs/main.txt
-output-page: "Main"
+-
+  type: creole
+  input-file: Docs/main.txt
+  output-page: "Main"
+-
+  type: creole
+  input-file: Docs/changelog.txt
+  output-page: "ChangeLog"

@@ -47,36 +47,7 @@ The filtering priorities are as follows: Add-on is ON ->  is NOT friend -> is NO
 Nothing planned
 
 ==== ChangeLog
-*r145
-**++Rewrite on DB functions, Repeat Function and Friends functions++\\
-**++Show repeat count with ability to reset count++\\
-**++Ability to enable/disable Black and White list checking++\\
-**++Debug: Black and White list debugging messages contain whitespaces++\\
-**++Debug: Black and White list debugging messages now show what they matched in your pattern list++\\
-**++Debug: Option to strip "Checking for Match" when debugging++\\
-*r144
-**++Debug: Further Debug output cleanup++\\
-**++Better repeat detection++\\
-**++Whitelisted strings still have to pass repeat test++\\
-**++Whitelisted strings also needs to pass Blacklist++\\
-*r132
-**++Typo causing reset buttons to error out fixed++\\
-**++Added all strings to locale++\\
-**++Keys are no longer necessary when adding filter or list patterns++\\
-**++Debug: Cleaned up debugging output, will now show what pattern that was matched to allow it to not be filtered++\\
-*r131
-**++Repeat filtration++\\
-**++Configurable number of repeats before filtered++\\
-**++Configurable time required between repeats in seconds++\\
-*r126
-**++Option: Reset to default filters++\\
-*r122
-**++Distinguish between Trade channel and LFG/General for the ability to have differant filter tables for pattern matching.++\\
-**++Ability to edit entire filter tables rather than having static lists.++\\
-*r111
-**++ TradeFilter now contains a Black/White list, though not yet configurable through the GUI.++\\
-*r82
-**++ TradeFilter also will not filter any messages from your friends, they must be on your current characters friends list for this functionality to work.++\\
+[[http://www.wowace.com/addons/trade-filter/pages/main/|ChangeLog Page]]\\
 
 === Supported Translations
 //Please help localize this project// [[http://www.wowace.com/projects/trade-filter/localization/|HERE]]\\

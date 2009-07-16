@@ -49,7 +49,6 @@ local find = _G.string.find
 local sub = _G.string.gsub
 local lower = _G.string.lower
 local formatIt = _G.string.format
-local friendCache = {}
 local repeatdata = {}
 local currentFriend
 local redirectFrame = L["redirectFrame"]
