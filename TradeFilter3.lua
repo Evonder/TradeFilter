@@ -287,13 +287,17 @@ function TF3:FindRepeat(msg, userID, msgID)
 		if (repeatdata[userID].repeats >= tonumber(TF3.db.profile.num_repeats)) then
 			--@alpha@
 			if (TF3.db.profile.debug) then
+			--@end-alpha@
 				if (msg ~= lastmsg) then
+					--@alpha@
 					TF3:FindFrame(repeatFrame, "|cFFFF8C00[" .. L["#RPT"] .. "]|r |cFFD9D9D9[" .. msgID .. "]|r |cFFD9D9D9[" .. userID .. "]:|r |cFFC08080" .. msg .. "|r")
+					--@end-alpha@
+					TF3.db.profile.repeats_blocked = TF3.db.profile.repeats_blocked + 1
 					lastmsg = msg
 				end
+			--@alpha@
 			end	
 			--@end-alpha@
-			TF3.db.profile.repeats_blocked = TF3.db.profile.repeats_blocked + 1
 			return true
 		end
 	elseif (msg ~= repeatdata[userID].lastmsg) then

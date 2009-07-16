@@ -38,7 +38,7 @@ Adding a set, e.g. [xXyY], will attempt to find a match for any character given 
 TradeFilter also has a build in Black and White list. A sentence, or "string". that contains a black list match will cease to be checked any more and be filtered out completely. A string found that contains a white list match will also cease to be checked and will be allowed to passed un-filtered.
 
 === Filtering Priorities
-The filtering priorities are as follows: Add-on is ON ->  is NOT friend -> is NOT self(unless filtering self for debugging) -> White list check -> Black list check -> Repeat check -> Filter
+{{http://static.wowace.com/uploads/19/16/157/TradeFilter_Flowchart.png}}
 
 === Configuration
 <<code php>>/tf or /filter<</code>>
@@ -47,7 +47,7 @@ The filtering priorities are as follows: Add-on is ON ->  is NOT friend -> is NO
 Nothing planned
 
 ==== ChangeLog
-[[http://www.wowace.com/addons/trade-filter/pages/main/|ChangeLog Page]]\\
+[[http://www.wowace.com/addons/trade-filter/pages/change-log/|ChangeLog Page]]\\
 
 === Supported Translations
 //Please help localize this project// [[http://www.wowace.com/projects/trade-filter/localization/|HERE]]\\
