@@ -47,8 +47,15 @@ The filtering priorities are as follows: Add-on is ON ->  is NOT friend -> is NO
 Nothing planned
 
 ==== ChangeLog
+*r145
+**++Rewrite on DB functions, Repeat Function and Friends functions++\\
+**++Show repeat count with ability to reset count++\\
+**++Ability to enable/disable Black and White list checking++\\
+**++Debug: Black and White list debugging messages contain whitespaces++\\
+**++Debug: Black and White list debugging messages now show what they matched in your pattern list++\\
+**++Debug: Option to strip "Checking for Match" when debugging++\\
 *r144
-**++Further Debug output cleanup++\\
+**++Debug: Further Debug output cleanup++\\
 **++Better repeat detection++\\
 **++Whitelisted strings still have to pass repeat test++\\
 **++Whitelisted strings also needs to pass Blacklist++\\
@@ -56,7 +63,7 @@ Nothing planned
 **++Typo causing reset buttons to error out fixed++\\
 **++Added all strings to locale++\\
 **++Keys are no longer necessary when adding filter or list patterns++\\
-**++Cleaned up debugging output, will now show what pattern that was matched to allow it to not be filtered++\\
+**++Debug: Cleaned up debugging output, will now show what pattern that was matched to allow it to not be filtered++\\
 *r131
 **++Repeat filtration++\\
 **++Configurable number of repeats before filtered++\\
@@ -73,7 +80,8 @@ Nothing planned
 
 === Supported Translations
 //Please help localize this project// [[http://www.wowace.com/projects/trade-filter/localization/|HERE]]\\
-German - 93.3%\\
-Simplified Chinese - 46.7%\\
-Traditional Chinese - 24.8%\\
-French - 27.6%
+German - 92.1%\\
+French - 64.9%\\
+Simplified Chinese - 43%\\
+Traditional Chinese - 22.8%\\
+Korean - 19.3%\\

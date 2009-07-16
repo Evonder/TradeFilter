@@ -7,46 +7,6 @@ local TradeFilter3 = LibStub("AceAddon-3.0"):GetAddon("TradeFilter3")
 local L = LibStub("AceLocale-3.0"):GetLocale("TradeFilter3")
 local TF3 = TradeFilter3
 
---[[ DB Functions ]]--
-function TF3:Del(t)
-	wipe(t)
-	setmetatable(t, nil)
-	pool[t] = true
-	return nil
-end
-
-function TF3:ClearTable(t, recursive)
-	if t ~= nil and type(t) == 'table' then
-		if not recursive then
-			wipe(t)
-		else
-			for k, v in pairs(t) do
-				if type(v) == 'table' then
-					TF3:ClearTable(v, true)
-					t[k] = TF3:Del(v)
-				else
-					t[k] = nil
-				end
-			end
-		end
-		return t
-		else
-			return {}
-	end
-end
-
-function TF3:CopyTable(t, recursive)
-  local ret = {}
-  for k, v in pairs(t) do
-    if (type(v) == "table") and recursive and not v.GetObjectType then
-      ret[k] = copyTable(v)
-    else
-      ret[k] = v
-    end
-  end
-  return ret
-end
-
 --[[ Options Table ]]--
 options = {
 	type="group",
@@ -166,13 +126,21 @@ options = {
 							get = function() return TF3.db.profile.addfilter_enable end,
 							set = function() TF3.db.profile.addfilter_enable = not TF3.db.profile.addfilter_enable end,
 						},
+						optionsHeader2a = {
+							type	= "header",
+							order	= 3,
+							name	= L["BTF"],
+						},
 						reset_tradefilters = {
 							type = 'execute',
-							order = 3,
+							disabled = function()
+								return not TF3.db.profile.addfilter_enable
+							end,
+							order = 4,
 							width = "double",
 							name = L["RTF"],
 							desc = L["RTF"],
-							func = function() TF3.db.profile.filters.TRADE = TF3:CopyTable(L.FILTERS.TRADE, true) end,
+							func = function() TF3.db.profile.filters.TRADE = TF3:CopyTable(L.FILTERS.TRADE) end,
 						},
 						tradefilters = {
 							type = 'input',
@@ -180,7 +148,7 @@ options = {
 								return not TF3.db.profile.addfilter_enable
 							end,
 							multiline = 8,
-							order = 4,
+							order = 5,
 							width = "double",
 							name = L["BTF"],
 --~ 							desc = L["BTF"],
@@ -196,7 +164,7 @@ options = {
 									return ret
 								end,
 							set = function(info, value)
-								TF3:ClearTable(TF3.db.profile.filters.TRADE)
+								TF3:WipeTable(TF3.db.profile.filters.TRADE)
 								local tbl = { strsplit("\n", value) }
 								for k, v in pairs(tbl) do
 									key = "FILTER"
@@ -204,13 +172,21 @@ options = {
 								end
 							end,
 						},
+						optionsHeader2b = {
+							type	= "header",
+							order	= 6,
+							name	= L["BCF"],
+						},
 						reset_basefilters = {
 							type = 'execute',
-							order = 5,
+							disabled = function()
+								return not TF3.db.profile.addfilter_enable
+							end,
+							order = 7,
 							width = "double",
 							name = L["RBF"],
 							desc = L["RBF"],
-							func = function() TF3.db.profile.filters.BASE = TF3:CopyTable(L.FILTERS.BASE, true) end,
+							func = function() TF3.db.profile.filters.BASE = TF3:CopyTable(L.FILTERS.BASE) end,
 						},
 
 						basefilters = {
@@ -219,7 +195,7 @@ options = {
 								return not TF3.db.profile.addfilter_enable
 							end,
 							multiline = 8,
-							order = 6,
+							order = 8,
 							width = "double",
 							name = L["BCF"],
 							desc = L["BCFD"],
@@ -235,7 +211,7 @@ options = {
 									return ret
 								end,
 							set = function(info, value)
-								TF3:ClearTable(TF3.db.profile.filters.BASE)
+								TF3:WipeTable(TF3.db.profile.filters.BASE)
 								local tbl = { strsplit("\n", value) }
 								for k, v in pairs(tbl) do
 									key = "FILTER"
@@ -269,13 +245,39 @@ options = {
 							get = function() return TF3.db.profile.editlists_enable end,
 							set = function() TF3.db.profile.editlists_enable = not TF3.db.profile.editlists_enable end,
 						},
-						reset_lists = {
-							type = 'execute',
+						blacklist_enable = {
+							type = 'toggle',
 							order = 3,
 							width = "double",
-							name = L["RLS"],
-							desc = L["RLS"],
-							func = function() TF3.db.profile.blacklist = TF3:CopyTable(L.BLACKLIST, true); TF3.db.profile.whitelist = TF3:CopyTable(L.WHITELIST, true) end,
+							name = L["BLE"],
+							desc = L["BLE"],
+							get = function() return TF3.db.profile.blacklist_enable end,
+							set = function() TF3.db.profile.blacklist_enable = not TF3.db.profile.blacklist_enable end,
+						},
+						whitelist_enable = {
+							type = 'toggle',
+							order = 4,
+							width = "double",
+							name = L["WLE"],
+							desc = L["WLE"],
+							get = function() return TF3.db.profile.whitelist_enable end,
+							set = function() TF3.db.profile.whitelist_enable = not TF3.db.profile.whitelist_enable end,
+						},
+						optionsHeader3a = {
+							type	= "header",
+							order	= 5,
+							name	= L["bLists"],
+						},
+						reset_blist = {
+							type = 'execute',
+							disabled = function()
+								return not TF3.db.profile.editlists_enable
+							end,
+							order = 6,
+							width = "double",
+							name = L["RBLS"],
+							desc = L["RBLS"],
+							func = function() TF3.db.profile.blacklist = TF3:CopyTable(L.BLACKLIST) end,
 						},
 						blist = {
 							type = 'input',
@@ -283,23 +285,22 @@ options = {
 								return not TF3.db.profile.editlists_enable
 							end,
 							multiline = 8,
-							order = 4,
+							order = 7,
 							width = "double",
 							name = L["bLists"],
---~ 							desc = L["bLists"],
 							get = function(info)
 								local ret = ""
-									for k, v in pairs(TF3.db.profile.blacklist) do
-										if ret == "" then
-											ret = v
-										else
-											ret = ret .. "\n" .. v
-										end
+								for k, v in pairs(TF3.db.profile.blacklist) do
+									if ret == "" then
+										ret = v
+									else
+										ret = ret .. "\n" .. v
 									end
-									return ret
-								end,
+								end
+								return ret
+							end,
 							set = function(info, value)
-								TF3:ClearTable(TF3.db.profile.blacklist)
+								TF3:WipeTable(TF3.db.profile.blacklist)
 								local tbl = { strsplit("\n", value) }
 								for k, v in pairs(tbl) do
 									key = "BLIST"
@@ -307,29 +308,44 @@ options = {
 								end
 							end,
 						},
+						optionsHeader3b = {
+							type	= "header",
+							order	= 8,
+							name	= L["wLists"],
+						},
+						reset_wlist = {
+							type = 'execute',
+							disabled = function()
+								return not TF3.db.profile.editlists_enable
+							end,
+							order = 9,
+							width = "double",
+							name = L["RWLS"],
+							desc = L["RWLS"],
+							func = function() TF3.db.profile.whitelist = TF3:CopyTable(L.WHITELIST) end,
+						},
 						wlist = {
 							type = 'input',
 							disabled = function()
 								return not TF3.db.profile.editlists_enable
 							end,
 							multiline = 8,
-							order = 5,
+							order = 10,
 							width = "double",
 							name = L["wLists"],
---~ 							desc = L["wLists"],
 							get = function(info)
 								local ret = ""
-									for k, v in pairs(TF3.db.profile.whitelist) do
-										if ret == "" then
-											ret = v
-										else
-											ret = ret .. "\n" .. v
-										end
+								for k, v in pairs(TF3.db.profile.whitelist) do
+									if ret == "" then
+										ret = v
+									else
+										ret = ret .. "\n" .. v
 									end
-									return ret
-								end,
+								end
+								return ret
+							end,
 							set = function(info, value)
-								TF3:ClearTable(TF3.db.profile.whitelist)
+								TF3:WipeTable(TF3.db.profile.whitelist)
 								local tbl = { strsplit("\n", value) }
 								for k, v in pairs(tbl) do
 									key = "WLIST"
@@ -349,11 +365,10 @@ options = {
 					name = L["REPEAT"],
 					desc = L["REPEAT"],
 					args = {
-						optionsHeader3 = {
+						optionsHeader4 = {
 							type	= "header",
 							order	= 1,
 							name	= L["REPEAT"],
-							desc = L["REPEAT"],
 						},
 						repeat_enable = {
 							type = 'toggle',
@@ -421,11 +436,10 @@ options = {
 					name = L["OUTPUT"],
 					desc = L["OUTPUT"],
 					args = {
-						optionsHeader3 = {
+						optionsHeader5 = {
 							type	= "header",
 							order	= 1,
 							name	= L["OUTPUT"],
-							desc = L["OUTPUT"],
 						},
 						redirect = {
 							type = 'toggle',
@@ -436,10 +450,24 @@ options = {
 							get = function() return TF3.db.profile.redirect end,
 							set = function() TF3.db.profile.redirect = not TF3.db.profile.redirect end,
 						},
-						--@alpha@
-						debug = {
+						redirect_blacklist = {
 							type = 'toggle',
 							order = 3,
+							width = "full",
+							name = L["RedirBL"],
+							desc = L["RedirDesc"],
+							get = function() return TF3.db.profile.redirect_blacklist end,
+							set = function() TF3.db.profile.redirect_blacklist = not TF3.db.profile.redirect_blacklist end,
+						},
+						--@alpha@
+						optionsHeader6 = {
+							type	= "header",
+							order	= 4,
+							name	= L["DEBUGGING"],
+						},
+						debug = {
+							type = 'toggle',
+							order = 5,
 							width = "full",
 							disabled = false,
 							hidden = false,
@@ -448,16 +476,27 @@ options = {
 							get = function() return TF3.db.profile.debug end,
 							set = function() TF3.db.profile.debug = not TF3.db.profile.debug end,
 						},
+						debug_checking = {
+							type = 'toggle',
+							order = 6,
+							width = "full",
+							disabled = false,
+							hidden = false,
+							name = L["DebugChecking"],
+							desc = L["DebugCheckingD"],
+							get = function() return TF3.db.profile.debug_checking end,
+							set = function() TF3.db.profile.debug_checking = not TF3.db.profile.debug_checking end,
+						},
 						--@end-alpha@
 						optionsHeader4 = {
 							type	= "header",
-							order	= 4,
+							order	= 7,
 							name	= L["FSELF"],
 							desc = L["FSELFD"],
 						},
 						filterSELF = {
 							type = 'toggle',
-							order = 5,
+							order = 8,
 							width = "double",
 							disabled = false,
 							name = L["FSELF"],
