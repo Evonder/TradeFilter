@@ -542,6 +542,7 @@ function TF3:FilterFunc(...)
 	local userID = arg2 or select(2, ...)
 	local zoneID = arg7 or select(7, ...)
 	local chanID = arg8 or select(8, ...)
+	local msgID = arg11 or select(11, ...)
 	local msg = lower(msg)
 	if (chanID == 1) then
 		chan = "1. " .. L["General"]
@@ -556,7 +557,7 @@ function TF3:FilterFunc(...)
 		filtered = true
 		if (TF3.db.profile.debug) then
 			if (lastmsg ~= msg or lastuserID ~= userID) then
-				TF3:FindFrame(debugFrame, "|cFFC08080[" .. chan .. "]|r |cFFD9D9D9[" .. userID .. "]:|r |cFFC08080" .. msg .. "|r")
+				TF3:FindFrame(debugFrame, "|cFFC08080[" .. chan .. "]|r |cFFD9D9D9[" .. msgID .. "]|r |cFFD9D9D9[" .. userID .. "]:|r |cFFC08080" .. msg .. "|r")
 			end
 		end
 		if (zoneID == 2) then
@@ -600,7 +601,7 @@ function TF3:FilterFunc(...)
 					TF3:FindFrame(debugFrame, L["NOMATCH"])
 				end
 				if (TF3.db.profile.redirect) then
-					TF3:FindFrame(redirectFrame, "|cFFC08080[" .. chan .. "]|r |cFFD9D9D9[" .. userID .. "]:|r |cFFC08080" .. msg .. "|r")
+					TF3:FindFrame(redirectFrame, "|cFFC08080[" .. chan .. "]|r |cFFD9D9D9[" .. msgID .. "]|r |cFFD9D9D9[" .. userID .. "]:|r |cFFC08080" .. msg .. "|r")
 				end
 				lastmsg, lastuserID = msg, userID
 			end
