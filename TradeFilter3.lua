@@ -32,7 +32,7 @@ File Date: @file-date-iso@
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 --]]
 
-TradeFilter3 = LibStub("AceAddon-3.0"):NewAddon("TradeFilter3", "AceConsole-3.0", "AceEvent-3.0")
+TradeFilter3 = LibStub("AceAddon-3.0"):NewAddon("TradeFilter3", "AceConsole-3.0", "AceEvent-3.0", "AceTimer-3.0")
 local L =  LibStub("AceLocale-3.0"):GetLocale("TradeFilter3", true)
 local friends = LibStub("LibFriends-1.0")
 local TF3 = TradeFilter3
@@ -43,12 +43,12 @@ TF3.version = MAJOR_VERSION .. "." .. MINOR_VERSION
 TF3.date = string.sub("$Date: @file-date-iso@ $", 8, 17)
 
 --[[ Locals ]]--
-local _G = _G
-local ipairs = _G.ipairs
-local find = _G.string.find
-local sub = _G.string.gsub
-local lower = _G.string.lower
-local formatIt = _G.string.format
+local ipairs = ipairs
+local find = string.find
+local sub = string.gsub
+local lower = string.lower
+local formatIt = string.format
+local timerCount = 0
 local repeatdata = {}
 local currentFriend
 local redirectFrame = L["redirectFrame"]
@@ -140,26 +140,57 @@ function TF3:IsLoggedIn()
 	self:RegisterEvent("FRIENDLIST_UPDATE", "GetFriends")
 	friends.RegisterCallback(self, "Added")
 	friends.RegisterCallback(self, "Removed")
+	self:ScheduleRepeatingTimer("RecycleTables", 1800, repeatdata)
 	self:UnregisterEvent("PLAYER_LOGIN")
 end
 
---[[ DB Functions ]]--
-function TF3:WipeTable(tbl)
-	if tbl ~= nil and type(tbl) == "table" then
-		wipe(tbl)
+--[[ Helper Functions ]]--
+function TF3:WipeTable(t)
+	if (t ~= nil and type(t) == "table") then
+		wipe(t)
 	end
 end
 
-function TF3:CopyTable(tbl)
-  local new_tbl = {}
-  for k, v in pairs(tbl) do
+function TF3:CopyTable(t)
+  local new_t = {}
+  for k, v in pairs(t) do
     if (type(v) == "table") then
-      new_tbl[k] = copyTable(v)
+      new_t[k] = TF3:CopyTable(v)
     else
-			new_tbl[k] = v
+			new_t[k] = v
     end
   end
-  return new_tbl
+  return new_t
+end
+
+function TF3:GetNumElements(t)
+ local count = 0
+ for _ in pairs(t) do
+  count = count + 1
+ end
+ return count
+end
+
+function TF3:RecycleTables(t, state)
+	local gtime = math.floor(GetTime()*math.pow(10,0)+0.5) / math.pow(10,0)
+	if (t ~= nil and type(t) == "table" and TF3:GetNumElements(t) >= 100) then
+		local key, value = next(t, state)
+		if key then
+			for k,v in pairs(value) do
+				if(k == "lastIndex" and gtime - v > 1800) then
+					if (TF3.db.profile.debug) then
+						TF3:FindFrame(debugFrame, "|cFFFFFF80" .. L["RMVRT1"] .. "|r |cFF33FF99" .. key .. "|r |cFFFFFF80" .. L["RMVRT2"] .. "|r")
+					end
+					t[key] = nil
+				end
+			end
+			return value, TF3:RecycleTables(t, key)
+		end
+		timerCount = timerCount + 1
+		if (TF3.db.profile.debug) then
+			TF3:FindFrame(debugFrame, ("%d " .. L["SECPSD"]):format(1800 * timerCount))
+		end
+	end
 end
 
 --[[ Friends Functions ]]--
@@ -167,15 +198,13 @@ function TF3:GetFriends()
 	local friends = TF3.db.profile.friendslist
 	local numFriends = GetNumFriends()
 	if (#friends ~= numFriends) then
-		print(L["TFFR"])
+		print("|cFF33FF99" .. L["TFFR"] .. "|r")
 		TF3:WipeTable(friends)
 		for i=1, numFriends do
 			local name = GetFriendInfo(i)
 			if name then
 				friends[i] = name
-				if (TF3.db.profile.debug) then
-					print("|cFFFFFF80" .. name .. " " .. L["FADD"] .. "|r")
-				end
+				print("|cFFFFFF80" .. name .. " " .. L["FADD"] .. "|r")
 			end
 		end
 	end
@@ -187,7 +216,7 @@ function TF3:Added(event, name)
 	if name ~= UnitName("player") then
 		friends[#friends + 1] = name
 		if (TF3.db.profile.debug) then
-			print("|cFFFFFF80" .. name .. " " .. L["FADD"] .. "|r")
+			TF3:FindFrame(debugFrame, "|cFFFFFF80" .. name .. " " .. L["FADD"] .. "|r")
 		end
 	end
 	if currentFriend then
@@ -202,7 +231,7 @@ function TF3:Removed(event, name)
 			if find(name,v) then
 				friends[k] = nil
 				if (TF3.db.profile.debug) then
-					print("|cFFFFFF80" .. name .. " " .. L["FREM"] .. "|r")
+					TF3:FindFrame(debugFrame, "|cFFFFFF80" .. name .. " " .. L["FREM"] .. "|r")
 				end
 			end
 		end
@@ -212,7 +241,6 @@ function TF3:Removed(event, name)
 	end
 end
 
---[[ IsFriend Func ]]--
 function TF3:IsFriend(userID)
 	local friends = self.db.profile.friendslist
 	for _,name in ipairs(friends) do
@@ -231,7 +259,6 @@ function TF3:BlackList(msg, userID, msgID)
 	if (TF3.db.profile.blacklist_enable) then
 		for _,word in pairs(blword) do
 			if (find(msg,word)) then
-				--@alpha@
 				if (TF3.db.profile.debug) then
 					if (msgID ~= lastmsgID) then
 						TF3:FindFrame(debugFrame, "|cFFFF0000[" .. L["bLists"] .. "]|r |cFFD9D9D9[" .. userID .. "]:|r |cFFC08080" .. msg .. "|r")
@@ -241,7 +268,6 @@ function TF3:BlackList(msg, userID, msgID)
 						end
 					end
 				end
-				--@end-alpha@
 				if (TF3.db.profile.redirect_blacklist) then
 					if (msgID ~= lastmsgID) then
 						TF3:FindFrame(redirectFrame, "|cFFFF0000[" .. L["bLists"] .. "]|r |cFFD9D9D9[" .. userID .. "]:|r |cFFC08080" .. msg .. "|r")
@@ -285,19 +311,13 @@ function TF3:FindRepeat(msg, userID, msgID)
 	if (msgID ~= repeatdata[userID].lastmsgID and msg == repeatdata[userID].lastmsg and gtime - repeatdata[userID].lastIndex < tonumber(TF3.db.profile.time_repeats)) then
 		repeatdata[userID].repeats = repeatdata[userID].repeats + 1
 		if (repeatdata[userID].repeats >= tonumber(TF3.db.profile.num_repeats)) then
-			--@alpha@
 			if (TF3.db.profile.debug) then
-			--@end-alpha@
 				if (msg ~= lastmsg) then
-					--@alpha@
 					TF3:FindFrame(repeatFrame, "|cFFFF8C00[" .. L["#RPT"] .. "]|r |cFFD9D9D9[" .. msgID .. "]|r |cFFD9D9D9[" .. userID .. "]:|r |cFFC08080" .. msg .. "|r")
-					--@end-alpha@
 					TF3.db.profile.repeats_blocked = TF3.db.profile.repeats_blocked + 1
 					lastmsg = msg
 				end
-			--@alpha@
 			end	
-			--@end-alpha@
 			return true
 		end
 	elseif (msg ~= repeatdata[userID].lastmsg) then
@@ -534,63 +554,51 @@ function TF3:FilterFunc(...)
 	end
 	if (filterFuncList and TF3.db.profile.turnOn) then
 		filtered = true
-		--@alpha@
 		if (TF3.db.profile.debug) then
 			if (lastmsg ~= msg or lastuserID ~= userID) then
 				TF3:FindFrame(debugFrame, "|cFFC08080[" .. chan .. "]|r |cFFD9D9D9[" .. userID .. "]:|r |cFFC08080" .. msg .. "|r")
 			end
 		end
-		--@end-alpha@
 		if (zoneID == 2) then
 			for i,v in pairs(TF3.db.profile.filters.TRADE) do
-				--@alpha@
 				if (TF3.db.profile.debug and not TF3.db.profile.debug_checking) then
 					if (lastmsg ~= msg or lastuserID ~= userID) then
 						TF3:FindFrame(debugFrame, L["CFM"] .. " " .. v)
 					end
 				end
-				--@end-alpha@
 				if (find(msg,v)) then
-					--@alpha@
 					if (TF3.db.profile.debug) then
 						if (lastmsg ~= msg or lastuserID ~= userID) then
 							TF3:FindFrame(debugFrame, L["MATCHED"] .. " |cffff8080" .. v .. "|r")
 							lastmsg, lastuserID = msg, userID
 						end
 					end
-					--@end-alpha@
 					filtered = false
 				end
 			end
 		else
 			for i,v in pairs(TF3.db.profile.filters.BASE) do
-				--@alpha@
 				if (TF3.db.profile.debug and not TF3.db.profile.debug_checking) then
 					if (lastmsg ~= msg or lastuserID ~= userID) then
 						TF3:FindFrame(debugFrame, L["CFM"] .. " " .. v)
 					end
 				end
-				--@end-alpha@
 				if (find(msg,v)) then
-					--@alpha@
 					if (TF3.db.profile.debug) then
 						if (lastmsg ~= msg or lastuserID ~= userID) then
 							TF3:FindFrame(debugFrame, L["MATCHED"] .. " |cffff8080" .. v .. "|r")
 							lastmsg, lastuserID = msg, userID
 						end
 					end
-					--@end-alpha@
 					filtered = false
 					end
 				end
 			end
 		if (filtered == true) then
 			if (lastmsg ~= msg or lastuserID ~= userID) then
-				--@alpha@
 				if (TF3.db.profile.debug) then
 					TF3:FindFrame(debugFrame, L["NOMATCH"])
 				end
-				--@end-alpha@
 				if (TF3.db.profile.redirect) then
 					TF3:FindFrame(redirectFrame, "|cFFC08080[" .. chan .. "]|r |cFFD9D9D9[" .. userID .. "]:|r |cFFC08080" .. msg .. "|r")
 				end

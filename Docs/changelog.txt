@@ -1,4 +1,7 @@
 == ChangeLog
+*r148
+**++Minor code cleanup++\\
+**++AceTimer lib added for repeat table recycling++\\
 *r145
 **++Rewrite on DB functions, Repeat Function and Friends functions++\\
 **++Show repeat count with ability to reset count++\\

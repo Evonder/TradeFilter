@@ -149,7 +149,7 @@ options = {
 							end,
 							multiline = 8,
 							order = 5,
-							width = "double",
+							width = "full",
 							name = L["BTF"],
 --~ 							desc = L["BTF"],
 							get = function(info)
@@ -196,7 +196,7 @@ options = {
 							end,
 							multiline = 8,
 							order = 8,
-							width = "double",
+							width = "full",
 							name = L["BCF"],
 							desc = L["BCFD"],
 							get = function(info)
@@ -286,7 +286,7 @@ options = {
 							end,
 							multiline = 8,
 							order = 7,
-							width = "double",
+							width = "full",
 							name = L["bLists"],
 							get = function(info)
 								local ret = ""
@@ -331,7 +331,7 @@ options = {
 							end,
 							multiline = 8,
 							order = 10,
-							width = "double",
+							width = "full",
 							name = L["wLists"],
 							get = function(info)
 								local ret = ""
@@ -385,7 +385,7 @@ options = {
 								return not TF3.db.profile.repeat_enable
 							end,
 							order = 3,
-							width = "double",
+							width = "full",
 							name = L["#RPT"],
 							desc = L["#RPTD"],
 							usage = L["RPTU"],
@@ -398,14 +398,13 @@ options = {
 								return not TF3.db.profile.repeat_enable
 							end,
 							order = 4,
-							width = "double",
+							width = "full",
 							name = L["TRPT"],
 							desc = L["TRPTD"],
 							usage = L["RPTU"],
 							get = function(info) return TF3.db.profile.time_repeats end,
 							set = function(info, value) TF3.db.profile.time_repeats = value end,
 						},
-						--@alpha@
 						repeats_blocked = {
 							type = 'input',
 							disabled = true,
@@ -423,7 +422,6 @@ options = {
 							desc = L["RPTRESETD"],
 							func = function() TF3.db.profile.repeats_blocked = 0 end,
 						},
-						--@end-alpha@
 					},
 				},
 				outputGroup = {
