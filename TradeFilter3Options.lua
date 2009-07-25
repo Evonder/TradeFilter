@@ -18,9 +18,16 @@ options = {
 			type = "group",
 			name = TF3.name,
 			args = {
+				mainHeader = {
+					type = "description",
+					name = "  " .. L["NJAOF"] .. "\n\n",
+					order = 1,
+					image = "Interface\\Icons\\Ability_Warrior_RallyingCry",
+					imageWidth = 32, imageHeight = 32,
+				},
 				turnOn = {
 					type = 'toggle',
-					order = 1,
+					order = 2,
 					width = "double",
 					name = L["TurnOn"],
 					desc = L["TurnOnDesc"],
@@ -100,6 +107,65 @@ options = {
 							get = function() return TF3.db.profile.filterYELL end,
 							set = function() TF3.db.profile.filterYELL = not TF3.db.profile.filterYELL end,
 						},
+						optionsHeader1a = {
+							type	= "header",
+							order	= 8,
+							name	= L["SPCS"],
+						},
+						GuildAddOnsChannel = {
+							type = 'toggle',
+							order = 9,
+							width = "double",
+							disabled = false,
+							name = L["GAC"],
+							desc = L["GACD"],
+							get = function() return TF3.db.profile.filterGAC end,
+							set = function() TF3.db.profile.filterGAC = not TF3.db.profile.filterGAC end,
+						},
+						special_enable = {
+							type = 'toggle',
+							order = 10,
+							width = "double",
+							disabled = false,
+							name = L["SPCST"],
+							desc = L["SPCSTD"],
+							get = function() return TF3.db.profile.special_enable end,
+							set = function() TF3.db.profile.special_enable = not TF3.db.profile.special_enable end,
+						},
+						specialfilters = {
+							type = 'input',
+							disabled = function()
+								return not TF3.db.profile.special_enable
+							end,
+							multiline = 4,
+							order = 11,
+							width = "full",
+							name = L["SPCST"],
+							desc = L["SPCSTD"],
+							usage = L["INPUSAGE"],
+							get = function(info)
+								local ret = ""
+								if (TF3.db.profile.filters.SPECIAL == nil) then
+									TF3.db.profile.filters.SPECIAL = L.FILTERS.SPECIAL
+								end
+								for k, v in pairs(TF3.db.profile.filters.SPECIAL) do
+									if ret == "" then
+										ret = v
+									else
+										ret = ret .. "\n" .. v
+									end
+								end
+								return ret
+							end,
+							set = function(info, value)
+								TF3:WipeTable(TF3.db.profile.filters.SPECIAL)
+								local tbl = { strsplit("\n", value) }
+								for k, v in pairs(tbl) do
+									key = "FILTER"
+									TF3.db.profile.filters.SPECIAL[key..k] = v
+								end
+							end,
+						},
 					},
 				},
 				editFilterGroup = {
@@ -151,18 +217,22 @@ options = {
 							order = 5,
 							width = "full",
 							name = L["BTF"],
---~ 							desc = L["BTF"],
+							desc = L["BTFD"],
+							usage = L["INPUSAGE"],
 							get = function(info)
 								local ret = ""
-									for k, v in pairs(TF3.db.profile.filters.TRADE) do
-										if ret == "" then
-											ret = v
-										else
-											ret = ret .. "\n" .. v
-										end
+								if (TF3.db.profile.filters.TRADE == nil) then
+									TF3.db.profile.filters.TRADE = L.FILTERS.TRADE
+								end
+								for k, v in pairs(TF3.db.profile.filters.TRADE) do
+									if ret == "" then
+										ret = v
+									else
+										ret = ret .. "\n" .. v
 									end
-									return ret
-								end,
+								end
+								return ret
+							end,
 							set = function(info, value)
 								TF3:WipeTable(TF3.db.profile.filters.TRADE)
 								local tbl = { strsplit("\n", value) }
@@ -199,17 +269,21 @@ options = {
 							width = "full",
 							name = L["BCF"],
 							desc = L["BCFD"],
+							usage = L["INPUSAGE"],
 							get = function(info)
 								local ret = ""
-									for k, v in pairs(TF3.db.profile.filters.BASE) do
-										if ret == "" then
-											ret = v
-										else
-											ret = ret .. "\n" .. v
-										end
+								if (TF3.db.profile.filters.BASE == nil) then
+									TF3.db.profile.filters.BASE = L.FILTERS.BASE
+								end
+								for k, v in pairs(TF3.db.profile.filters.BASE) do
+									if ret == "" then
+										ret = v
+									else
+										ret = ret .. "\n" .. v
 									end
-									return ret
-								end,
+								end
+								return ret
+							end,
 							set = function(info, value)
 								TF3:WipeTable(TF3.db.profile.filters.BASE)
 								local tbl = { strsplit("\n", value) }
@@ -288,8 +362,12 @@ options = {
 							order = 7,
 							width = "full",
 							name = L["bLists"],
+							usage = L["INPUSAGE"],
 							get = function(info)
 								local ret = ""
+								if (TF3.db.profile.blacklist == nil) then
+									TF3.db.profile.blacklist = L.BLACKLIST
+								end
 								for k, v in pairs(TF3.db.profile.blacklist) do
 									if ret == "" then
 										ret = v
@@ -333,8 +411,12 @@ options = {
 							order = 10,
 							width = "full",
 							name = L["wLists"],
+							usage = L["INPUSAGE"],
 							get = function(info)
 								local ret = ""
+								if (TF3.db.profile.whitelist == nil) then
+									TF3.db.profile.whitelist = L.WHITELIST
+								end
 								for k, v in pairs(TF3.db.profile.whitelist) do
 									if ret == "" then
 										ret = v
@@ -457,7 +539,6 @@ options = {
 							get = function() return TF3.db.profile.redirect_blacklist end,
 							set = function() TF3.db.profile.redirect_blacklist = not TF3.db.profile.redirect_blacklist end,
 						},
-						--@alpha@
 						optionsHeader6 = {
 							type	= "header",
 							order	= 4,
@@ -485,7 +566,6 @@ options = {
 							get = function() return TF3.db.profile.debug_checking end,
 							set = function() TF3.db.profile.debug_checking = not TF3.db.profile.debug_checking end,
 						},
-						--@end-alpha@
 						optionsHeader4 = {
 							type	= "header",
 							order	= 7,
