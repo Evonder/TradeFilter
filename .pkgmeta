@@ -53,7 +53,7 @@ externals:
   url: git://git.curseforge.net/wow/libaboutpanel/mainline.git
   tag: latest
  libs/LibDataBroker-1.1:
-  url: git://git.wowace.com/wow/libdatabroker-1-1/mainline.git
+  url: git://github.com/tekkub/libdatabroker-1-1.git
   tag: latest
  libs/LibDBIcon-1.0:
   url: svn://svn.wowace.com/wow/libdbicon-1-0/mainline/trunk
