@@ -35,6 +35,7 @@ File Date: @file-date-iso@
 TradeFilter3 = LibStub("AceAddon-3.0"):NewAddon("TradeFilter3", "AceConsole-3.0", "AceEvent-3.0", "AceTimer-3.0")
 local L =  LibStub("AceLocale-3.0"):GetLocale("TradeFilter3", true)
 local friends = LibStub("LibFriends-1.0")
+local LDB = LibStub("LibDataBroker-1.1")
 local TF3 = TradeFilter3
 
 local MAJOR_VERSION = "3.0"
