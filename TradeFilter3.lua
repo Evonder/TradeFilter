@@ -73,10 +73,12 @@ defaults = {
 		filterGeneral = false,
 		filterTrade = true,
 		editfilter_enable = false,
-		editlists_enable = false,
+		ebl = false,
+		ewl = false,
 		blacklist_enable = true,
 		whitelist_enable = true,
 		redirect_blacklist = false,
+		wlbp = false,
 		repeat_enable = true,
 		special_enable = false,
 		num_repeats = "2",
@@ -139,12 +141,51 @@ function TF3:FirstLogin()
 	TF3.db.profile.filters = L.FILTERS
 end
 
+local function OnTooltipShow(self)
+	self:AddLine("|cffeda55fRight Click|r to open config GUI")
+	self:AddLine("|cffeda55fLeft Click|r reset repeat count")
+end
+
+local function OnEnter(self)
+	GameTooltip:SetOwner(self, "ANCHOR_NONE")
+	GameTooltip:SetPoint("TOPLEFT", self, "BOTTOMLEFT")
+	GameTooltip:ClearLines()
+	OnTooltipShow(GameTooltip)
+	GameTooltip:Show()
+end
+
+local function OnLeave(self)
+	GameTooltip:Hide()
+end
+
+local function OnClick(clickedframe, button)
+	if (button == "RightButton") then
+		TF3:OpenOptions()
+	else
+		TF3.db.profile.repeats_blocked = 0
+	end
+end
+
 function TF3:IsLoggedIn()
 	self:RegisterEvent("FRIENDLIST_UPDATE", "GetFriends")
 	friends.RegisterCallback(self, "Added")
 	friends.RegisterCallback(self, "Removed")
 	self:ScheduleRepeatingTimer("RecycleTables", 1800, repeatdata)
 	self:UnregisterEvent("PLAYER_LOGIN")
+	
+	if (LDB) then
+		TF3Frame = CreateFrame("Frame", "LDB_TradeFilter3")
+		TF3Frame.Blocked = LDB:NewDataObject(L["TFR"], {
+			type = "data source",
+			text = "0 Blocked Repeats",
+			value = TF3.db.profile.repeats_blocked,
+			suffix = "Repeats Blocked",
+			OnClick = OnClick,
+			OnEnter = OnEnter,
+			OnLeave = OnLeave,
+			OnTooltipShow = OnTooltipShow,
+		})
+	end
 end
 
 --[[ Helper Functions ]]--
@@ -291,7 +332,7 @@ function TF3:WhiteList(msg, userID, msgID)
 	local msg = lower(msg)
 	if (TF3.db.profile.whitelist_enable) then
 		for _,word in pairs(wlword) do
-			if (find(msg,word) and TF3:FindRepeat(msg, userID, msgID) == false and TF3:BlackList(msg, userID, msgID) == false) then
+			if (find(msg,word) and TF3:FindRepeat(msg, userID, msgID, whitelist) == false and TF3:BlackList(msg, userID, msgID) == false) then
 				if (TF3.db.profile.debug) then
 					if (msgID ~= lastmsgID) then
 						TF3:FindFrame(debugFrame, "|cFFFFFF80[" .. L["wLists"] .. "]|r |cFFD9D9D9[" .. userID .. "]:|r |cFFC08080" .. msg .. "|r")
@@ -322,27 +363,35 @@ function TF3:SpecialChans(chanName)
 end
 
 --[[ Repeat Func ]]--
-function TF3:FindRepeat(msg, userID, msgID)
-	local gtime = math.floor(GetTime()*math.pow(10,0)+0.5) / math.pow(10,0)
-	if (msgID ~= repeatdata[userID].lastmsgID and msg == repeatdata[userID].lastmsg and gtime - repeatdata[userID].lastIndex < tonumber(TF3.db.profile.time_repeats)) then
-		repeatdata[userID].repeats = repeatdata[userID].repeats + 1
-		if (repeatdata[userID].repeats >= tonumber(TF3.db.profile.num_repeats)) then
-			if (TF3.db.profile.debug) then
-				if (msg ~= lastmsg) then
-					TF3:FindFrame(repeatFrame, "|cFFFF8C00[" .. L["#RPT"] .. "]|r |cFFD9D9D9[" .. msgID .. "]|r |cFFD9D9D9[" .. userID .. "]:|r |cFFC08080" .. msg .. "|r")
-					TF3.db.profile.repeats_blocked = TF3.db.profile.repeats_blocked + 1
-					lastmsg = msg
-				end
-			end	
-			return true
+function TF3:FindRepeat(msg, userID, msgID, arg)
+	if (arg == whitelist and not TF3.db.profile.wlbp) then
+		local gtime = math.floor(GetTime()*math.pow(10,0)+0.5) / math.pow(10,0)
+		if (msgID ~= repeatdata[userID].lastmsgID and msg == repeatdata[userID].lastmsg and gtime - repeatdata[userID].lastIndex < tonumber(TF3.db.profile.time_repeats)) then
+			repeatdata[userID].repeats = repeatdata[userID].repeats + 1
+			if (repeatdata[userID].repeats >= tonumber(TF3.db.profile.num_repeats)) then
+				if (TF3.db.profile.debug) then
+					if (msg ~= lastmsg) then
+						TF3:FindFrame(repeatFrame, "|cFFFF8C00[" .. L["#RPT"] .. "]|r |cFFD9D9D9[" .. msgID .. "]|r |cFFD9D9D9[" .. userID .. "]:|r |cFFC08080" .. msg .. "|r")
+						TF3.db.profile.repeats_blocked = TF3.db.profile.repeats_blocked + 1
+						if (LDB) then
+							TF3Frame.Blocked.text = TF3.db.profile.repeats_blocked .. "Repeats Blocked"
+							TF3Frame.Blocked.value = TF3.db.profile.repeats_blocked
+						end
+						lastmsg = msg
+					end
+				end	
+				return true
+			end
+		elseif (msg ~= repeatdata[userID].lastmsg) then
+			repeatdata[userID].repeats = 1
 		end
-	elseif (msg ~= repeatdata[userID].lastmsg) then
-	 repeatdata[userID].repeats = 1
+		repeatdata[userID].lastmsg = msg
+		repeatdata[userID].lastmsgID = msgID
+		repeatdata[userID].lastIndex  = gtime
+		return false
+	else
+		return false
 	end
-	repeatdata[userID].lastmsg = msg
-	repeatdata[userID].lastmsgID = msgID
-	repeatdata[userID].lastIndex  = gtime
-	return false
 end
 
 --[[ Window and Chat Functions ]]--
@@ -392,7 +441,7 @@ local function PreFilterFunc_Addon(self, event, ...)
 		repeatdata[userID].repeats = 1
 	end
 	if (distType == "GUILD" and find(prefix,"ET") and TF3.db.profile.filterGAC and TF3:IsFriend(userID) == false) then
-		if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false or TF3:WhiteList(msg, userID) == true) then
+		if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false or TF3:WhiteList(msg, userID, msgID) == true) then
 			filtered = false
 		elseif (TF3:BlackList(msg, userID) == true) then
 			filtered = true

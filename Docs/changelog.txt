@@ -1,4 +1,8 @@
 == ChangeLog
+*r155
+**++LDB support for Repeats Blocked++
+**++Ability for Whitelist to bypass repeat filter++
+**++GUI layout changed a little++
 *r148
 **++Minor code cleanup++\\
 **++AceTimer lib added for repeat table recycling++\\
