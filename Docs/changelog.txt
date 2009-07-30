@@ -1,4 +1,6 @@
 == ChangeLog
+*r159
+**++Keep lists sorted!++
 *r155
 **++LDB support for Repeats Blocked++
 **++Ability for Whitelist to bypass repeat filter++

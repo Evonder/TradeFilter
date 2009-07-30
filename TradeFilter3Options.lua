@@ -148,7 +148,7 @@ options = {
 								if (TF3.db.profile.filters.SPECIAL == nil) then
 									TF3.db.profile.filters.SPECIAL = L.FILTERS.SPECIAL
 								end
-								for k, v in pairs(TF3.db.profile.filters.SPECIAL) do
+								for k,v in TF3:pairsByKeys(TF3.db.profile.filters.SPECIAL) do
 									if ret == "" then
 										ret = v
 									else
@@ -213,7 +213,7 @@ options = {
 								if (TF3.db.profile.filters.TRADE == nil) then
 									TF3.db.profile.filters.TRADE = L.FILTERS.TRADE
 								end
-								for k, v in pairs(TF3.db.profile.filters.TRADE) do
+								for k,v in TF3:pairsByKeys(TF3.db.profile.filters.TRADE) do
 									if ret == "" then
 										ret = v
 									else
@@ -262,7 +262,7 @@ options = {
 								if (TF3.db.profile.filters.BASE == nil) then
 									TF3.db.profile.filters.BASE = L.FILTERS.BASE
 								end
-								for k, v in pairs(TF3.db.profile.filters.BASE) do
+								for k,v in TF3:pairsByKeys(TF3.db.profile.filters.BASE) do
 									if ret == "" then
 										ret = v
 									else
@@ -340,7 +340,7 @@ options = {
 								if (TF3.db.profile.blacklist == nil) then
 									TF3.db.profile.blacklist = L.BLACKLIST
 								end
-								for k, v in pairs(TF3.db.profile.blacklist) do
+								for k,v in TF3:pairsByKeys(TF3.db.profile.blacklist) do
 									if ret == "" then
 										ret = v
 									else
@@ -415,7 +415,7 @@ options = {
 								if (TF3.db.profile.whitelist == nil) then
 									TF3.db.profile.whitelist = L.WHITELIST
 								end
-								for k, v in pairs(TF3.db.profile.whitelist) do
+								for k,v in TF3:pairsByKeys(TF3.db.profile.whitelist) do
 									if ret == "" then
 										ret = v
 									else
