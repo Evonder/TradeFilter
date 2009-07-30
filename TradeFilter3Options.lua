@@ -7,6 +7,12 @@ local TradeFilter3 = LibStub("AceAddon-3.0"):GetAddon("TradeFilter3")
 local L = LibStub("AceLocale-3.0"):GetLocale("TradeFilter3")
 local TF3 = TradeFilter3
 
+--[[ Locals ]]--
+local ipairs = ipairs
+local pairs = pairs
+local insert = table.insert
+local sort = table.sort
+
 --[[ Options Table ]]--
 options = {
 	type="group",
@@ -144,11 +150,16 @@ options = {
 							desc = L["SPCSTD"],
 							usage = L["INPUSAGE"],
 							get = function(info)
+								local a = {}
 								local ret = ""
 								if (TF3.db.profile.filters.SPECIAL == nil) then
 									TF3.db.profile.filters.SPECIAL = L.FILTERS.SPECIAL
 								end
-								for k,v in TF3:pairsByKeys(TF3.db.profile.filters.SPECIAL) do
+								for _,v in pairs(TF3.db.profile.filters.SPECIAL) do
+									insert(a, v)
+								end
+								sort(a)
+								for _,v in ipairs(a) do
 									if ret == "" then
 										ret = v
 									else
@@ -209,11 +220,16 @@ options = {
 							desc = L["BTFD"],
 							usage = L["INPUSAGE"],
 							get = function(info)
+								local a = {}
 								local ret = ""
 								if (TF3.db.profile.filters.TRADE == nil) then
 									TF3.db.profile.filters.TRADE = L.FILTERS.TRADE
 								end
-								for k,v in TF3:pairsByKeys(TF3.db.profile.filters.TRADE) do
+								for _,v in pairs(TF3.db.profile.filters.TRADE) do
+									table.insert(a, v)
+								end
+								sort(a)
+								for _,v in ipairs(a) do
 									if ret == "" then
 										ret = v
 									else
@@ -258,11 +274,16 @@ options = {
 							desc = L["BCFD"],
 							usage = L["INPUSAGE"],
 							get = function(info)
+								local a = {}
 								local ret = ""
 								if (TF3.db.profile.filters.BASE == nil) then
 									TF3.db.profile.filters.BASE = L.FILTERS.BASE
 								end
-								for k,v in TF3:pairsByKeys(TF3.db.profile.filters.BASE) do
+								for _,v in pairs(TF3.db.profile.filters.BASE) do
+									table.insert(a, v)
+								end
+								sort(a)
+								for _,v in ipairs(a) do
 									if ret == "" then
 										ret = v
 									else
@@ -336,11 +357,16 @@ options = {
 							name = L["bLists"],
 							usage = L["INPUSAGE"],
 							get = function(info)
+								local a = {}
 								local ret = ""
 								if (TF3.db.profile.blacklist == nil) then
 									TF3.db.profile.blacklist = L.BLACKLIST
 								end
-								for k,v in TF3:pairsByKeys(TF3.db.profile.blacklist) do
+								for _,v in pairs(TF3.db.profile.blacklist) do
+									table.insert(a, v)
+								end
+								sort(a)
+								for _,v in ipairs(a) do
 									if ret == "" then
 										ret = v
 									else
@@ -411,11 +437,16 @@ options = {
 							name = L["wLists"],
 							usage = L["INPUSAGE"],
 							get = function(info)
+								local a = {}
 								local ret = ""
 								if (TF3.db.profile.whitelist == nil) then
 									TF3.db.profile.whitelist = L.WHITELIST
 								end
-								for k,v in TF3:pairsByKeys(TF3.db.profile.whitelist) do
+								for _,v in pairs(TF3.db.profile.whitelist) do
+									table.insert(a, v)
+								end
+								sort(a)
+								for _,v in ipairs(a) do
 									if ret == "" then
 										ret = v
 									else

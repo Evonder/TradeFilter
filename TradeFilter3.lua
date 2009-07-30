@@ -45,10 +45,13 @@ TF3.date = string.sub("$Date: @file-date-iso@ $", 8, 17)
 
 --[[ Locals ]]--
 local ipairs = ipairs
+local pairs = pairs
 local find = string.find
 local sub = string.gsub
 local lower = string.lower
 local formatIt = string.format
+local insert = table.insert
+local sort = table.sort
 local timerCount = 0
 local repeatdata = {}
 local currentFriend
@@ -236,24 +239,6 @@ function TF3:RecycleTables(t, state)
 			TF3:FindFrame(debugFrame, ("%d " .. L["SECPSD"]):format(1800 * timerCount))
 		end
 	end
-end
-
-function TF3:pairsByKeys(t, f)
-  local a = {}
-  for n in pairs(t) do
-		table.insert(a, n)
-	end
-	table.sort(a, f)
-  local i = 0      -- iterator variable
-  local iter = function()   -- iterator function
-		i = i + 1
-		if a[i] == nil then
-			return nil
-		else
-			return a[i], t[a[i]]
-    end
-	end
-	return iter
 end
 
 --[[ Friends Functions ]]--
