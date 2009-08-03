@@ -353,10 +353,10 @@ end
 
 --[[ Special Channels Func ]]--
 function TF3:SpecialChans(chanName)
-	if (TF3.db.profile.filters.SPECIAL == nil) then
-		TF3.db.profile.filters.SPECIAL = L.FILTERS.SPECIAL
-	end
 	local schans = TF3.db.profile.filters.SPECIAL
+	if (schans == nil) then
+		schans = L.FILTERS.SPECIAL
+	end
 	local chanName = lower(chanName)
 	for _,names in pairs(schans) do
 		if (find(chanName,names) and names ~= "") then

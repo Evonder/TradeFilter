@@ -226,7 +226,7 @@ options = {
 									TF3.db.profile.filters.TRADE = L.FILTERS.TRADE
 								end
 								for _,v in pairs(TF3.db.profile.filters.TRADE) do
-									table.insert(a, v)
+									insert(a, v)
 								end
 								sort(a)
 								for _,v in ipairs(a) do
@@ -280,7 +280,7 @@ options = {
 									TF3.db.profile.filters.BASE = L.FILTERS.BASE
 								end
 								for _,v in pairs(TF3.db.profile.filters.BASE) do
-									table.insert(a, v)
+									insert(a, v)
 								end
 								sort(a)
 								for _,v in ipairs(a) do
@@ -363,7 +363,7 @@ options = {
 									TF3.db.profile.blacklist = L.BLACKLIST
 								end
 								for _,v in pairs(TF3.db.profile.blacklist) do
-									table.insert(a, v)
+									insert(a, v)
 								end
 								sort(a)
 								for _,v in ipairs(a) do
@@ -443,7 +443,7 @@ options = {
 									TF3.db.profile.whitelist = L.WHITELIST
 								end
 								for _,v in pairs(TF3.db.profile.whitelist) do
-									table.insert(a, v)
+									insert(a, v)
 								end
 								sort(a)
 								for _,v in ipairs(a) do
