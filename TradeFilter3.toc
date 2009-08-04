@@ -1,4 +1,4 @@
-## Interface: 30100
+## Interface: 30200
 #@alpha@
 ## Title: @localization(locale="enUS", key="Title", namespace="ToC")@ SVN: @project-revision@
 #@end-alpha@
