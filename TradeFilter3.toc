@@ -1,6 +1,6 @@
 ## Interface: 30100
 #@alpha@
-## Title: Trade|cffffffffFilter|r3 SVN: @project-revision@
+## Title: @localization(locale="enUS", key="Title", namespace="ToC")@ SVN: @project-revision@
 #@end-alpha@
 ## Title: @localization(locale="enUS", key="Title", namespace="ToC")@
 ## Title-deDE: @localization(locale="deDE", key="Title", namespace="TOC")@
@@ -8,7 +8,7 @@
 ## Title-zhTW: @localization(locale="zhTW", key="Title", namespace="TOC")@
 ## Title-frFR: @localization(locale="frFR", key="Title", namespace="TOC")@
 #@alpha@
-## Notes: Filter the shit outta trade channel. SVN: @project-revision@
+## Notes: @localization(locale="enUS", key="Notes", namespace="TOC")@ SVN: @project-revision@
 #@end-alpha@
 ## Notes: @localization(locale="enUS", key="Notes", namespace="TOC")@
 ## Notes-deDE: @localization(locale="deDE", key="Notes", namespace="TOC")@
@@ -32,7 +32,7 @@
 ## SavedVariables: TradeFilter3DB
 
 ## LoadManagers: AddonLoader
-## X-LoadOn-Always: true
+## X-LoadOn-Always: delayed
 
 #@no-lib-strip@
 libs\LibStub\LibStub.lua

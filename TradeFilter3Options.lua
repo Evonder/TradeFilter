@@ -177,6 +177,16 @@ options = {
 								end
 							end,
 						},
+						reset_specialfilters = {
+							type = 'execute',
+							disabled = function()
+								return not TF3.db.profile.special_enable
+							end,
+							order = 12,
+							name = L["RSF"],
+							desc = L["RSF"],
+							func = function() TF3.db.profile.filters.SPECIAL = TF3:CopyTable(L.FILTERS.SPECIAL) end,
+						},
 					},
 				},
 				editFilterGroup = {
