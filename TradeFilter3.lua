@@ -167,6 +167,8 @@ local function OnClick(clickedframe, button)
 		TF3:OpenOptions()
 	else
 		TF3.db.profile.repeats_blocked = 0
+		TF3Frame.Blocked.text = TF3.db.profile.repeats_blocked .. "Repeats Blocked"
+		TF3Frame.Blocked.value = TF3.db.profile.repeats_blocked
 	end
 end
 
