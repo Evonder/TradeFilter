@@ -115,12 +115,34 @@ options = {
 						},
 						optionsHeader1a = {
 							type	= "header",
-							order	= 8,
+							order	= 7,
+							name	= L["FDS"],
+						},
+						filterDuelSpam = {
+							type = 'toggle',
+							order = 8,
+							width = "double",
+							disabled = false,
+							name = L["FDS"],
+							desc = L["FDSD"],
+							get = function() return TF3.db.profile.filterDuelSpam end,
+							set = function() 
+								TF3.db.profile.filterDuelSpam = not TF3.db.profile.filterDuelSpam
+								if (TF3.db.profile.filterDuelSpam) then
+									DUEL_WINNER_KNOCKOUT, DUEL_WINNER_RETREAT = "", ""
+								else
+									DUEL_WINNER_KNOCKOUT, DUEL_WINNER_RETREAT = L["DUEL_WINNER_KNOCKOUT"], L["DUEL_WINNER_RETREAT"]
+								end
+							end,
+						},
+						optionsHeader1b = {
+							type	= "header",
+							order	= 9,
 							name	= L["SPCS"],
 						},
 						GuildAddOnsChannel = {
 							type = 'toggle',
-							order = 9,
+							order = 10,
 							width = "double",
 							disabled = false,
 							name = L["GAC"],
@@ -130,7 +152,7 @@ options = {
 						},
 						special_enable = {
 							type = 'toggle',
-							order = 10,
+							order = 11,
 							width = "double",
 							disabled = false,
 							name = L["SPCST"],
@@ -144,7 +166,7 @@ options = {
 								return not TF3.db.profile.special_enable
 							end,
 							multiline = 4,
-							order = 11,
+							order = 12,
 							width = "full",
 							name = L["SPCST"],
 							desc = L["SPCSTD"],
@@ -182,7 +204,7 @@ options = {
 							disabled = function()
 								return not TF3.db.profile.special_enable
 							end,
-							order = 12,
+							order = 13,
 							name = L["RSF"],
 							desc = L["RSF"],
 							func = function() TF3.db.profile.filters.SPECIAL = TF3:CopyTable(L.FILTERS.SPECIAL) end,
@@ -436,13 +458,22 @@ options = {
 							get = function() return TF3.db.profile.wlbp end,
 							set = function() TF3.db.profile.wlbp = not TF3.db.profile.wlbp end,
 						},
+						whitelist_blacklist_bypass = {
+							type = 'toggle',
+							order = 11,
+							width = "double",
+							name = L["BLBYPASS"],
+							desc = L["BLBYPASSD"],
+							get = function() return TF3.db.profile.wlblbp end,
+							set = function() TF3.db.profile.wlblbp = not TF3.db.profile.wlblbp end,
+						},
 						wlist = {
 							type = 'input',
 							disabled = function()
 								return not TF3.db.profile.ewl
 							end,
 							multiline = 8,
-							order = 11,
+							order = 12,
 							width = "full",
 							name = L["wLists"],
 							usage = L["INPUSAGE"],
@@ -479,7 +510,7 @@ options = {
 							disabled = function()
 								return not TF3.db.profile.ewl
 							end,
-							order = 12,
+							order = 13,
 							name = L["RWLS"],
 							desc = L["RWLS"],
 							func = function() TF3.db.profile.whitelist = TF3:CopyTable(L.WHITELIST) end,

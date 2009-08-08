@@ -83,6 +83,7 @@ defaults = {
 		whitelist_enable = true,
 		redirect_blacklist = false,
 		wlbp = false,
+		wlblbp = false,
 		repeat_enable = true,
 		special_enable = false,
 		num_repeats = "2",
@@ -303,33 +304,37 @@ end
 
 --[[ BlackList Func ]]--
 --[[ Base blacklist words from BadBoy(Funkydude) ]]--
-function TF3:BlackList(msg, userID, msgID)
+function TF3:BlackList(msg, userID, msgID, arg)
 	local blword = TF3.db.profile.blacklist
 	local msg = lower(msg)
-	if (TF3.db.profile.blacklist_enable) then
-		for _,word in pairs(blword) do
-			if (find(msg,word)) then
-				if (TF3.db.profile.debug) then
-					if (msgID ~= lastmsgID) then
-						TF3:FindFrame(debugFrame, "|cFFFF0000[" .. L["bLists"] .. "]|r |cFFD9D9D9[" .. userID .. "]:|r |cFFC08080" .. msg .. "|r")
-						TF3:FindFrame(debugFrame, L["MATCHED"] .. " |cFFFF0000" .. word .. "|r")
-						if not (TF3.db.profile.redirect_blacklist) then
+	if (arg == whitelist and TF3.db.profile.wlblbp == true) then
+		return false
+	else
+		if (TF3.db.profile.blacklist_enable) then
+			for _,word in pairs(blword) do
+				if (find(msg,word)) then
+					if (TF3.db.profile.debug) then
+						if (msgID ~= lastmsgID) then
+							TF3:FindFrame(debugFrame, "|cFFFF0000[" .. L["bLists"] .. "]|r |cFFD9D9D9[" .. userID .. "]:|r |cFFC08080" .. msg .. "|r")
+							TF3:FindFrame(debugFrame, L["MATCHED"] .. " |cFFFF0000" .. word .. "|r")
+							if not (TF3.db.profile.redirect_blacklist) then
+								lastmsgID = msgID
+							end
+						end
+					end
+					if (TF3.db.profile.redirect_blacklist) then
+						if (msgID ~= lastmsgID) then
+							TF3:FindFrame(redirectFrame, "|cFFFF0000[" .. L["bLists"] .. "]|r |cFFD9D9D9[" .. userID .. "]:|r |cFFC08080" .. msg .. "|r")
+							TF3:FindFrame(redirectFrame, L["MATCHED"] .. " |cFFFF0000" .. word .. "|r")
 							lastmsgID = msgID
 						end
 					end
+					return true
 				end
-				if (TF3.db.profile.redirect_blacklist) then
-					if (msgID ~= lastmsgID) then
-						TF3:FindFrame(redirectFrame, "|cFFFF0000[" .. L["bLists"] .. "]|r |cFFD9D9D9[" .. userID .. "]:|r |cFFC08080" .. msg .. "|r")
-						TF3:FindFrame(redirectFrame, L["MATCHED"] .. " |cFFFF0000" .. word .. "|r")
-						lastmsgID = msgID
-					end
-				end
-				return true
 			end
 		end
+		return false
 	end
-	return false
 end
 
 --[[ WhiteList Func ]]--
@@ -338,7 +343,7 @@ function TF3:WhiteList(msg, userID, msgID)
 	local msg = lower(msg)
 	if (TF3.db.profile.whitelist_enable) then
 		for _,word in pairs(wlword) do
-			if (find(msg,word) and TF3:FindRepeat(msg, userID, msgID, whitelist) == false and TF3:BlackList(msg, userID, msgID) == false) then
+			if (find(msg,word) and TF3:FindRepeat(msg, userID, msgID, whitelist) == false and TF3:BlackList(msg, userID, msgID, whitelist) == false) then
 				if (TF3.db.profile.debug) then
 					if (msgID ~= lastmsgID) then
 						TF3:FindFrame(debugFrame, "|cFFFFFF80[" .. L["wLists"] .. "]|r |cFFD9D9D9[" .. userID .. "]:|r |cFFC08080" .. msg .. "|r")
@@ -370,8 +375,12 @@ end
 
 --[[ Repeat Func ]]--
 function TF3:FindRepeat(msg, userID, msgID, arg)
-	if (arg == whitelist and not TF3.db.profile.wlbp) then
-		local gtime = math.floor(GetTime()*math.pow(10,0)+0.5) / math.pow(10,0)
+	local gtime = math.floor(GetTime()*math.pow(10,0)+0.5) / math.pow(10,0)
+	if (arg == whitelist and TF3.db.profile.wlbp == true) then
+		return false
+	elseif (TF3.db.profile.repeat_enable == false) then
+		return false
+	else
 		if (msgID ~= repeatdata[userID].lastmsgID and msg == repeatdata[userID].lastmsg and gtime - repeatdata[userID].lastIndex < tonumber(TF3.db.profile.time_repeats)) then
 			repeatdata[userID].repeats = repeatdata[userID].repeats + 1
 			if (repeatdata[userID].repeats >= tonumber(TF3.db.profile.num_repeats)) then
@@ -394,8 +403,6 @@ function TF3:FindRepeat(msg, userID, msgID, arg)
 		repeatdata[userID].lastmsg = msg
 		repeatdata[userID].lastmsgID = msgID
 		repeatdata[userID].lastIndex  = gtime
-		return false
-	else
 		return false
 	end
 end
