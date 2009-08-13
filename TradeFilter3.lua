@@ -38,7 +38,7 @@ local friends = LibStub("LibFriends-1.0")
 local LDB = LibStub("LibDataBroker-1.1")
 local TF3 = TradeFilter3
 
-local MAJOR_VERSION = "3.0"
+local MAJOR_VERSION = "3.1"
 local MINOR_VERSION = 000 + tonumber(("$Revision: @project-revision@ $"):match("%d+"))
 TF3.version = MAJOR_VERSION .. "." .. MINOR_VERSION
 TF3.date = string.sub("$Date: @file-date-iso@ $", 8, 17)
