@@ -29,6 +29,7 @@
 ## X-License: BSD
 ## Version: @project-version@
 ## Revision: @project-revision@
+## X-WoWI-ID: 13784
 ## SavedVariables: TradeFilter3DB
 
 ## LoadManagers: AddonLoader
