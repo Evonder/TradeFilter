@@ -126,14 +126,7 @@ options = {
 							name = L["FDS"],
 							desc = L["FDSD"],
 							get = function() return TF3.db.profile.filterDuelSpam end,
-							set = function() 
-								TF3.db.profile.filterDuelSpam = not TF3.db.profile.filterDuelSpam
-								if (TF3.db.profile.filterDuelSpam) then
-									DUEL_WINNER_KNOCKOUT, DUEL_WINNER_RETREAT = "", ""
-								else
-									DUEL_WINNER_KNOCKOUT, DUEL_WINNER_RETREAT = L["DUEL_WINNER_KNOCKOUT"], L["DUEL_WINNER_RETREAT"]
-								end
-							end,
+							set = function() TF3.db.profile.filterDuelSpam = not TF3.db.profile.filterDuelSpam; TF3:DuelFilter()end,
 						},
 						optionsHeader1b = {
 							type	= "header",

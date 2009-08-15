@@ -179,6 +179,7 @@ function TF3:IsLoggedIn()
 	friends.RegisterCallback(self, "Removed")
 	self:ScheduleRepeatingTimer("RecycleTables", 1800, repeatdata)
 	self:UnregisterEvent("PLAYER_LOGIN")
+	TF3:DuelFilter()
 	
 	if (LDB) then
 		TF3Frame = CreateFrame("Frame", "LDB_TradeFilter3")
@@ -301,6 +302,14 @@ function TF3:IsFriend(userID)
 	end
 	return false
 end
+
+function TF3:DuelFilter()
+	if (TF3.db.profile.filterDuelSpam) then
+		DUEL_WINNER_KNOCKOUT, DUEL_WINNER_RETREAT = "", ""
+	else
+		DUEL_WINNER_KNOCKOUT, DUEL_WINNER_RETREAT = L["DUEL_WINNER_KNOCKOUT"], L["DUEL_WINNER_RETREAT"]
+	end
+end	
 
 --[[ BlackList Func ]]--
 --[[ Base blacklist words from BadBoy(Funkydude) ]]--
