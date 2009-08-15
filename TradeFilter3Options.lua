@@ -584,7 +584,7 @@ options = {
 							desc = L["RPTRESETD"],
 							func = function()
 								TF3.db.profile.repeats_blocked = 0
-								if (LDB) then
+								if (LibStub("LibDataBroker-1.1", true)) then
 									TF3Frame.Blocked.text = TF3.db.profile.repeats_blocked .. "Repeats Blocked"
 									TF3Frame.Blocked.value = TF3.db.profile.repeats_blocked
 								end
