@@ -38,16 +38,12 @@ local friends = LibStub("LibFriends-1.0")
 local LDB = LibStub("LibDataBroker-1.1", true)
 local TF3 = TradeFilter3
 
-local PROJECT.VERSION = @project-version@
-local PROJECT.REVISION = 000 + tonumber(("$Revision: @project-revision@ $"):match("%d+"))
-TF3.date = string.sub("$Date: @file-date-iso@ $", 8, 17)
-TF3.version = string.sub(PROJECT_VERSION, "-release", "")
-
 --[[ Locals ]]--
 local ipairs = ipairs
 local pairs = pairs
 local find = string.find
-local sub = string.gsub
+local sub = string.sub
+local gsub = string.gsub
 local lower = string.lower
 local formatIt = string.format
 local insert = table.insert
@@ -61,6 +57,11 @@ local repeatFrame = L["repeatFrame"]
 local lastmsgID
 local lastmsg
 local lastuserID
+
+local PROJECT.VERSION = "@project-version@"
+local PROJECT.REVISION = 000 + tonumber(("$Revision: @project-revision@ $"):match("%d+"))
+TF3.date = sub("$Date: @file-date-iso@ $", 8, 17)
+TF3.version = gsub(PROJECT_VERSION, "-release", "")
 
 --[[ Database Defaults ]]--
 defaults = {
