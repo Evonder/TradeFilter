@@ -1,4 +1,6 @@
 == ChangeLog
+*r167
+**++Added simple duel spam block++
 *r159
 **++Keep lists sorted!++
 *r155
