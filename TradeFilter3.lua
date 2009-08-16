@@ -38,14 +38,10 @@ local friends = LibStub("LibFriends-1.0")
 local LDB = LibStub("LibDataBroker-1.1", true)
 local TF3 = TradeFilter3
 
-local MAJOR_VERSION = 3
-local MINOR_VERSION = 1
-local BUILD = 0
-local REVISION = 000 + tonumber(("$Revision: @project-revision@ $"):match("%d+"))
-TF3.version = MAJOR_VERSION .. "." .. MINOR_VERSION .. "." .. BUILD
+local PROJECT.VERSION = @project-version@
+local PROJECT.REVISION = 000 + tonumber(("$Revision: @project-revision@ $"):match("%d+"))
 TF3.date = string.sub("$Date: @file-date-iso@ $", 8, 17)
-
-local project.version = "@project-version@"
+TF3.version = string.sub(PROJECT_VERSION, "-release", "")
 
 --[[ Locals ]]--
 local ipairs = ipairs
