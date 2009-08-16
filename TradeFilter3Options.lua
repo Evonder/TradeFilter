@@ -26,7 +26,7 @@ options = {
 			args = {
 				mainHeader = {
 					type = "description",
-					name = "  " .. L["NJAOF"] .. "\n\n",
+					name = "  " .. L["NJAOF"] .. "\n  Version " .. TF3.version .. "\n",
 					order = 1,
 					image = "Interface\\Icons\\Ability_Warrior_RallyingCry",
 					imageWidth = 32, imageHeight = 32,

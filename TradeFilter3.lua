@@ -38,10 +38,14 @@ local friends = LibStub("LibFriends-1.0")
 local LDB = LibStub("LibDataBroker-1.1", true)
 local TF3 = TradeFilter3
 
-local MAJOR_VERSION = "3.1"
-local MINOR_VERSION = 000 + tonumber(("$Revision: @project-revision@ $"):match("%d+"))
-TF3.version = MAJOR_VERSION .. "." .. MINOR_VERSION
+local MAJOR_VERSION = 3
+local MINOR_VERSION = 1
+local BUILD = 0
+local REVISION = 000 + tonumber(("$Revision: @project-revision@ $"):match("%d+"))
+TF3.version = MAJOR_VERSION .. "." .. MINOR_VERSION .. "." .. BUILD
 TF3.date = string.sub("$Date: @file-date-iso@ $", 8, 17)
+
+local project.version = "@project-version@"
 
 --[[ Locals ]]--
 local ipairs = ipairs
@@ -111,7 +115,7 @@ function TF3:OnInitialize()
 	local AC = LibStub("AceConsole-3.0")
 	AC:RegisterChatCommand("tf", function() TF3:OpenOptions() end)
 	AC:RegisterChatCommand("filter", function() TF3:OpenOptions() end)
-	AC:Print(L.TOC.Title .. " " .. MAJOR_VERSION .. "." .. MINOR_VERSION .. " " .. L["LOADED"])
+	AC:Print(L.TOC.Title .. " " .. TF3.version .. " " .. L["ENABLED"])
 
 	local ACR = LibStub("AceConfigRegistry-3.0")
 	ACR:RegisterOptionsTable("TradeFilter3", options)
