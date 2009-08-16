@@ -58,8 +58,8 @@ local lastmsgID
 local lastmsg
 local lastuserID
 
-local PROJECT.VERSION = "@project-version@"
-local PROJECT.REVISION = 000 + tonumber(("$Revision: @project-revision@ $"):match("%d+"))
+local PROJECT_VERSION = "@project-version@"
+local PROJECT_REVISION = 000 + tonumber(("$Revision: @project-revision@ $"):match("%d+"))
 TF3.date = sub("$Date: @file-date-iso@ $", 8, 17)
 TF3.version = gsub(PROJECT_VERSION, "-release", "")
 
