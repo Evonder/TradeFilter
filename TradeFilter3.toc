@@ -21,7 +21,7 @@
 ## X-eMail: evonder AT gmail DOT com
 ## X-Website: http://www.wowace.com/projects/trade-filter/
 ## X-Category: Chat & Communication
-## X-Localizations: enUS, frFR, zhCN, zhTW, deDE, koKR
+## X-Localizations: enUS, frFR, zhCN, zhTW, deDE, koKR, ruRU
 ## OptionalDeps: Ace3, LibAboutPanel, LibDataBroker-1.1, LibFriends-1.0
 #@no-lib-strip@
 ## X-Embeds: Ace3, LibAboutPanel, LibDataBroker-1.1, LibFriends-1.0
