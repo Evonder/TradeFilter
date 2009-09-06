@@ -43,3 +43,9 @@ if L then
 --@localization(locale="frFR", format="lua_additive_table", same-key-is-true=true, handle-subnamespaces="subtable")@
 if GetLocale() == "frFR" then return end
 end
+
+local L =  LibStub("AceLocale-3.0"):NewLocale("TradeFilter3", "ruRU")
+if L then
+--@localization(locale="ruRU", format="lua_additive_table", same-key-is-true=true, handle-subnamespaces="subtable")@
+if GetLocale() == "ruRU" then return end
+end
