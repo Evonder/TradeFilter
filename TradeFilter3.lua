@@ -148,8 +148,10 @@ function TF3:FirstLogin()
 end
 
 local function OnTooltipShow(self)
-	self:AddLine("|cffeda55fRight Click|r to open config GUI")
-	self:AddLine("|cffeda55fLeft Click|r reset repeat count")
+	local hint = L["|cffeda55fRight Click|r to open config GUI.\n|cffeda55fLeft Click|r reset repeat count."]
+	self:AddLine(TF3.db.profile.repeats_blocked .. " " .. L["Repeats Blocked"])
+	self:AddLine(" ")
+	self:AddLine(hint, 0.2, 1, 0.2, 1)
 end
 
 local function OnEnter(self)
