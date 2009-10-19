@@ -275,7 +275,7 @@ function TF3:GetFriends()
 			if name then
 				friends[i] = name
 				if (TF3.db.profile.debug) then
-					print("|cFFFFFF80" .. name .. " " .. L["FADD"] .. "|r")
+					TF3:FindFrame(debugFrame, "|cFFFFFF80" .. name .. " " .. L["FADD"] .. "|r")
 				end
 			end
 		end
