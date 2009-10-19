@@ -274,9 +274,12 @@ function TF3:GetFriends()
 			local name = GetFriendInfo(i)
 			if name then
 				friends[i] = name
-				print("|cFFFFFF80" .. name .. " " .. L["FADD"] .. "|r")
+				if (TF3.db.profile.debug) then
+					print("|cFFFFFF80" .. name .. " " .. L["FADD"] .. "|r")
+				end
 			end
 		end
+		print("|cFF33FF99" .. L["TFFRC"] .. "|r")
 	end
 	self:UnregisterEvent("FRIENDLIST_UPDATE")
 end
