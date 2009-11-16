@@ -1,4 +1,7 @@
 == ChangeLog
+*r192
+**++Added BG Filters++
+**++Config GUI reorganization++
 *r167
 **++Added simple duel spam block++
 *r159

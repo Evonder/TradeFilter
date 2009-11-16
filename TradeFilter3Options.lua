@@ -93,6 +93,16 @@ options = {
 							get = function() return TF3.db.profile.filterLFG end,
 							set = function() TF3.db.profile.filterLFG = not TF3.db.profile.filterLFG end,
 						},
+						Battlegrounds = {
+							type = 'toggle',
+							order = 4,
+							width = "double",
+							disabled = false,
+							name = L["BGC"],
+							desc = L["BGCD"],
+							get = function() return TF3.db.profile.filterBG end,
+							set = function() TF3.db.profile.filterBG = not TF3.db.profile.filterBG end,
+						},
 						SAYChannel = {
 							type = 'toggle',
 							order = 5,
@@ -206,6 +216,7 @@ options = {
 				},
 				editFilterGroup = {
 					type = "group",
+					childGroups = "tab",
 					handler = TF3,
 					order = 2,
 					disabled = function()
@@ -214,132 +225,251 @@ options = {
 					name = L["EditFilterGroup"],
 					desc = L["EditFilterGD"],
 					args = {
-						optionsHeader2 = {
-							type	= "header",
-							order	= 1,
-							name	= L["EditFilter"],
+						editFilterGroupTRADE = {
+							type = "group",
+							handler = TF3,
+							order = 1,
+							disabled = function()
+								return not TF3.db.profile.turnOn
+							end,
+							name = "TRADE Filters",
+							desc = "TRADE Filters",
+							args = {
+								optionsHeader1 = {
+									type	= "header",
+									order	= 1,
+									name	= L["EditFilter"],
+								},
+								editfilter_enable = {
+									type = 'toggle',
+									order = 2,
+									width = "double",
+									name = L["EditFilter"],
+									desc = L["EditFilterD"],
+									get = function() return TF3.db.profile.addfilterTRADE_enable end,
+									set = function() TF3.db.profile.addfilterTRADE_enable = not TF3.db.profile.addfilterTRADE_enable end,
+								},
+								optionsHeader2 = {
+									type	= "header",
+									order	= 3,
+									name	= L["BTF"],
+								},
+								tradefilters = {
+									type = 'input',
+									disabled = function()
+										return not TF3.db.profile.addfilterTRADE_enable
+									end,
+									multiline = 10,
+									order = 4,
+									width = "full",
+									name = L["BTF"],
+									desc = L["BTFD"],
+									usage = L["INPUSAGE"],
+									get = function(info)
+										local a = {}
+										local ret = ""
+										if (TF3.db.profile.filters.TRADE == nil) then
+											TF3.db.profile.filters.TRADE = L.FILTERS.TRADE
+										end
+										for _,v in pairs(TF3.db.profile.filters.TRADE) do
+											insert(a, v)
+										end
+										sort(a)
+										for _,v in ipairs(a) do
+											if ret == "" then
+												ret = v
+											else
+												ret = ret .. "\n" .. v
+											end
+										end
+										return ret
+									end,
+									set = function(info, value)
+										TF3:WipeTable(TF3.db.profile.filters.TRADE)
+										local tbl = { strsplit("\n", value) }
+										for k, v in pairs(tbl) do
+											key = "FILTER"
+											TF3.db.profile.filters.TRADE[key..k] = v
+										end
+									end,
+								},
+								reset_tradefilters = {
+									type = 'execute',
+									disabled = function()
+										return not TF3.db.profile.addfilterTRADE_enable
+									end,
+									order = 5,
+									name = L["RTF"],
+									desc = L["RTF"],
+									func = function() TF3.db.profile.filters.TRADE = TF3:CopyTable(L.FILTERS.TRADE) end,
+								},
+							},
 						},
-						editfilter_enable = {
-							type = 'toggle',
+						editFilterGroupBASE = {
+							type = "group",
+							handler = TF3,
 							order = 2,
-							width = "double",
-							name = L["EditFilter"],
-							desc = L["EditFilterD"],
-							get = function() return TF3.db.profile.addfilter_enable end,
-							set = function() TF3.db.profile.addfilter_enable = not TF3.db.profile.addfilter_enable end,
-						},
-						optionsHeader2a = {
-							type	= "header",
-							order	= 3,
-							name	= L["BTF"],
-						},
-						tradefilters = {
-							type = 'input',
 							disabled = function()
-								return not TF3.db.profile.addfilter_enable
+								return not TF3.db.profile.turnOn
 							end,
-							multiline = 8,
-							order = 4,
-							width = "full",
-							name = L["BTF"],
-							desc = L["BTFD"],
-							usage = L["INPUSAGE"],
-							get = function(info)
-								local a = {}
-								local ret = ""
-								if (TF3.db.profile.filters.TRADE == nil) then
-									TF3.db.profile.filters.TRADE = L.FILTERS.TRADE
-								end
-								for _,v in pairs(TF3.db.profile.filters.TRADE) do
-									insert(a, v)
-								end
-								sort(a)
-								for _,v in ipairs(a) do
-									if ret == "" then
-										ret = v
-									else
-										ret = ret .. "\n" .. v
-									end
-								end
-								return ret
-							end,
-							set = function(info, value)
-								TF3:WipeTable(TF3.db.profile.filters.TRADE)
-								local tbl = { strsplit("\n", value) }
-								for k, v in pairs(tbl) do
-									key = "FILTER"
-									TF3.db.profile.filters.TRADE[key..k] = v
-								end
-							end,
+							name = "BASE Filters",
+							desc = "BASE Filters",
+							args = {
+								optionsHeader1 = {
+									type	= "header",
+									order	= 1,
+									name	= L["EditFilter"],
+								},
+								editfilter_enable = {
+									type = 'toggle',
+									order = 2,
+									width = "double",
+									name = L["EditFilter"],
+									desc = L["EditFilterD"],
+									get = function() return TF3.db.profile.addfilterBASE_enable end,
+									set = function() TF3.db.profile.addfilterBASE_enable = not TF3.db.profile.addfilterBASE_enable end,
+								},
+								optionsHeader2 = {
+									type	= "header",
+									order	= 6,
+									name	= L["BCF"],
+								},
+								basefilters = {
+									type = 'input',
+									disabled = function()
+										return not TF3.db.profile.addfilterBASE_enable
+									end,
+									multiline = 10,
+									order = 7,
+									width = "full",
+									name = L["BCF"],
+									desc = L["BCFD"],
+									usage = L["INPUSAGE"],
+									get = function(info)
+										local a = {}
+										local ret = ""
+										if (TF3.db.profile.filters.BASE == nil) then
+											TF3.db.profile.filters.BASE = L.FILTERS.BASE
+										end
+										for _,v in pairs(TF3.db.profile.filters.BASE) do
+											insert(a, v)
+										end
+										sort(a)
+										for _,v in ipairs(a) do
+											if ret == "" then
+												ret = v
+											else
+												ret = ret .. "\n" .. v
+											end
+										end
+										return ret
+									end,
+									set = function(info, value)
+										TF3:WipeTable(TF3.db.profile.filters.BASE)
+										local tbl = { strsplit("\n", value) }
+										for k, v in pairs(tbl) do
+											key = "FILTER"
+											TF3.db.profile.filters.BASE[key..k] = v
+										end
+									end,
+								},
+								reset_basefilters = {
+									type = 'execute',
+									disabled = function()
+										return not TF3.db.profile.addfilterBASE_enable
+									end,
+									order = 8,
+									name = L["RBF"],
+									desc = L["RBF"],
+									func = function() TF3.db.profile.filters.BASE = TF3:CopyTable(L.FILTERS.BASE) end,
+								},
+							},
 						},
-						reset_tradefilters = {
-							type = 'execute',
+						editFilterGroupBG = {
+							type = "group",
+							handler = TF3,
+							order = 3,
 							disabled = function()
-								return not TF3.db.profile.addfilter_enable
+								return not TF3.db.profile.turnOn
 							end,
-							order = 5,
-							name = L["RTF"],
-							desc = L["RTF"],
-							func = function() TF3.db.profile.filters.TRADE = TF3:CopyTable(L.FILTERS.TRADE) end,
-						},
-						optionsHeader2b = {
-							type	= "header",
-							order	= 6,
-							name	= L["BCF"],
-						},
-						basefilters = {
-							type = 'input',
-							disabled = function()
-								return not TF3.db.profile.addfilter_enable
-							end,
-							multiline = 8,
-							order = 7,
-							width = "full",
-							name = L["BCF"],
-							desc = L["BCFD"],
-							usage = L["INPUSAGE"],
-							get = function(info)
-								local a = {}
-								local ret = ""
-								if (TF3.db.profile.filters.BASE == nil) then
-									TF3.db.profile.filters.BASE = L.FILTERS.BASE
-								end
-								for _,v in pairs(TF3.db.profile.filters.BASE) do
-									insert(a, v)
-								end
-								sort(a)
-								for _,v in ipairs(a) do
-									if ret == "" then
-										ret = v
-									else
-										ret = ret .. "\n" .. v
-									end
-								end
-								return ret
-							end,
-							set = function(info, value)
-								TF3:WipeTable(TF3.db.profile.filters.BASE)
-								local tbl = { strsplit("\n", value) }
-								for k, v in pairs(tbl) do
-									key = "FILTER"
-									TF3.db.profile.filters.BASE[key..k] = v
-								end
-							end,
-						},
-						reset_basefilters = {
-							type = 'execute',
-							disabled = function()
-								return not TF3.db.profile.addfilter_enable
-							end,
-							order = 8,
-							name = L["RBF"],
-							desc = L["RBF"],
-							func = function() TF3.db.profile.filters.BASE = TF3:CopyTable(L.FILTERS.BASE) end,
+							name = "BG Filters",
+							desc = "BG Filters",
+							args = {
+								optionsHeader1 = {
+									type	= "header",
+									order	= 1,
+									name	= L["EditFilter"],
+								},
+								editfilter_enable = {
+									type = 'toggle',
+									order = 2,
+									width = "double",
+									name = L["EditFilter"],
+									desc = L["EditFilterD"],
+									get = function() return TF3.db.profile.addfilterBG_enable end,
+									set = function() TF3.db.profile.addfilterBG_enable = not TF3.db.profile.addfilterBG_enable end,
+								},
+								optionsHeader2 = {
+									type	= "header",
+									order	= 6,
+									name	= L["BG"],
+								},
+								bgfilters = {
+									type = 'input',
+									disabled = function()
+										return not TF3.db.profile.addfilterBG_enable
+									end,
+									multiline = 10,
+									order = 7,
+									width = "full",
+									name = L["BG"],
+									desc = L["BGD"],
+									usage = L["INPUSAGE"],
+									get = function(info)
+										local a = {}
+										local ret = ""
+										if (TF3.db.profile.filters.BG == nil) then
+											TF3.db.profile.filters.BG = L.FILTERS.BG
+										end
+										for _,v in pairs(TF3.db.profile.filters.BG) do
+											insert(a, v)
+										end
+										sort(a)
+										for _,v in ipairs(a) do
+											if ret == "" then
+												ret = v
+											else
+												ret = ret .. "\n" .. v
+											end
+										end
+										return ret
+									end,
+									set = function(info, value)
+										TF3:WipeTable(TF3.db.profile.filters.BG)
+										local tbl = { strsplit("\n", value) }
+										for k, v in pairs(tbl) do
+											key = "FILTER"
+											TF3.db.profile.filters.BG[key..k] = v
+										end
+									end,
+								},
+								reset_bgfilters = {
+									type = 'execute',
+									disabled = function()
+										return not TF3.db.profile.addfilterBG_enable
+									end,
+									order = 8,
+									name = L["RBF"],
+									desc = L["RBF"],
+									func = function() TF3.db.profile.filters.BG = TF3:CopyTable(L.FILTERS.BG) end,
+								},
+							},
 						},
 					},
 				},
 				listsGroup = {
 					type = "group",
+					childGroups = "tab",
 					handler = TF3,
 					order = 3,
 					disabled = function()
@@ -348,165 +478,189 @@ options = {
 					name = L["listsGroup"],
 					desc = L["listsGD"],
 					args = {
-						optionsHeader3a = {
-							type	= "header",
-							order	= 1,
-							name	= L["bLists"],
+						listsGroupBlack = {
+							type = "group",
+							handler = TF3,
+							order = 1,
+							disabled = function()
+								return not TF3.db.profile.turnOn
+							end,
+							name = L["listsGroup"],
+							desc = L["listsGD"],
+							args = {
+								optionsHeader1 = {
+									type	= "header",
+									order	= 1,
+									name	= L["bLists"],
+								},
+								blacklist_enable = {
+									type = 'toggle',
+									order = 2,
+									width = "double",
+									name = L["BLE"],
+									desc = L["BLE"],
+									get = function() return TF3.db.profile.blacklist_enable end,
+									set = function() TF3.db.profile.blacklist_enable = not TF3.db.profile.blacklist_enable end,
+								},
+								editblacklist = {
+									type = 'toggle',
+									order = 3,
+									width = "double",
+									name = L["EBL"],
+									desc = L["EBL"],
+									get = function() return TF3.db.profile.ebl end,
+									set = function() TF3.db.profile.ebl = not TF3.db.profile.ebl end,
+								},
+								blist = {
+									type = 'input',
+									disabled = function()
+										return not TF3.db.profile.ebl
+									end,
+									multiline = 10,
+									order = 4,
+									width = "full",
+									name = L["bLists"],
+									usage = L["INPUSAGE"],
+									get = function(info)
+										local a = {}
+										local ret = ""
+										if (TF3.db.profile.blacklist == nil) then
+											TF3.db.profile.blacklist = L.BLACKLIST
+										end
+										for _,v in pairs(TF3.db.profile.blacklist) do
+											insert(a, v)
+										end
+										sort(a)
+										for _,v in ipairs(a) do
+											if ret == "" then
+												ret = v
+											else
+												ret = ret .. "\n" .. v
+											end
+										end
+										return ret
+									end,
+									set = function(info, value)
+										TF3:WipeTable(TF3.db.profile.blacklist)
+										local tbl = { strsplit("\n", value) }
+										for k, v in pairs(tbl) do
+											key = "BLIST"
+											TF3.db.profile.blacklist[key..k] = v
+										end
+									end,
+								},
+								reset_blist = {
+									type = 'execute',
+									disabled = function()
+										return not TF3.db.profile.ebl
+									end,
+									order = 5,
+									name = L["RBLS"],
+									desc = L["RBLS"],
+									func = function() TF3.db.profile.blacklist = TF3:CopyTable(L.BLACKLIST) end,
+								},
+							},
 						},
-						blacklist_enable = {
-							type = 'toggle',
+						listsGroupWhite = {
+							type = "group",
+							handler = TF3,
 							order = 2,
-							width = "double",
-							name = L["BLE"],
-							desc = L["BLE"],
-							get = function() return TF3.db.profile.blacklist_enable end,
-							set = function() TF3.db.profile.blacklist_enable = not TF3.db.profile.blacklist_enable end,
-						},
-						editblacklist = {
-							type = 'toggle',
-							order = 3,
-							width = "double",
-							name = L["EBL"],
-							desc = L["EBL"],
-							get = function() return TF3.db.profile.ebl end,
-							set = function() TF3.db.profile.ebl = not TF3.db.profile.ebl end,
-						},
-						blist = {
-							type = 'input',
 							disabled = function()
-								return not TF3.db.profile.ebl
+								return not TF3.db.profile.turnOn
 							end,
-							multiline = 8,
-							order = 4,
-							width = "full",
-							name = L["bLists"],
-							usage = L["INPUSAGE"],
-							get = function(info)
-								local a = {}
-								local ret = ""
-								if (TF3.db.profile.blacklist == nil) then
-									TF3.db.profile.blacklist = L.BLACKLIST
-								end
-								for _,v in pairs(TF3.db.profile.blacklist) do
-									insert(a, v)
-								end
-								sort(a)
-								for _,v in ipairs(a) do
-									if ret == "" then
-										ret = v
-									else
-										ret = ret .. "\n" .. v
-									end
-								end
-								return ret
-							end,
-							set = function(info, value)
-								TF3:WipeTable(TF3.db.profile.blacklist)
-								local tbl = { strsplit("\n", value) }
-								for k, v in pairs(tbl) do
-									key = "BLIST"
-									TF3.db.profile.blacklist[key..k] = v
-								end
-							end,
-						},
-						reset_blist = {
-							type = 'execute',
-							disabled = function()
-								return not TF3.db.profile.ebl
-							end,
-							order = 5,
-							name = L["RBLS"],
-							desc = L["RBLS"],
-							func = function() TF3.db.profile.blacklist = TF3:CopyTable(L.BLACKLIST) end,
-						},
-						optionsHeader3b = {
-							type	= "header",
-							order	= 6,
-							name	= L["wLists"],
-						},
-						whitelist_enable = {
-							type = 'toggle',
-							order = 8,
-							width = "double",
-							name = L["WLE"],
-							desc = L["WLE"],
-							get = function() return TF3.db.profile.whitelist_enable end,
-							set = function() TF3.db.profile.whitelist_enable = not TF3.db.profile.whitelist_enable end,
-						},
-						editwhitelist = {
-							type = 'toggle',
-							order = 9,
-							width = "double",
-							name = L["EWL"],
-							desc = L["EWL"],
-							get = function() return TF3.db.profile.ewl end,
-							set = function() TF3.db.profile.ewl = not TF3.db.profile.ewl end,
-						},
-						whitelist_repeat_bypass = {
-							type = 'toggle',
-							order = 10,
-							width = "double",
-							name = L["RPTBYPASS"],
-							desc = L["RPTBYPASSD"],
-							get = function() return TF3.db.profile.wlbp end,
-							set = function() TF3.db.profile.wlbp = not TF3.db.profile.wlbp end,
-						},
-						whitelist_blacklist_bypass = {
-							type = 'toggle',
-							order = 11,
-							width = "double",
-							name = L["BLBYPASS"],
-							desc = L["BLBYPASSD"],
-							get = function() return TF3.db.profile.wlblbp end,
-							set = function() TF3.db.profile.wlblbp = not TF3.db.profile.wlblbp end,
-						},
-						wlist = {
-							type = 'input',
-							disabled = function()
-								return not TF3.db.profile.ewl
-							end,
-							multiline = 8,
-							order = 12,
-							width = "full",
-							name = L["wLists"],
-							usage = L["INPUSAGE"],
-							get = function(info)
-								local a = {}
-								local ret = ""
-								if (TF3.db.profile.whitelist == nil) then
-									TF3.db.profile.whitelist = L.WHITELIST
-								end
-								for _,v in pairs(TF3.db.profile.whitelist) do
-									insert(a, v)
-								end
-								sort(a)
-								for _,v in ipairs(a) do
-									if ret == "" then
-										ret = v
-									else
-										ret = ret .. "\n" .. v
-									end
-								end
-								return ret
-							end,
-							set = function(info, value)
-								TF3:WipeTable(TF3.db.profile.whitelist)
-								local tbl = { strsplit("\n", value) }
-								for k, v in pairs(tbl) do
-									key = "WLIST"
-									TF3.db.profile.whitelist[key..k] = v
-								end
-							end,
-						},
-						reset_wlist = {
-							type = 'execute',
-							disabled = function()
-								return not TF3.db.profile.ewl
-							end,
-							order = 13,
-							name = L["RWLS"],
-							desc = L["RWLS"],
-							func = function() TF3.db.profile.whitelist = TF3:CopyTable(L.WHITELIST) end,
+							name = L["listsGroup"],
+							desc = L["listsGD"],
+							args = {
+								optionsHeader3b = {
+									type	= "header",
+									order	= 1,
+									name	= L["wLists"],
+								},
+								whitelist_enable = {
+									type = 'toggle',
+									order = 2,
+									width = "double",
+									name = L["WLE"],
+									desc = L["WLE"],
+									get = function() return TF3.db.profile.whitelist_enable end,
+									set = function() TF3.db.profile.whitelist_enable = not TF3.db.profile.whitelist_enable end,
+								},
+								editwhitelist = {
+									type = 'toggle',
+									order = 3,
+									width = "double",
+									name = L["EWL"],
+									desc = L["EWL"],
+									get = function() return TF3.db.profile.ewl end,
+									set = function() TF3.db.profile.ewl = not TF3.db.profile.ewl end,
+								},
+								whitelist_repeat_bypass = {
+									type = 'toggle',
+									order = 4,
+									width = "double",
+									name = L["RPTBYPASS"],
+									desc = L["RPTBYPASSD"],
+									get = function() return TF3.db.profile.wlbp end,
+									set = function() TF3.db.profile.wlbp = not TF3.db.profile.wlbp end,
+								},
+								whitelist_blacklist_bypass = {
+									type = 'toggle',
+									order = 5,
+									width = "double",
+									name = L["BLBYPASS"],
+									desc = L["BLBYPASSD"],
+									get = function() return TF3.db.profile.wlblbp end,
+									set = function() TF3.db.profile.wlblbp = not TF3.db.profile.wlblbp end,
+								},
+								wlist = {
+									type = 'input',
+									disabled = function()
+										return not TF3.db.profile.ewl
+									end,
+									multiline = 10,
+									order = 6,
+									width = "full",
+									name = L["wLists"],
+									usage = L["INPUSAGE"],
+									get = function(info)
+										local a = {}
+										local ret = ""
+										if (TF3.db.profile.whitelist == nil) then
+											TF3.db.profile.whitelist = L.WHITELIST
+										end
+										for _,v in pairs(TF3.db.profile.whitelist) do
+											insert(a, v)
+										end
+										sort(a)
+										for _,v in ipairs(a) do
+											if ret == "" then
+												ret = v
+											else
+												ret = ret .. "\n" .. v
+											end
+										end
+										return ret
+									end,
+									set = function(info, value)
+										TF3:WipeTable(TF3.db.profile.whitelist)
+										local tbl = { strsplit("\n", value) }
+										for k, v in pairs(tbl) do
+											key = "WLIST"
+											TF3.db.profile.whitelist[key..k] = v
+										end
+									end,
+								},
+								reset_wlist = {
+									type = 'execute',
+									disabled = function()
+										return not TF3.db.profile.ewl
+									end,
+									order = 7,
+									name = L["RWLS"],
+									desc = L["RWLS"],
+									func = function() TF3.db.profile.whitelist = TF3:CopyTable(L.WHITELIST) end,
+								},
+							},
 						},
 					},
 				},
