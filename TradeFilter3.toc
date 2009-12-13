@@ -1,4 +1,4 @@
-## Interface: 30200
+## Interface: 30300
 #@alpha@
 ## Title: @localization(locale="enUS", key="Title", namespace="ToC")@ SVN: @project-revision@
 #@end-alpha@
@@ -17,7 +17,7 @@
 ## Notes-frFR: @localization(locale="frFR", key="Notes", namespace="TOC")@
 ## Author: @project-author@
 ## X-Date: @project-date-iso@
-## X-Credits: Inspiration: crashmstr  Translations: Contiki and Erreka
+## X-Credits: Inspiration: crashmstr  Translations: Contiki
 ## X-eMail: evonder AT gmail DOT com
 ## X-Website: http://www.wowace.com/projects/trade-filter/
 ## X-Category: Chat & Communication
