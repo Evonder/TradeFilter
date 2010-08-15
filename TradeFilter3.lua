@@ -56,6 +56,7 @@ local debugFrame = L["debugFrame"]
 local repeatFrame = L["repeatFrame"]
 local lastmsgID
 local lastmsg
+local rptmsg
 local lastuserID
 
 local PROJECT_VERSION = "@project-version@"
@@ -188,6 +189,7 @@ function TF3:IsLoggedIn()
 		TF3Frame = CreateFrame("Frame", "LDB_TradeFilter3")
 		TF3Frame.Blocked = LDB:NewDataObject(L["TFR"], {
 			type = "data source",
+			icon = "Interface\\Icons\\Ability_Warrior_RallyingCry",
 			text = "0 Blocked Repeats",
 			value = TF3.db.profile.repeats_blocked,
 			suffix = "Repeats Blocked",
@@ -414,16 +416,16 @@ function TF3:FindRepeat(msg, userID, msgID, coloredName, arg)
 		if (msgID ~= repeatdata[userID].lastmsgID and msg == repeatdata[userID].lastmsg and gtime - repeatdata[userID].lastIndex < tonumber(TF3.db.profile.time_repeats)) then
 			repeatdata[userID].repeats = repeatdata[userID].repeats + 1
 			if (repeatdata[userID].repeats >= tonumber(TF3.db.profile.num_repeats)) then
-				if (TF3.db.profile.debug) then
-					if (msg ~= lastmsg) then
+				if (msg ~= rptmsg) then
+					if (TF3.db.profile.debug) then
 						TF3:FindFrame(repeatFrame, "|cFFFF8C00[" .. L["#RPT"] .. "]|r |cFFD9D9D9[" .. msgID .. "]|r |Hplayer:" .. userID .. ":" .. msgID .. "|h[" .. coloredName .. "]|h |cFFC08080" .. msg .. "|r")
-						TF3.db.profile.repeats_blocked = TF3.db.profile.repeats_blocked + 1
-						if (LDB) then
-							TF3Frame.Blocked.text = TF3.db.profile.repeats_blocked .. "Repeats Blocked"
-							TF3Frame.Blocked.value = TF3.db.profile.repeats_blocked
-						end
-						lastmsg = msg
 					end
+					TF3.db.profile.repeats_blocked = TF3.db.profile.repeats_blocked + 1
+					if (LDB) then
+						TF3Frame.Blocked.text = TF3.db.profile.repeats_blocked .. "Repeats Blocked"
+						TF3Frame.Blocked.value = TF3.db.profile.repeats_blocked
+					end
+					rptmsg = msg
 				end	
 				return true
 			end

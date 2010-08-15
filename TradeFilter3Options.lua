@@ -485,7 +485,7 @@ options = {
 							disabled = function()
 								return not TF3.db.profile.turnOn
 							end,
-							name = L["listsGroup"],
+							name = L["bLists"],
 							desc = L["listsGD"],
 							args = {
 								optionsHeader1 = {
@@ -568,7 +568,7 @@ options = {
 							disabled = function()
 								return not TF3.db.profile.turnOn
 							end,
-							name = L["listsGroup"],
+							name = L["wLists"],
 							desc = L["listsGD"],
 							args = {
 								optionsHeader3b = {
