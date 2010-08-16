@@ -57,6 +57,7 @@ local repeatFrame = L["repeatFrame"]
 local lastmsgID
 local lastmsg
 local rptmsg
+local rptmsgID
 local lastuserID
 
 local PROJECT_VERSION = "@project-version@"
@@ -416,9 +417,13 @@ function TF3:FindRepeat(msg, userID, msgID, coloredName, arg)
 		if (msgID ~= repeatdata[userID].lastmsgID and msg == repeatdata[userID].lastmsg and gtime - repeatdata[userID].lastIndex < tonumber(TF3.db.profile.time_repeats)) then
 			repeatdata[userID].repeats = repeatdata[userID].repeats + 1
 			if (repeatdata[userID].repeats >= tonumber(TF3.db.profile.num_repeats)) then
-				if (msg ~= rptmsg) then
+				if (msg ~= rptmsg or msg == rptmsg and msgID ~= rptmsgID) then
 					if (TF3.db.profile.debug) then
-						TF3:FindFrame(repeatFrame, "|cFFFF8C00[" .. L["#RPT"] .. "]|r |cFFD9D9D9[" .. msgID .. "]|r |Hplayer:" .. userID .. ":" .. msgID .. "|h[" .. coloredName .. "]|h |cFFC08080" .. msg .. "|r")
+						if rptmsg ~= nil then
+							TF3:FindFrame(repeatFrame, "|cFFFF8C00[" .. L["#RPT"] .. "]|r |cFFD9D9D9[" .. msgID .. "(" .. rptmsgID .. ")" .. "]|r |Hplayer:" .. userID .. ":" .. msgID .. "|h[" .. coloredName .. "]|h |cFFC08080" .. msg .. "(" .. rptmsg .. ")" .. "|r")
+						else
+							TF3:FindFrame(repeatFrame, "|cFFFF8C00[" .. L["#RPT"] .. "]|r |cFFD9D9D9[" .. msgID .. "(" .. repeatdata[userID].lastmsgID .. ")" .. "]|r |Hplayer:" .. userID .. ":" .. msgID .. "|h[" .. coloredName .. "]|h |cFFC08080" .. msg .. "(" .. repeatdata[userID].lastmsg .. ")" .. "|r")
+						end
 					end
 					TF3.db.profile.repeats_blocked = TF3.db.profile.repeats_blocked + 1
 					if (LDB) then
@@ -426,6 +431,7 @@ function TF3:FindRepeat(msg, userID, msgID, coloredName, arg)
 						TF3Frame.Blocked.value = TF3.db.profile.repeats_blocked
 					end
 					rptmsg = msg
+					rptmsgID = msgID
 				end	
 				return true
 			end
