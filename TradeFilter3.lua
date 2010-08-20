@@ -59,6 +59,7 @@ local lastmsg
 local rptmsg
 local rptmsgID
 local lastuserID
+local rptdone
 
 local PROJECT_VERSION = "@project-version@"
 local PROJECT_REVISION = 000 + tonumber(("$Revision: @project-revision@ $"):match("%d+"))
@@ -433,6 +434,7 @@ function TF3:FindRepeat(msg, userID, msgID, coloredName, arg)
 					rptmsg = msg
 					rptmsgID = msgID
 				end	
+				rptdone = 1 + msgID
 				return true
 			end
 		elseif (msg ~= repeatdata[userID].lastmsg) then
@@ -499,7 +501,7 @@ local function PreFilterFunc_Addon(self, event, ...)
 			filtered = false
 		elseif (TF3:BlackList(msg, userID, msgID, coloredName) == true) then
 			filtered = true
-		elseif (TF3.db.profile.repeat_enable) then
+		elseif (TF3.db.profile.repeat_enable and rptdone == 0 + msgID) then
 			if (TF3:FindRepeat(msg, userID, msgID, coloredName) == true) then
 				filtered = true
 			else
@@ -535,7 +537,7 @@ local function PreFilterFunc_Say(self, event, ...)
 			filtered = false
 		elseif (TF3:BlackList(msg, userID, msgID, coloredName) == true) then
 			filtered = true
-		elseif (TF3.db.profile.repeat_enable) then
+		elseif (TF3.db.profile.repeat_enable and rptdone == 0 + msgID) then
 			if (TF3:FindRepeat(msg, userID, msgID, coloredName) == true) then
 				filtered = true
 			else
@@ -570,7 +572,7 @@ local function PreFilterFunc_Yell(self, event, ...)
 			filtered = false
 		elseif (TF3:BlackList(msg, userID, msgID, coloredName) == true) then
 			filtered = true
-		elseif (TF3.db.profile.repeat_enable) then
+		elseif (TF3.db.profile.repeat_enable and rptdone == 0 + msgID) then
 			if (TF3:FindRepeat(msg, userID, msgID, coloredName) == true) then
 				filtered = true
 			else
@@ -605,7 +607,7 @@ local function PreFilterFunc_BG(self, event, ...)
 			filtered = false
 		elseif (TF3:BlackList(msg, userID, msgID, coloredName) == true) then
 			filtered = true
-		elseif (TF3.db.profile.repeat_enable) then
+		elseif (TF3.db.profile.repeat_enable and rptdone == 0 + msgID) then
 			if (TF3:FindRepeat(msg, userID, msgID, coloredName) == true) then
 				filtered = true
 			else
@@ -644,7 +646,7 @@ local function PreFilterFunc(self, event, ...)
 			filtered = false
 		elseif (TF3:BlackList(msg, userID, msgID, coloredName) == true) then
 			filtered = true
-		elseif (TF3.db.profile.repeat_enable) then
+		elseif (TF3.db.profile.repeat_enable and rptdone == 0 + msgID) then
 			if (TF3:FindRepeat(msg, userID, msgID, coloredName) == true) then
 				filtered = true
 			else
@@ -662,7 +664,7 @@ local function PreFilterFunc(self, event, ...)
 			filtered = false
 		elseif (TF3:BlackList(msg, userID, msgID, coloredName) == true) then
 			filtered = true
-		elseif (TF3.db.profile.repeat_enable) then
+		elseif (TF3.db.profile.repeat_enable and rptdone == 0 + msgID) then
 			if (TF3:FindRepeat(msg, userID, msgID, coloredName) == true) then
 				filtered = true
 			else
@@ -680,7 +682,7 @@ local function PreFilterFunc(self, event, ...)
 			filtered = false
 		elseif (TF3:BlackList(msg, userID, msgID, coloredName) == true) then
 			filtered = true
-		elseif (TF3.db.profile.repeat_enable) then
+		elseif (TF3.db.profile.repeat_enable and rptdone == 0 + msgID) then
 			if (TF3:FindRepeat(msg, userID, msgID, coloredName) == true) then
 				filtered = true
 			else
@@ -698,7 +700,7 @@ local function PreFilterFunc(self, event, ...)
 			filtered = false
 		elseif (TF3:BlackList(msg, userID, msgID, coloredName) == true) then
 			filtered = true
-		elseif (TF3.db.profile.repeat_enable) then
+		elseif (TF3.db.profile.repeat_enable and rptdone == 0 + msgID) then
 			if (TF3:FindRepeat(msg, userID, msgID, coloredName) == true) then
 				filtered = true
 			else
