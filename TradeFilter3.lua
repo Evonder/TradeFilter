@@ -236,7 +236,7 @@ end
 
 function TF3:RecycleTables(t, state)
 	local gtime = math.floor(GetTime()*math.pow(10,0)+0.5) / math.pow(10,0)
-	if (t ~= nil and type(t) == "table" and TF3:GetNumElements(t) >= tonumber(TF3.db.profile.repeat_recycle_size)) then
+	if (t ~= nil and type(t) == "table" and TF3:GetNumElements(t) > tonumber(TF3.db.profile.repeat_recycle_size)) then
 		local key, value = next(t, state)
 		if key then
 			for k,v in pairs(value) do
