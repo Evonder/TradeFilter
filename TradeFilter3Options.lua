@@ -779,7 +779,7 @@ options = {
 									get = function(info) return TF3.db.profile.repeat_recycle_time end,
 									set = function(info, value)
 										TF3.db.profile.repeat_recycle_time = value
-										TF3:ScheduleRepeatingTimer(TF3:RecycleTables(), tonumber(TF3.db.profile.repeat_recycle_time), repeatdata)
+										TF3:ScheduleRepeatingTimer("RecycleTables", tonumber(TF3.db.profile.repeat_recycle_time), repeatdata)
 									end,
 								},
 								repeat_recycle_size = {
