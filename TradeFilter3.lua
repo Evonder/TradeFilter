@@ -49,7 +49,6 @@ local formatIt = string.format
 local insert = table.insert
 local sort = table.sort
 local timerCount = 0
-local repeatdata = {}
 local currentFriend
 local redirectFrame = L["redirectFrame"]
 local debugFrame = L["debugFrame"]
@@ -60,6 +59,9 @@ local rptmsg
 local rptmsgID
 local lastuserID
 local rptdone
+
+--[[  Globals  ]]--
+repeatdata = {}
 
 local PROJECT_VERSION = "@project-version@"
 local PROJECT_REVISION = 000 + tonumber(("$Revision: @project-revision@ $"):match("%d+"))
@@ -95,6 +97,8 @@ defaults = {
 		special_enable = false,
 		num_repeats = "2",
 		time_repeats = "30",
+		repeat_recycle_time = "1800",
+		repeat_recycle_size = "50",
 		repeats_blocked =  0,
 		friendslist = {},
 		whitelist = {},
@@ -183,7 +187,7 @@ function TF3:IsLoggedIn()
 	self:RegisterEvent("FRIENDLIST_UPDATE", "GetFriends")
 	friends.RegisterCallback(self, "Added")
 	friends.RegisterCallback(self, "Removed")
-	self:ScheduleRepeatingTimer("RecycleTables", 1800, repeatdata)
+	self:ScheduleRepeatingTimer("RecycleTables", tonumber(TF3.db.profile.repeat_recycle_time), repeatdata)
 	self:UnregisterEvent("PLAYER_LOGIN")
 	TF3:DuelFilter()
 	
@@ -232,11 +236,11 @@ end
 
 function TF3:RecycleTables(t, state)
 	local gtime = math.floor(GetTime()*math.pow(10,0)+0.5) / math.pow(10,0)
-	if (t ~= nil and type(t) == "table" and TF3:GetNumElements(t) >= 100) then
+	if (t ~= nil and type(t) == "table" and TF3:GetNumElements(t) >= tonumber(TF3.db.profile.repeat_recycle_size)) then
 		local key, value = next(t, state)
 		if key then
 			for k,v in pairs(value) do
-				if(k == "lastIndex" and gtime - v > 1800) then
+				if(k == "lastIndex" and gtime - v > tonumber(TF3.db.profile.repeat_recycle_time)) then
 					if (TF3.db.profile.debug) then
 						TF3:FindFrame(debugFrame, "|cFFFFFF80" .. L["RMVRT1"] .. "|r |cFF33FF99" .. key .. "|r |cFFFFFF80" .. L["RMVRT2"] .. "|r")
 					end
@@ -247,7 +251,7 @@ function TF3:RecycleTables(t, state)
 		end
 		timerCount = timerCount + 1
 		if (TF3.db.profile.debug) then
-			TF3:FindFrame(debugFrame, ("%d " .. L["SECPSD"]):format(1800 * timerCount))
+			TF3:FindFrame(debugFrame, ("%d " .. L["SECPSD"]):format(tonumber(TF3.db.profile.repeat_recycle_time) * timerCount))
 		end
 	end
 end

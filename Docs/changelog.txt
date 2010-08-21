@@ -1,15 +1,27 @@
 == ChangeLog
+*r199
+**++Added configuration for repeat recycling(Advanced)++\\
+**++Added achievement links to defualt Whitelist++\\
+**++Removed defunct default Whitelist entry that produced a bug in new entries++\\
+*r198
+**++Let's not check for repeats twice++\\
+*r196
+**++Fix repeat counter++\\
+**++Fix error in localization (r195)++\\
+*r195
+**++Fix repeat detection++\\
+**++GUI typo++\\
 *r192
-**++Added BG Filters++
-**++Config GUI reorganization++
+**++Added BG Filters++\\
+**++Config GUI reorganization++\\
 *r167
-**++Added simple duel spam block++
+**++Added simple duel spam block++\\
 *r159
-**++Keep lists sorted!++
+**++Keep lists sorted!++\\
 *r155
-**++LDB support for Repeats Blocked++
-**++Ability for Whitelist to bypass repeat filter++
-**++GUI layout changed a little++
+**++LDB support for Repeats Blocked++\\
+**++Ability for Whitelist to bypass repeat filter++\\
+**++GUI layout changed a little++\\
 *r148
 **++Minor code cleanup++\\
 **++AceTimer lib added for repeat table recycling++\\

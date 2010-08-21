@@ -51,8 +51,9 @@ Nothing planned
 
 === Supported Translations
 //Please help localize this project// [[http://www.wowace.com/projects/trade-filter/localization/|HERE]]\\
-German - 97.4%\\
-French - 63.2%\\
-Simplified Chinese - 41.9%\\
-Traditional Chinese - 22.2%\\
-Korean - 47.9%\\
+[[http://www.wowace.com/projects/trade-filter/localization/|German]] - 93.3%\\
+[[http://www.wowace.com/projects/trade-filter/localization/|Simplified Chinese]] - 52.0%\\
+[[http://www.wowace.com/projects/trade-filter/localization/|French]] - 41.9%\\
+[[http://www.wowace.com/projects/trade-filter/localization/|Korean]] - 30.7%\\
+[[http://www.wowace.com/projects/trade-filter/localization/|Russian]] - 26.9%\\
+[[http://www.wowace.com/projects/trade-filter/localization/|Traditional Chinese]] - 14.0%\\

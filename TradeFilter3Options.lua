@@ -3,6 +3,7 @@ File Author: @file-author@
 File Revision: @file-revision@
 File Date: @file-date-iso@
 ]]--
+
 local TradeFilter3 = LibStub("AceAddon-3.0"):GetAddon("TradeFilter3")
 local L = LibStub("AceLocale-3.0"):GetLocale("TradeFilter3")
 local TF3 = TradeFilter3
@@ -12,6 +13,16 @@ local ipairs = ipairs
 local pairs = pairs
 local insert = table.insert
 local sort = table.sort
+
+function getnHash(t)
+   local count = 0;
+   if not t then return 0; end
+   if (type(t)) ~= "table" then return 0; end
+   for i,_ in pairs(t) do
+      count = count + 1;
+   end
+   return count;
+end
 
 --[[ Options Table ]]--
 options = {
@@ -664,9 +675,10 @@ options = {
 						},
 					},
 				},
-				repeatGroup = {
+				repeatGroupMain = {
 					type = "group",
 					handler = TF3,
+					childGroups = "tab",
 					order = 4,
 					disabled = function()
 						return not TF3.db.profile.turnOn
@@ -674,68 +686,165 @@ options = {
 					name = L["REPEAT"],
 					desc = L["REPEAT"],
 					args = {
-						optionsHeader4 = {
-							type	= "header",
-							order	= 1,
-							name	= L["REPEAT"],
-						},
 						repeat_enable = {
 							type = 'toggle',
-							order = 2,
+							order = 1,
 							width = "double",
 							name = L["RPTENABLE"],
 							desc = L["RPTENABLED"],
 							get = function() return TF3.db.profile.repeat_enable end,
 							set = function() TF3.db.profile.repeat_enable = not TF3.db.profile.repeat_enable end,
 						},
-						num_repeats = {
-							type = 'input',
+						repeatGroup = {
+							type = "group",
+							handler = TF3,
+							order = 2,
 							disabled = function()
 								return not TF3.db.profile.repeat_enable
 							end,
+							name = L["REPEAT"],
+							desc = L["REPEAT"],
+							args = {
+								num_repeats = {
+									type = 'input',
+									disabled = function()
+										return not TF3.db.profile.repeat_enable
+									end,
+									order = 3,
+									width = "full",
+									name = L["#RPT"],
+									desc = L["#RPTD"],
+									usage = L["RPTU"],
+									get = function(info) return TF3.db.profile.num_repeats end,
+									set = function(info, value) TF3.db.profile.num_repeats = value end,
+								},
+								time_repeats = {
+									type = 'input',
+									disabled = function()
+										return not TF3.db.profile.repeat_enable
+									end,
+									order = 4,
+									width = "full",
+									name = L["TRPT"],
+									desc = L["TRPTD"],
+									usage = L["RPTU"],
+									get = function(info) return TF3.db.profile.time_repeats end,
+									set = function(info, value) TF3.db.profile.time_repeats = value end,
+								},
+								repeats_blocked = {
+									type = 'input',
+									disabled = true,
+									order = 5,
+									width = "half",
+									name = L["RPTBLOCKED"],
+									desc = L["RPTBLOCKEDD"],
+									get = function(info) return tostring(TF3.db.profile.repeats_blocked) end,
+								},
+								reset_repeats_blocked = {
+									type = 'execute',
+									order = 6,
+									width = "half",
+									name = L["RPTRESET"],
+									desc = L["RPTRESETD"],
+									func = function()
+										TF3.db.profile.repeats_blocked = 0
+										if (LibStub("LibDataBroker-1.1", true)) then
+											TF3Frame.Blocked.text = TF3.db.profile.repeats_blocked .. "Repeats Blocked"
+											TF3Frame.Blocked.value = TF3.db.profile.repeats_blocked
+										end
+									end,
+								},
+							},
+						},
+						repeatGroupAdv = {
+							type = "group",
+							handler = TF3,
 							order = 3,
-							width = "full",
-							name = L["#RPT"],
-							desc = L["#RPTD"],
-							usage = L["RPTU"],
-							get = function(info) return TF3.db.profile.num_repeats end,
-							set = function(info, value) TF3.db.profile.num_repeats = value end,
-						},
-						time_repeats = {
-							type = 'input',
 							disabled = function()
 								return not TF3.db.profile.repeat_enable
 							end,
-							order = 4,
-							width = "full",
-							name = L["TRPT"],
-							desc = L["TRPTD"],
-							usage = L["RPTU"],
-							get = function(info) return TF3.db.profile.time_repeats end,
-							set = function(info, value) TF3.db.profile.time_repeats = value end,
-						},
-						repeats_blocked = {
-							type = 'input',
-							disabled = true,
-							order = 5,
-							width = "half",
-							name = L["RPTBLOCKED"],
-							desc = L["RPTBLOCKEDD"],
-							get = function(info) return tostring(TF3.db.profile.repeats_blocked) end,
-						},
-						reset_repeats_blocked = {
-							type = 'execute',
-							order = 6,
-							width = "half",
-							name = L["RPTRESET"],
-							desc = L["RPTRESETD"],
-							func = function()
-								TF3.db.profile.repeats_blocked = 0
-								if (LibStub("LibDataBroker-1.1", true)) then
-									TF3Frame.Blocked.text = TF3.db.profile.repeats_blocked .. "Repeats Blocked"
-									TF3Frame.Blocked.value = TF3.db.profile.repeats_blocked
-								end
-							end,
+							name = L["RPTA"],
+							desc = L["RPTAD"],
+							args = {
+								repeat_recycle_time = {
+									type = 'input',
+									disabled = function()
+										return not TF3.db.profile.repeat_enable
+									end,
+									order = 1,
+									width = "full",
+									name = L["RPTRT"],
+									desc = L["RPTRTD"],
+									usage = L["RPTRTSU"],
+									get = function(info) return TF3.db.profile.repeat_recycle_time end,
+									set = function(info, value)
+										TF3.db.profile.repeat_recycle_time = value
+										TF3:ScheduleRepeatingTimer(TF3:RecycleTables(), tonumber(TF3.db.profile.repeat_recycle_time), repeatdata)
+									end,
+								},
+								repeat_recycle_size = {
+									type = 'input',
+									disabled = function()
+										return not TF3.db.profile.repeat_enable
+									end,
+									order = 2,
+									width = "full",
+									name = L["RPTRS"],
+									desc = L["RPTRSD"],
+									usage = L["RPTRTSU"],
+									get = function(info) return TF3.db.profile.repeat_recycle_size end,
+									set = function(info, value) TF3.db.profile.repeat_recycle_size = value end,
+								},
+								repeats_table_size = {
+									type = 'input',
+									disabled = true,
+									order = 3,
+									name = L["RPTTS"],
+									get = function() return tostring(getnHash(repeatdata)) end,
+								},
+								blank_space1 = {
+									type = 'description',
+									order = 4,
+									name = "",
+								},
+								options_header5 = {
+									type	= "header",
+									order	= 5,
+									name	= L["RPTTC"],
+								},
+								reset_repeat_table_content = {
+									type = 'execute',
+									disabled = function()
+										return not TF3.db.profile.repeat_enable
+									end,
+									order = 6,
+									name = L["RPTTT"],
+									desc = L["RPTTTD"],
+									func = function() TF3:RecycleTables(repeatdata) end,
+								},
+								repeats_table_content = {
+									type = 'description',
+									fontSize = "medium",
+									disabled = true,
+									order = 7,
+									name = function()
+										local ret = ""
+										for k,v in pairs(repeatdata) do
+											if ret == "" then
+												ret = k
+											else
+												ret = ret .. "\n" .. k
+											end
+										end
+										return ret
+									end,
+								},
+								blank_space2 = {
+									type = 'description',
+									order = 8,
+									name = "",
+								},
+							},
 						},
 					},
 				},
