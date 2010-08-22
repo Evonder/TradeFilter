@@ -404,6 +404,7 @@ function TF3:SpecialChans(chanName)
 	end
 	local chanName = lower(chanName)
 	for _,names in pairs(schans) do
+		local names = lower(names)
 		if (find(chanName,names) and names ~= "") then
 			return true
 		end
