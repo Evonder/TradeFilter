@@ -158,7 +158,7 @@ end
 
 local function OnTooltipShow(self)
 	local hint = L["|cffeda55fRight Click|r to open config GUI.\n|cffeda55fLeft Click|r reset repeat count."]
-	self:AddLine(TF3.db.profile.repeats_blocked .. " " .. L["Repeats Blocked"])
+	self:AddLine(TF3.db.profile.repeats_blocked .. L[" Repeats Blocked"])
 	self:AddLine(" ")
 	self:AddLine(hint, 0.2, 1, 0.2, 1)
 end
@@ -180,7 +180,7 @@ local function OnClick(clickedframe, button)
 		TF3:OpenOptions()
 	else
 		TF3.db.profile.repeats_blocked = 0
-		TF3Frame.Blocked.text = TF3.db.profile.repeats_blocked .. "Repeats Blocked"
+		TF3Frame.Blocked.text = TF3.db.profile.repeats_blocked .. L[" Repeats Blocked"]
 		TF3Frame.Blocked.value = TF3.db.profile.repeats_blocked
 	end
 end
@@ -198,9 +198,9 @@ function TF3:IsLoggedIn()
 		TF3Frame.Blocked = LDB:NewDataObject(L["TFR"], {
 			type = "data source",
 			icon = "Interface\\Icons\\Ability_Warrior_RallyingCry",
-			text = "0 Blocked Repeats",
+			text = L["0 Repeats Blocked"],
 			value = TF3.db.profile.repeats_blocked,
-			suffix = "Repeats Blocked",
+			suffix = L[" Repeats Blocked"],
 			OnClick = OnClick,
 			OnEnter = OnEnter,
 			OnLeave = OnLeave,
@@ -433,7 +433,7 @@ function TF3:FindRepeat(msg, userID, msgID, coloredName, arg)
 					end
 					TF3.db.profile.repeats_blocked = TF3.db.profile.repeats_blocked + 1
 					if (LDB) then
-						TF3Frame.Blocked.text = TF3.db.profile.repeats_blocked .. "Repeats Blocked"
+						TF3Frame.Blocked.text = TF3.db.profile.repeats_blocked .. L[" Repeats Blocked"]
 						TF3Frame.Blocked.value = TF3.db.profile.repeats_blocked
 					end
 					rptmsg = msg
