@@ -1,4 +1,15 @@
 == ChangeLog
+*r204
+**++Limit function calls if CHAT_MSG event conditions are not met++\\
+**++Fix repeat detection... for good++\\
+*r203
+**++SPAM and DEBUG frames now auto created++\\
+**++Various bugs swatted++\\
+**++Minor cleanup++\\
+*r202
+**++Fix Special Channel names never matching++\\
+*r200
+**++Fix Recycle Timer configuration option that would produce a AceTimer callback error++\\
 *r199
 **++Added configuration for repeat recycling(Advanced)++\\
 **++Added achievement links to defualt Whitelist++\\

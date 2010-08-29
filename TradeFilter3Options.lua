@@ -11,6 +11,7 @@ local TF3 = TradeFilter3
 --[[ Locals ]]--
 local ipairs = ipairs
 local pairs = pairs
+local format = string.format
 local insert = table.insert
 local sort = table.sort
 
@@ -37,7 +38,7 @@ options = {
 			args = {
 				mainHeader = {
 					type = "description",
-					name = "  " .. L["NJAOF"] .. "\n  Version " .. TF3.version .. "\n",
+					name = "  " .. L["NJAOF"] .. "\n  Version " .. TF3.version .. "\n  " .. TF3.date .. "\n",
 					order = 1,
 					image = "Interface\\Icons\\Ability_Warrior_RallyingCry",
 					imageWidth = 32, imageHeight = 32,
@@ -738,7 +739,7 @@ options = {
 									width = "half",
 									name = L["RPTBLOCKED"],
 									desc = L["RPTBLOCKEDD"],
-									get = function(info) return tostring(TF3.db.profile.repeats_blocked) end,
+									get = function(info) return format("%d",TF3.db.profile.repeats_blocked) end,
 								},
 								reset_repeats_blocked = {
 									type = 'execute',
@@ -779,7 +780,7 @@ options = {
 									get = function(info) return TF3.db.profile.repeat_recycle_time end,
 									set = function(info, value)
 										TF3.db.profile.repeat_recycle_time = value
-										TF3:ScheduleRepeatingTimer("RecycleTables", tonumber(TF3.db.profile.repeat_recycle_time), repeatdata)
+										TF3:ScheduleRepeatingTimer(TF3:RecycleTables(), tonumber(TF3.db.profile.repeat_recycle_time), repeatdata)
 									end,
 								},
 								repeat_recycle_size = {
@@ -800,7 +801,7 @@ options = {
 									disabled = true,
 									order = 3,
 									name = L["RPTTS"],
-									get = function() return tostring(getnHash(repeatdata)) end,
+									get = function() return format("%d",getnHash(repeatdata)) end,
 								},
 								blank_space1 = {
 									type = 'description',
