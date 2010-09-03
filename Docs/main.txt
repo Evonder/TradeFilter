@@ -35,10 +35,7 @@ lfg,
 Adding a set, e.g. [xXyY], will attempt to find a match for any character given in a set. Example: lf[wWeEmM] will match for lfw, lfe and lfm.
 
 === Black and White Lists
-TradeFilter also has a built in Black and White list. Refer to the [[http://www.wowace.com/addons/trade-filter/#w-filtering-priorities|Filtering Priorities]] for how Black and White lists are checked.
-
-=== Filtering Priorities
-{{http://static.wowace.com/uploads/19/16/173/TradeFilter_Flowchart.png}}
+TradeFilter also has a built in Black and White list. Refer to the [[http://www.wowace.com/addons/trade-filter/pages/flow/]] for how Black and White lists are checked.
 
 === Configuration
 <<code php>>/tf or /filter<</code>>
@@ -51,9 +48,3 @@ Nothing planned
 
 === Supported Translations
 //Please help localize this project// [[http://www.wowace.com/projects/trade-filter/localization/|HERE]]\\
-[[http://www.wowace.com/projects/trade-filter/localization/|German]] - 93.3%\\
-[[http://www.wowace.com/projects/trade-filter/localization/|Simplified Chinese]] - 52.0%\\
-[[http://www.wowace.com/projects/trade-filter/localization/|French]] - 41.9%\\
-[[http://www.wowace.com/projects/trade-filter/localization/|Korean]] - 30.7%\\
-[[http://www.wowace.com/projects/trade-filter/localization/|Russian]] - 26.9%\\
-[[http://www.wowace.com/projects/trade-filter/localization/|Traditional Chinese]] - 14.0%\\

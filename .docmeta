@@ -6,3 +6,7 @@
   type: creole
   input-file: Docs/changelog.txt
   output-page: "ChangeLog"
+-
+  type: creole
+  input-file: Docs/flow.txt
+  output-page: "Flow"
