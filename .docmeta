@@ -16,5 +16,5 @@
   output-page: "default-filters"
 -
   type: creole
-  input-file: Docs/defualt-lists.txt
-  output-page: "defualt-lists"
+  input-file: Docs/default-lists.txt
+  output-page: "default-lists"
