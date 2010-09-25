@@ -10,3 +10,11 @@
   type: creole
   input-file: Docs/flow.txt
   output-page: "Flow"
+-
+  type: creole
+  input-file: Docs/default-filters.txt
+  output-page: "default-filters"
+-
+  type: creole
+  input-file: Docs/defualt-lists.txt
+  output-page: "defualt-lists"

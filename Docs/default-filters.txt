@@ -1,0 +1,61 @@
+TradeFilters default channel filters:
+
+##Trade Filters##:
+<<code php>>
+TRADE = {
+  FILTER1 = "[bB][uU][yY][iI][nN][gG]",
+  FILTER10 = "[lL][fF] [pP][oO][rR][tT]",
+  FILTER2 = "[wW][tT][bBsStT]",
+  FILTER3 = "[lL][fF][wWeE]",
+  FILTER4 = "[lL][fF] [eE][nN][cC][hH][aA][nN][tT]",
+  FILTER5 = "[lL][fF] [jJ][cC]",
+  FILTER6 = "AH",
+  FILTER7 = "looking for work",
+  FILTER8 = "lockpick",
+  FILTER9 = "[sS][eE][lL][lL][iI][nN][gG]",
+}<</code>>
+
+##Base Channel Filters##:
+<<code php>>
+BASE = {
+  FILTER1 = "[lL][fF]%d[mM]?",
+  FILTER2 = "[lL][fF][mM]?",
+  FILTER3 = "[lL][fF][gG]",
+  FILTER4 = "2[vV]2",
+  FILTER5 = "3[vV]3",
+  FILTER6 = "5[vV]5",
+  FILTER7 = "[lL][fF] [dD][pP][sS]",
+  FILTER8 = "[lL][fF] [tT][aA][nN][kK]",
+  FILTER9 = "[lL][fF] [hH][eE][aA][lL][eE][rR]",
+}<</code>>
+
+##Battleground Channel Filters##:
+<<code php>>
+BG = {
+  FILTER1 = "^[iI][nN][cC]$",
+  FILTER10 = "[pP][uU][rR][pP][lL][eE]",
+  FILTER11 = "[fF][aA][rR][mM]",
+  FILTER12 = "^[gG][mM]$",
+  FILTER13 = "[mM][iI][nN][eE]",
+  FILTER14 = "[mM][iI][lL][lL]",
+  FILTER15 = "^[lL][mM]$",
+  FILTER16 = "^[bB][sS]$",
+  FILTER17 = "[bB][lL][aA][cC][kK][sS][mM][iT][hH]",
+  FILTER18 = "^[sS][tT]$",
+  FILTER19 = "[sS][tT][aA][bB][lL][eE][sS]",
+  FILTER2 = "^[fF][cC]$",
+  FILTER20 = "[dD][rR][eE][kK]",
+  FILTER21 = "[bB][lL][uU][eE]",
+  FILTER22 = "[rR][eE][dD]",
+  FILTER3 = "^[gG][yY]$",
+  FILTER4 = "^[fF][rR]$",
+  FILTER5 = "^[fF][rR][rR]$",
+  FILTER6 = "^[mM][tT]$",
+  FILTER7 = "^[dD][rR]$",
+  FILTER8 = "[gG][oO][lL][dD]",
+  FILTER9 = "[gG][rR][eE][eE][nN]",
+}
+<</code>>
+
+Note: Adding a set, e.g. [xXyY], will attempt to find a match for any character given in a set. Example: lf[wWeEmM] will match for lfw, lfe and lfm.
+  e.g. http://www.wowwiki.com/Pattern_matching

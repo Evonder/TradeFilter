@@ -67,7 +67,7 @@ repeatdata = {}
 
 local PROJECT_VERSION = "@project-version@"
 local PROJECT_REVISION = 000 + tonumber(("$Revision: @project-revision@ $"):match("%d+"))
-TF3.date = sub("$Date: @file-date-iso@ $", 8, 17)
+TF3.date = sub("$Date: @project-date-iso@ $", 8, 17)
 TF3.version = gsub(PROJECT_VERSION, "-release", "")
 
 --[[ Database Defaults ]]--
@@ -236,6 +236,16 @@ function TF3:GetNumElements(t)
  return count
 end
 
+function TF3:getnHash(t)
+   local count = 0;
+   if not t then return 0; end
+   if (type(t)) ~= "table" then return 0; end
+   for i,_ in pairs(t) do
+      count = count + 1;
+   end
+   return count;
+end
+
 function TF3:RecycleTables(t, state)
 	local gtime = floor(GetTime()*power(10,0)+0.5) / power(10,0)
 	if (t ~= nil and type(t) == "table" and TF3:GetNumElements(t) >= tonumber(TF3.db.profile.repeat_recycle_size)) then
@@ -333,6 +343,7 @@ function TF3:IsFriend(userID)
 	return false
 end
 
+--[[ Duel Spam Functions ]]--
 function TF3:DuelFilter()
 	if (TF3.db.profile.filterDuelSpam) then
 		DUEL_WINNER_KNOCKOUT, DUEL_WINNER_RETREAT = "", ""
@@ -497,7 +508,7 @@ local function PreFilterFunc_Addon(self, event, ...)
 	local msgID = arg11 or select(11, ...)
 	local cName = arg12 or select(12, ...)
 	local coloredName = TF3:GetColoredName(userID, cName)
-	if not (repeatdata[userID]) then
+	if (repeatdata[userID] ~= type(table) and TF3.db.profile.repeat_enable) then
 		repeatdata[userID] = {}
 		repeatdata[userID].lastmsg = msg
 		repeatdata[userID].lastmsgID = msgID
@@ -538,7 +549,7 @@ local function PreFilterFunc_Say(self, event, ...)
 	local msgID = arg11 or select(11, ...)
 	local cName = arg12 or select(12, ...)
 	local coloredName = TF3:GetColoredName(userID, cName)
-	if not (repeatdata[userID]) then
+	if (repeatdata[userID] ~= type(table) and TF3.db.profile.repeat_enable) then
 		repeatdata[userID] = {}
 		repeatdata[userID].lastmsg = msg
 		repeatdata[userID].lastmsgID = msgID
@@ -578,7 +589,7 @@ local function PreFilterFunc_Yell(self, event, ...)
 	local msgID = arg11 or select(11, ...)
 	local cName = arg12 or select(12, ...)
 	local coloredName = TF3:GetColoredName(userID, cName)
-	if not (repeatdata[userID]) then
+	if (repeatdata[userID] ~= type(table) and TF3.db.profile.repeat_enable) then
 		repeatdata[userID] = {}
 		repeatdata[userID].lastmsg = msg
 		repeatdata[userID].lastmsgID = msgID
@@ -618,7 +629,7 @@ local function PreFilterFunc_BG(self, event, ...)
 	local msgID = arg11 or select(11, ...)
 	local cName = arg12 or select(12, ...)
 	local coloredName = TF3:GetColoredName(userID, cName)
-	if not (repeatdata[userID]) then
+	if (repeatdata[userID] ~= type(table) and TF3.db.profile.repeat_enable) then
 		repeatdata[userID] = {}
 		repeatdata[userID].lastmsg = msg
 		repeatdata[userID].lastmsgID = msgID
@@ -661,7 +672,7 @@ local function PreFilterFunc(self, event, ...)
 	local msgID = arg11 or select(11, ...)
 	local cName = arg12 or select(12, ...)
 	local coloredName = TF3:GetColoredName(userID, cName)
-	if not (repeatdata[userID]) then
+	if (repeatdata[userID] ~= type(table) and TF3.db.profile.repeat_enable) then
 		repeatdata[userID] = {}
 		repeatdata[userID].lastmsg = msg
 		repeatdata[userID].lastmsgID = msgID
@@ -670,8 +681,8 @@ local function PreFilterFunc(self, event, ...)
 		rptdone = msgID
 	end
 	--[[ Check for Trade Channel and User setting ]]--
-	if (TF3.db.profile.filtertrade) then
-		if (zoneID == 2) then
+	if (zoneID == 2) then
+		if (TF3.db.profile.filtertrade) then
 			if (TF3:IsFriend(userID) == false) then
 				if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false or TF3:WhiteList(msg, userID, msgID, coloredName) == true) then
 					filtered = false
@@ -690,10 +701,10 @@ local function PreFilterFunc(self, event, ...)
 				filtered = false
 			end
 		end
-	end
+--~ 	end
 	--[[ Check for General Channel and User setting ]]--
-	if (TF3.db.profile.filtergeneral) then
-		if (chanID == 1) then
+	elseif (chanID == 1) then
+		if (TF3.db.profile.filtergeneral) then
 			if (TF3:IsFriend(userID) == false) then
 				if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false or TF3:WhiteList(msg, userID, msgID, coloredName) == true) then
 					filtered = false
@@ -712,10 +723,10 @@ local function PreFilterFunc(self, event, ...)
 				filtered = false
 			end
 		end
-	end
+--~ 	end
 	--[[ Check for LFG Channel and User setting ]]--
-	if (TF3.db.profile.filterLFG) then
-		if (zoneID == 26) then
+	elseif (zoneID == 26) then
+		if (TF3.db.profile.filterLFG) then
 			if (TF3:IsFriend(userID) == false) then
 				if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false or TF3:WhiteList(msg, userID, msgID, coloredName) == true) then
 					filtered = false
@@ -734,10 +745,10 @@ local function PreFilterFunc(self, event, ...)
 				filtered = false
 			end
 		end
-	end
+--~ 	end
 	--[[ Check for Special Channel and User setting ]]--
-	if (TF3.db.profile.special_enable) then
-		if (TF3:SpecialChans(chanName) == true) then
+	elseif (TF3:SpecialChans(chanName) == true) then	
+		if (TF3.db.profile.special_enable) then
 			if (TF3:IsFriend(userID) == false) then
 				if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false or TF3:WhiteList(msg, userID, msgID, coloredName) == true) then
 					filtered = false

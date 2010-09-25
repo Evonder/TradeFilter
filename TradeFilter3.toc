@@ -1,4 +1,5 @@
 ## Interface: 30300
+## X-Compatible-With: 40000 
 #@alpha@
 ## Title: @localization(locale="enUS", key="Title", namespace="ToC")@ SVN: @project-revision@
 #@end-alpha@

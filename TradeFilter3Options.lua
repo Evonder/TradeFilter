@@ -15,16 +15,6 @@ local format = string.format
 local insert = table.insert
 local sort = table.sort
 
-function getnHash(t)
-   local count = 0;
-   if not t then return 0; end
-   if (type(t)) ~= "table" then return 0; end
-   for i,_ in pairs(t) do
-      count = count + 1;
-   end
-   return count;
-end
-
 --[[ Options Table ]]--
 options = {
 	type="group",
@@ -517,6 +507,9 @@ options = {
 								editblacklist = {
 									type = 'toggle',
 									order = 3,
+									disabled = function()
+										return not TF3.db.profile.blacklist_enable
+									end,
 									width = "double",
 									name = L["EBL"],
 									desc = L["EBL"],
@@ -600,6 +593,9 @@ options = {
 								editwhitelist = {
 									type = 'toggle',
 									order = 3,
+									disabled = function()
+										return not TF3.db.profile.whitelist_enable
+									end,
 									width = "double",
 									name = L["EWL"],
 									desc = L["EWL"],
@@ -609,6 +605,9 @@ options = {
 								whitelist_repeat_bypass = {
 									type = 'toggle',
 									order = 4,
+									disabled = function()
+										return not TF3.db.profile.whitelist_enable
+									end,
 									width = "double",
 									name = L["RPTBYPASS"],
 									desc = L["RPTBYPASSD"],
@@ -618,6 +617,9 @@ options = {
 								whitelist_blacklist_bypass = {
 									type = 'toggle',
 									order = 5,
+									disabled = function()
+										return not TF3.db.profile.whitelist_enable
+									end,
 									width = "double",
 									name = L["BLBYPASS"],
 									desc = L["BLBYPASSD"],
@@ -780,7 +782,7 @@ options = {
 									get = function(info) return TF3.db.profile.repeat_recycle_time end,
 									set = function(info, value)
 										TF3.db.profile.repeat_recycle_time = value
-										TF3:ScheduleRepeatingTimer(TF3:RecycleTables(), tonumber(TF3.db.profile.repeat_recycle_time), repeatdata)
+										TF3:ScheduleRepeatingTimer("RecycleTables", tonumber(TF3.db.profile.repeat_recycle_time), repeatdata)
 									end,
 								},
 								repeat_recycle_size = {
@@ -801,7 +803,7 @@ options = {
 									disabled = true,
 									order = 3,
 									name = L["RPTTS"],
-									get = function() return format("%d",getnHash(repeatdata)) end,
+									get = function() return format("%d",TF3:getnHash(repeatdata)) end,
 								},
 								blank_space1 = {
 									type = 'description',
