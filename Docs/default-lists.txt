@@ -13,7 +13,8 @@ TRADE = {
   FILTER7 = "looking for work",
   FILTER8 = "lockpick",
   FILTER9 = "[sS][eE][lL][lL][iI][nN][gG]",
-}<</code>>
+}
+<</code>>
 
 ##Black List##:
 <<code php>>
@@ -27,7 +28,8 @@ BASE = {
   FILTER7 = "[lL][fF] [dD][pP][sS]",
   FILTER8 = "[lL][fF] [tT][aA][nN][kK]",
   FILTER9 = "[lL][fF] [hH][eE][aA][lL][eE][rR]",
-}<</code>>
+}
+<</code>>
 
 Note: Adding a set, e.g. [xXyY], will attempt to find a match for any character given in a set. Example: lf[wWeEmM] will match for lfw, lfe and lfm.
   e.g. http://www.wowwiki.com/Pattern_matching

@@ -13,7 +13,8 @@ TRADE = {
   FILTER7 = "looking for work",
   FILTER8 = "lockpick",
   FILTER9 = "[sS][eE][lL][lL][iI][nN][gG]",
-}<</code>>
+}
+<</code>>
 
 ##Base Channel Filters##:
 <<code php>>
@@ -27,7 +28,8 @@ BASE = {
   FILTER7 = "[lL][fF] [dD][pP][sS]",
   FILTER8 = "[lL][fF] [tT][aA][nN][kK]",
   FILTER9 = "[lL][fF] [hH][eE][aA][lL][eE][rR]",
-}<</code>>
+}
+<</code>>
 
 ##Battleground Channel Filters##:
 <<code php>>
