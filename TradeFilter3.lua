@@ -65,10 +65,10 @@ local rptdone
 --[[  Globals  ]]--
 repeatdata = {}
 
-local PROJECT_VERSION = "@project-version@"
-local PROJECT_REVISION = 000 + tonumber(("$Revision: @project-revision@ $"):match("%d+"))
-TF3.date = sub("$Date: @project-date-iso@ $", 8, 17)
-TF3.version = gsub(PROJECT_VERSION, "-release", "")
+local MAJOR_VERSION = "@project-version@"
+local PATCH_VERSION = "@project-revision@"
+TF3.version = MAJOR_VERSION .. " r" .. PATCH_VERSION
+TF3.date = "@file-date-iso@"
 
 --[[ Database Defaults ]]--
 defaults = {

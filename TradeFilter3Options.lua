@@ -28,7 +28,7 @@ options = {
 			args = {
 				mainHeader = {
 					type = "description",
-					name = "  " .. L["NJAOF"] .. "\n  Version " .. TF3.version .. "\n  " .. TF3.date .. "\n",
+					name = "  " .. L["NJAOF"] .. "\n  Version " .. TF3.version .. "\n  " .. string.sub(TF3.date,6,7) .. "-" .. string.sub(TF3.date,9,10) .. "-" .. string.sub(TF3.date,1,4),
 					order = 1,
 					image = "Interface\\Icons\\Ability_Warrior_RallyingCry",
 					imageWidth = 32, imageHeight = 32,
