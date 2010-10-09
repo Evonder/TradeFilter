@@ -67,7 +67,11 @@ repeatdata = {}
 
 local MAJOR_VERSION = "@project-version@"
 local PATCH_VERSION = "@project-revision@"
-TF3.version = MAJOR_VERSION .. " r" .. PATCH_VERSION
+if (find(MAJOR_VERSION, "release" or "beta")) then
+	TF3.version = MAJOR_VERSION
+else
+	TF3.version = PATCH_VERSION .. " DEV"
+end
 TF3.date = "@file-date-iso@"
 
 --[[ Database Defaults ]]--
