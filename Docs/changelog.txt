@@ -1,4 +1,17 @@
 == ChangeLog
+*r216
+**++TOC to 40000++\\
+**++Add current party members to exempt list for say/yell++\\
+**++Temporary Current Party Members output in options GUI++\\
+**++Wipe party table after leaving group++\\
+**++Version/Revision recognition++\\
+*r211
+**++Switch to WowAce LibDataBroker-1.1++\\
+**++Small configuration GUI update++\\
+*r209
+**++Overhead reduction++\\
+**++Docs update++\\
+**++4.0.1 compatibility++\\
 *r204
 **++Limit function calls if CHAT_MSG event conditions are not met++\\
 **++Fix repeat detection... for good++\\

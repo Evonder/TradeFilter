@@ -1,6 +1,6 @@
 --[[
 File Author: @file-author@
-File Revision: @file-revision@
+File Revision: @file-abbreviated-hash@
 File Date: @file-date-iso@
 ]]--
 
@@ -14,6 +14,7 @@ local pairs = pairs
 local format = string.format
 local insert = table.insert
 local sort = table.sort
+local sub = string.sub
 
 --[[ Options Table ]]--
 options = {
@@ -28,7 +29,7 @@ options = {
 			args = {
 				mainHeader = {
 					type = "description",
-					name = "  " .. L["NJAOF"] .. "\n  Version " .. TF3.version .. "\n  " .. string.sub(TF3.date,6,7) .. "-" .. string.sub(TF3.date,9,10) .. "-" .. string.sub(TF3.date,1,4),
+					name = "  " .. L["NJAOF"] .. "\n  " .. TF3.version .. "\n  " .. sub(TF3.date,6,7) .. "-" .. sub(TF3.date,9,10) .. "-" .. sub(TF3.date,1,4),
 					order = 1,
 					image = "Interface\\Icons\\Ability_Warrior_RallyingCry",
 					imageWidth = 32, imageHeight = 32,
@@ -782,7 +783,7 @@ options = {
 									get = function(info) return TF3.db.profile.repeat_recycle_time end,
 									set = function(info, value)
 										TF3.db.profile.repeat_recycle_time = value
-										TF3:ScheduleRepeatingTimer("RecycleTables", tonumber(TF3.db.profile.repeat_recycle_time), repeatdata)
+										TF3:ScheduleRepeatingTimer("RecycleTables", tonumber(TF3.db.profile.repeat_recycle_time), TF3.repeatdata)
 									end,
 								},
 								repeat_recycle_size = {
@@ -803,7 +804,7 @@ options = {
 									disabled = true,
 									order = 3,
 									name = L["RPTTS"],
-									get = function() return format("%d",TF3:getnHash(repeatdata)) end,
+									get = function() return format("%d",TF3:GetNumElements(TF3.repeatdata)) end,
 								},
 								blank_space1 = {
 									type = 'description',
@@ -823,7 +824,7 @@ options = {
 									order = 6,
 									name = L["RPTTT"],
 									desc = L["RPTTTD"],
-									func = function() TF3:RecycleTables(repeatdata) end,
+									func = function() TF3:RecycleTables(TF3.repeatdata) end,
 								},
 								repeats_table_content = {
 									type = 'description',
@@ -832,7 +833,7 @@ options = {
 									order = 7,
 									name = function()
 										local ret = ""
-										for k,v in pairs(repeatdata) do
+										for k,v in pairs(TF3.repeatdata) do
 											if ret == "" then
 												ret = k
 											else
@@ -845,7 +846,7 @@ options = {
 								blank_space2 = {
 									type = 'description',
 									order = 8,
-									name = "",
+									name = "\n",
 								},
 							},
 						},
@@ -926,6 +927,72 @@ options = {
 							desc = L["FSELFD"],
 							get = function() return TF3.db.profile.filterSELF end,
 							set = function() TF3.db.profile.filterSELF = not TF3.db.profile.filterSELF end,
+						},
+					},
+				},
+				tableGroup = {
+					type = "group",
+					handler = TF3,
+					order = 6,
+					disabled = function()
+						return not TF3.db.profile.turnOn
+					end,
+					name = "Exempt List",
+					desc = "Current Exempt List",
+					args = {
+						optionsHeader7 = {
+							type = 'header',
+							order = 1,
+							name = "Exempt Party Members",
+						},
+						currentPartyMembers_table_content = {
+							type = 'description',
+							fontSize = "medium",
+							disabled = true,
+							order = 2,
+							name = function()
+								local ret = ""
+								for k,v in pairs(TF3.currentPartyMembers) do
+									if ret == "" then
+										ret = v
+									else
+										ret = ret .. "\n" .. v
+									end
+								end
+								return ret
+							end,
+						},
+						blank_space3 = {
+							type = 'description',
+							order = 3,
+							name = "\n",
+						},
+						optionsHeader8 = {
+							type = 'header',
+							order = 4,
+							name = "Exempt Friend List",
+						},
+						currentFriends_table_content = {
+							type = 'description',
+							fontSize = "medium",
+							disabled = true,
+							order = 5,
+							name = function()
+								local ret = ""
+								for k,v in pairs(TF3.db.profile.friendslist) do
+									if ret == "" then
+										ret = v
+									else
+										ret = ret .. "\n" .. v
+									end
+								end
+								return ret
+							end,
+						},
+						blank_space4 = {
+							type = 'description',
+							order = 6,
+							name = "\n",
 						},
 					},
 				},

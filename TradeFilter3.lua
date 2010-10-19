@@ -3,7 +3,7 @@ TradeFilter3
 		Filter that shit!
 
 File Author: @file-author@
-File Revision: @file-revision@
+File Revision: @file-abbreviated-hash@
 File Date: @file-date-iso@
 
 * Copyright (c) 2008, Evonder
@@ -62,15 +62,14 @@ local rptmsgID
 local lastuserID
 local rptdone
 
---[[  Globals  ]]--
-repeatdata = {}
+TF3.repeatdata = {}
+TF3.currentPartyMembers = {}
 
 local MAJOR_VERSION = "@project-version@"
-local PATCH_VERSION = "@project-revision@"
 if (find(MAJOR_VERSION, "release" or "beta")) then
 	TF3.version = MAJOR_VERSION
 else
-	TF3.version = "r" .. PATCH_VERSION .. " DEV"
+	TF3.version = MAJOR_VERSION .. " DEV"
 end
 TF3.date = "@file-date-iso@"
 
@@ -191,9 +190,10 @@ end
 
 function TF3:IsLoggedIn()
 	self:RegisterEvent("FRIENDLIST_UPDATE", "GetFriends")
+	self:RegisterEvent("PARTY_MEMBERS_CHANGED", "GetParty")
 	friends.RegisterCallback(self, "Added")
 	friends.RegisterCallback(self, "Removed")
-	self:ScheduleRepeatingTimer("RecycleTables", tonumber(TF3.db.profile.repeat_recycle_time), repeatdata)
+	self:ScheduleRepeatingTimer("RecycleTables", tonumber(TF3.db.profile.repeat_recycle_time), TF3.repeatdata)
 	self:UnregisterEvent("PLAYER_LOGIN")
 	TF3:DuelFilter()
 	
@@ -233,21 +233,14 @@ function TF3:CopyTable(t)
 end
 
 function TF3:GetNumElements(t)
- local count = 0
- for _ in pairs(t) do
-  count = count + 1
- end
- return count
-end
-
-function TF3:getnHash(t)
-   local count = 0;
-   if not t then return 0; end
-   if (type(t)) ~= "table" then return 0; end
-   for i,_ in pairs(t) do
-      count = count + 1;
-   end
-   return count;
+	local count = 0
+	if not (t or type(t) ~= "table") then
+		return 0
+	end
+	for _ in pairs(t) do
+		count = count + 1
+	end
+	return count
 end
 
 function TF3:RecycleTables(t, state)
@@ -284,6 +277,65 @@ function TF3:GetColoredName(userID, cName)
 		end
 	end
 	return userID;
+end
+
+--[[ Party Functions ]]--
+function TF3:GetParty()
+	local currentParty = TF3.currentPartyMembers
+	local numPartyMembers = GetNumPartyMembers()
+	local numRaidMembers = GetNumRaidMembers()
+	local function partytype()
+		if(numRaidMembers ~= 0) then
+			if (TF3.db.profile.debug) then
+				TF3:FindFrame(debugFrame, "|cFFFF0000".."inRaid".."|r")
+			end
+			return 1
+		elseif(numPartyMembers ~= 0) then
+			if (TF3.db.profile.debug) then
+				TF3:FindFrame(debugFrame, "|cFFFF0000".."inParty".."|r")
+			end
+			return 2
+		end
+	end
+	if (partytype() == 1) then
+		if (#currentParty ~= numPartyMembers) then
+			TF3:WipeTable(TF3.currentPartyMembers)
+			for i=1, numRaidMembers do
+				local partymember = UnitName("raid"..i)
+				if partymember then
+					TF3.currentPartyMembers[i] = partymember
+					if (TF3.db.profile.debug) then
+						TF3:FindFrame(debugFrame, "|cFFFFFF80" .. partymember .. " " .. L["PADD"] .. "|r")
+					end
+				end
+			end		
+		end
+	elseif (partytype() == 2) then
+		if (#currentParty ~= numPartyMembers) then
+			TF3:WipeTable(TF3.currentPartyMembers)
+			for i=1, numPartyMembers do
+				local partymember = UnitName("party"..i)
+				if partymember then
+					TF3.currentPartyMembers[i] = partymember
+					if (TF3.db.profile.debug) then
+						TF3:FindFrame(debugFrame, "|cFFFFFF80" .. partymember .. " " .. L["PADD"] .. "|r")
+					end
+				end
+			end		
+		end
+	else
+		TF3:WipeTable(TF3.currentPartyMembers)
+	end
+end
+
+function TF3:IsParty(userID)
+	local currentParty = TF3.currentPartyMembers
+	for _,partymember in ipairs(currentParty) do
+		if find(userID,partymember) then
+			return true
+		end
+	end
+	return false
 end
 
 --[[ Friends Functions ]]--
@@ -435,15 +487,15 @@ function TF3:FindRepeat(msg, userID, msgID, coloredName, arg)
 	elseif (TF3.db.profile.repeat_enable == false) then
 		return false
 	else
-		if (msgID ~= repeatdata[userID].lastmsgID and msg == repeatdata[userID].lastmsg and gtime - repeatdata[userID].lastIndex < tonumber(TF3.db.profile.time_repeats)) then
-			repeatdata[userID].repeats = repeatdata[userID].repeats + 1
-			if (repeatdata[userID].repeats >= tonumber(TF3.db.profile.num_repeats)) then
+		if (msgID ~= TF3.repeatdata[userID].lastmsgID and msg == TF3.repeatdata[userID].lastmsg and gtime - TF3.repeatdata[userID].lastIndex < tonumber(TF3.db.profile.time_repeats)) then
+			TF3.repeatdata[userID].repeats = TF3.repeatdata[userID].repeats + 1
+			if (TF3.repeatdata[userID].repeats >= tonumber(TF3.db.profile.num_repeats)) then
 				if (msg ~= rptmsg or msg == rptmsg and msgID ~= rptmsgID) then
 					if (TF3.db.profile.debug) then
 						if rptmsg ~= nil then
 							TF3:FindFrame(repeatFrame, "|cFFFF8C00[" .. L["#RPT"] .. "]|r |cFFD9D9D9[" .. msgID .. "(" .. rptmsgID .. ")" .. "]|r |Hplayer:" .. userID .. ":" .. msgID .. "|h[" .. coloredName .. "]|h |cFFC08080" .. msg .. "(" .. rptmsg .. ")" .. "|r")
 						else
-							TF3:FindFrame(repeatFrame, "|cFFFF8C00[" .. L["#RPT"] .. "]|r |cFFD9D9D9[" .. msgID .. "(" .. repeatdata[userID].lastmsgID .. ")" .. "]|r |Hplayer:" .. userID .. ":" .. msgID .. "|h[" .. coloredName .. "]|h |cFFC08080" .. msg .. "(" .. repeatdata[userID].lastmsg .. ")" .. "|r")
+							TF3:FindFrame(repeatFrame, "|cFFFF8C00[" .. L["#RPT"] .. "]|r |cFFD9D9D9[" .. msgID .. "(" .. TF3.repeatdata[userID].lastmsgID .. ")" .. "]|r |Hplayer:" .. userID .. ":" .. msgID .. "|h[" .. coloredName .. "]|h |cFFC08080" .. msg .. "(" .. TF3.repeatdata[userID].lastmsg .. ")" .. "|r")
 						end
 					end
 					TF3.db.profile.repeats_blocked = TF3.db.profile.repeats_blocked + 1
@@ -457,12 +509,12 @@ function TF3:FindRepeat(msg, userID, msgID, coloredName, arg)
 				rptdone = 1 + msgID
 				return true
 			end
-		elseif (msg ~= repeatdata[userID].lastmsg) then
-			repeatdata[userID].repeats = 1
+		elseif (msg ~= TF3.repeatdata[userID].lastmsg) then
+			TF3.repeatdata[userID].repeats = 1
 		end
-		repeatdata[userID].lastmsg = msg
-		repeatdata[userID].lastmsgID = msgID
-		repeatdata[userID].lastIndex  = gtime
+		TF3.repeatdata[userID].lastmsg = msg
+		TF3.repeatdata[userID].lastmsgID = msgID
+		TF3.repeatdata[userID].lastIndex  = gtime
 		return false
 	end
 end
@@ -512,12 +564,12 @@ local function PreFilterFunc_Addon(self, event, ...)
 	local msgID = arg11 or select(11, ...)
 	local cName = arg12 or select(12, ...)
 	local coloredName = TF3:GetColoredName(userID, cName)
-	if (repeatdata[userID] ~= type(table) and TF3.db.profile.repeat_enable) then
-		repeatdata[userID] = {}
-		repeatdata[userID].lastmsg = msg
-		repeatdata[userID].lastmsgID = msgID
-		repeatdata[userID].lastIndex = 1
-		repeatdata[userID].repeats = 1
+	if (TF3.repeatdata[userID] ~= type(table) and TF3.db.profile.repeat_enable) then
+		TF3.repeatdata[userID] = {}
+		TF3.repeatdata[userID].lastmsg = msg
+		TF3.repeatdata[userID].lastmsgID = msgID
+		TF3.repeatdata[userID].lastIndex = 1
+		TF3.repeatdata[userID].repeats = 1
 		rptdone = msgID
 	end
 	if (TF3.db.profile.filterGAC) then
@@ -553,17 +605,17 @@ local function PreFilterFunc_Say(self, event, ...)
 	local msgID = arg11 or select(11, ...)
 	local cName = arg12 or select(12, ...)
 	local coloredName = TF3:GetColoredName(userID, cName)
-	if (repeatdata[userID] ~= type(table) and TF3.db.profile.repeat_enable) then
-		repeatdata[userID] = {}
-		repeatdata[userID].lastmsg = msg
-		repeatdata[userID].lastmsgID = msgID
-		repeatdata[userID].lastIndex = 1
-		repeatdata[userID].repeats = 1
+	if (TF3.repeatdata[userID] ~= type(table) and TF3.db.profile.repeat_enable) then
+		TF3.repeatdata[userID] = {}
+		TF3.repeatdata[userID].lastmsg = msg
+		TF3.repeatdata[userID].lastmsgID = msgID
+		TF3.repeatdata[userID].lastIndex = 1
+		TF3.repeatdata[userID].repeats = 1
 		rptdone = msgID
 	end
 	if (TF3.db.profile.filterSAY) then
 		if (event == "CHAT_MSG_SAY") then
-			if (TF3:IsFriend(userID) == false) then
+			if (TF3:IsFriend(userID) == false and TF3:IsParty(userID) == false) then
 				if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false or TF3:WhiteList(msg, userID, msgID, coloredName) == true) then
 					filtered = false
 				elseif (TF3:BlackList(msg, userID, msgID, coloredName) == true) then
@@ -593,17 +645,17 @@ local function PreFilterFunc_Yell(self, event, ...)
 	local msgID = arg11 or select(11, ...)
 	local cName = arg12 or select(12, ...)
 	local coloredName = TF3:GetColoredName(userID, cName)
-	if (repeatdata[userID] ~= type(table) and TF3.db.profile.repeat_enable) then
-		repeatdata[userID] = {}
-		repeatdata[userID].lastmsg = msg
-		repeatdata[userID].lastmsgID = msgID
-		repeatdata[userID].lastIndex = 1
-		repeatdata[userID].repeats = 1
+	if (TF3.repeatdata[userID] ~= type(table) and TF3.db.profile.repeat_enable) then
+		TF3.repeatdata[userID] = {}
+		TF3.repeatdata[userID].lastmsg = msg
+		TF3.repeatdata[userID].lastmsgID = msgID
+		TF3.repeatdata[userID].lastIndex = 1
+		TF3.repeatdata[userID].repeats = 1
 		rptdone = msgID
 	end
 	if (TF3.db.profile.filterYELL) then
 		if (event == "CHAT_MSG_YELL") then
-			if (TF3:IsFriend(userID) == false) then
+			if (TF3:IsFriend(userID) == false and TF3:IsParty(userID) == false) then
 				if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false or TF3:WhiteList(msg, userID, msgID, coloredName) == true) then
 					filtered = false
 				elseif (TF3:BlackList(msg, userID, msgID, coloredName) == true) then
@@ -633,12 +685,12 @@ local function PreFilterFunc_BG(self, event, ...)
 	local msgID = arg11 or select(11, ...)
 	local cName = arg12 or select(12, ...)
 	local coloredName = TF3:GetColoredName(userID, cName)
-	if (repeatdata[userID] ~= type(table) and TF3.db.profile.repeat_enable) then
-		repeatdata[userID] = {}
-		repeatdata[userID].lastmsg = msg
-		repeatdata[userID].lastmsgID = msgID
-		repeatdata[userID].lastIndex = 1
-		repeatdata[userID].repeats = 1
+	if (TF3.repeatdata[userID] ~= type(table) and TF3.db.profile.repeat_enable) then
+		TF3.repeatdata[userID] = {}
+		TF3.repeatdata[userID].lastmsg = msg
+		TF3.repeatdata[userID].lastmsgID = msgID
+		TF3.repeatdata[userID].lastIndex = 1
+		TF3.repeatdata[userID].repeats = 1
 		rptdone = msgID
 	end
 	if (TF3.db.profile.filterBG) then
@@ -676,12 +728,12 @@ local function PreFilterFunc(self, event, ...)
 	local msgID = arg11 or select(11, ...)
 	local cName = arg12 or select(12, ...)
 	local coloredName = TF3:GetColoredName(userID, cName)
-	if (repeatdata[userID] ~= type(table) and TF3.db.profile.repeat_enable) then
-		repeatdata[userID] = {}
-		repeatdata[userID].lastmsg = msg
-		repeatdata[userID].lastmsgID = msgID
-		repeatdata[userID].lastIndex = 1
-		repeatdata[userID].repeats = 1
+	if (TF3.repeatdata[userID] ~= type(table) and TF3.db.profile.repeat_enable) then
+		TF3.repeatdata[userID] = {}
+		TF3.repeatdata[userID].lastmsg = msg
+		TF3.repeatdata[userID].lastmsgID = msgID
+		TF3.repeatdata[userID].lastIndex = 1
+		TF3.repeatdata[userID].repeats = 1
 		rptdone = msgID
 	end
 	--[[ Check for Trade Channel and User setting ]]--

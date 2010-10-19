@@ -1,7 +1,7 @@
-## Interface: 30300
-## X-Compatible-With: 40000 
+## Interface: 40000
+## X-Compatible-With: 30300 
 #@alpha@
-## Title: @localization(locale="enUS", key="Title", namespace="ToC")@ SVN: @project-revision@
+## Title: @localization(locale="enUS", key="Title", namespace="ToC")@ SVN: @project-version@
 #@end-alpha@
 ## Title: @localization(locale="enUS", key="Title", namespace="ToC")@
 ## Title-deDE: @localization(locale="deDE", key="Title", namespace="TOC")@
@@ -9,7 +9,7 @@
 ## Title-zhTW: @localization(locale="zhTW", key="Title", namespace="TOC")@
 ## Title-frFR: @localization(locale="frFR", key="Title", namespace="TOC")@
 #@alpha@
-## Notes: @localization(locale="enUS", key="Notes", namespace="TOC")@ SVN: @project-revision@
+## Notes: @localization(locale="enUS", key="Notes", namespace="TOC")@ SVN: @project-version@
 #@end-alpha@
 ## Notes: @localization(locale="enUS", key="Notes", namespace="TOC")@
 ## Notes-deDE: @localization(locale="deDE", key="Notes", namespace="TOC")@
@@ -29,7 +29,6 @@
 #@end-no-lib-strip@ 
 ## X-License: BSD
 ## Version: @project-version@
-## Revision: @project-revision@
 ## X-WoWI-ID: 13784
 ## SavedVariables: TradeFilter3DB
 
