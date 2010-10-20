@@ -285,19 +285,7 @@ function TF3:GetParty()
 	local numPartyMembers = GetNumPartyMembers()
 	local numRaidMembers = GetNumRaidMembers()
 	local function partytype()
-		if(numRaidMembers ~= 0) then
-			if (TF3.db.profile.debug) then
-				TF3:FindFrame(debugFrame, "|cFFFF0000".."inRaid".."|r")
-			end
-			return 1
-		elseif(numPartyMembers ~= 0) then
-			if (TF3.db.profile.debug) then
-				TF3:FindFrame(debugFrame, "|cFFFF0000".."inParty".."|r")
-			end
-			return 2
-		end
-	end
-	if (partytype() == 1) then
+	if (numRaidMembers ~= 0) then
 		if (#currentParty ~= numPartyMembers) then
 			TF3:WipeTable(TF3.currentPartyMembers)
 			for i=1, numRaidMembers do
@@ -310,7 +298,7 @@ function TF3:GetParty()
 				end
 			end		
 		end
-	elseif (partytype() == 2) then
+	elseif (numPartyMembers ~= 0) then
 		if (#currentParty ~= numPartyMembers) then
 			TF3:WipeTable(TF3.currentPartyMembers)
 			for i=1, numPartyMembers do
