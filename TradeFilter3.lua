@@ -284,33 +284,28 @@ function TF3:GetParty()
 	local currentParty = TF3.currentPartyMembers
 	local numPartyMembers = GetNumPartyMembers()
 	local numRaidMembers = GetNumRaidMembers()
-	local function partytype()
-	if (numRaidMembers ~= 0) then
-		if (#currentParty ~= numPartyMembers) then
-			TF3:WipeTable(TF3.currentPartyMembers)
-			for i=1, numRaidMembers do
-				local partymember = UnitName("raid"..i)
-				if partymember then
-					TF3.currentPartyMembers[i] = partymember
-					if (TF3.db.profile.debug) then
-						TF3:FindFrame(debugFrame, "|cFFFFFF80" .. partymember .. " " .. L["PADD"] .. "|r")
-					end
+	if (numRaidMembers ~= 0 and #currentParty ~= numPartyMembers) then
+		TF3:WipeTable(TF3.currentPartyMembers)
+		for i=1, numRaidMembers do
+			local partymember = UnitName("raid"..i)
+			if partymember then
+				TF3.currentPartyMembers[i] = partymember
+				if (TF3.db.profile.debug) then
+					TF3:FindFrame(debugFrame, "|cFFFFFF80" .. partymember .. " " .. L["PADD"] .. "|r")
 				end
-			end		
-		end
-	elseif (numPartyMembers ~= 0) then
-		if (#currentParty ~= numPartyMembers) then
-			TF3:WipeTable(TF3.currentPartyMembers)
-			for i=1, numPartyMembers do
-				local partymember = UnitName("party"..i)
-				if partymember then
-					TF3.currentPartyMembers[i] = partymember
-					if (TF3.db.profile.debug) then
-						TF3:FindFrame(debugFrame, "|cFFFFFF80" .. partymember .. " " .. L["PADD"] .. "|r")
-					end
+			end
+		end		
+	elseif (numPartyMembers ~= 0 and #currentParty ~= numPartyMembers) then
+		TF3:WipeTable(TF3.currentPartyMembers)
+		for i=1, numPartyMembers do
+			local partymember = UnitName("party"..i)
+			if partymember then
+				TF3.currentPartyMembers[i] = partymember
+				if (TF3.db.profile.debug) then
+					TF3:FindFrame(debugFrame, "|cFFFFFF80" .. partymember .. " " .. L["PADD"] .. "|r")
 				end
-			end		
-		end
+			end
+		end		
 	else
 		TF3:WipeTable(TF3.currentPartyMembers)
 	end
