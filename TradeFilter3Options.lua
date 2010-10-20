@@ -937,13 +937,13 @@ options = {
 					disabled = function()
 						return not TF3.db.profile.turnOn
 					end,
-					name = "Exempt List",
-					desc = "Current Exempt List",
+					name = L["Exempt List"],
+					desc = L["Current Exempt List"],
 					args = {
 						optionsHeader7 = {
 							type = 'header',
 							order = 1,
-							name = "Exempt Party Members",
+							name = L["Exempt Party Members"],
 						},
 						currentPartyMembers_table_content = {
 							type = 'description',
@@ -970,7 +970,7 @@ options = {
 						optionsHeader8 = {
 							type = 'header',
 							order = 4,
-							name = "Exempt Friend List",
+							name = L["Exempt Friend List"],
 						},
 						currentFriends_table_content = {
 							type = 'description',
