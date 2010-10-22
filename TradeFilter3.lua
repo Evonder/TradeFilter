@@ -284,7 +284,7 @@ function TF3:GetParty()
 	local currentParty = TF3.currentPartyMembers
 	local numPartyMembers = GetNumPartyMembers()
 	local numRaidMembers = GetNumRaidMembers()
-	if (numRaidMembers ~= 0 and #currentParty ~= numPartyMembers) then
+	if (numRaidMembers >= 0 and #currentParty ~= numRaidMembers) then
 		TF3:WipeTable(TF3.currentPartyMembers)
 		for i=1, numRaidMembers do
 			local partymember = UnitName("raid"..i)
@@ -295,7 +295,7 @@ function TF3:GetParty()
 				end
 			end
 		end		
-	elseif (numPartyMembers ~= 0 and #currentParty ~= numPartyMembers) then
+	elseif (numPartyMembers >= 0 and #currentParty ~= numPartyMembers) then
 		TF3:WipeTable(TF3.currentPartyMembers)
 		for i=1, numPartyMembers do
 			local partymember = UnitName("party"..i)
