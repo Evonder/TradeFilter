@@ -1,5 +1,4 @@
 ## Interface: 40000
-## X-Compatible-With: 30300 
 #@alpha@
 ## Title: @localization(locale="enUS", key="Title", namespace="ToC")@ DEV: @project-version@
 #@end-alpha@
