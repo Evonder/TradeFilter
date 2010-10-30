@@ -66,7 +66,7 @@ TF3.repeatdata = {}
 TF3.currentPartyMembers = {}
 
 local MAJOR_VERSION = "@project-version@"
-if (find(MAJOR_VERSION, "release" or "beta")) then
+if (select(3,find(MAJOR_VERSION, "(%a+)")) ~= "alpha") then
 	TF3.version = MAJOR_VERSION
 else
 	TF3.version = MAJOR_VERSION .. " DEV"
