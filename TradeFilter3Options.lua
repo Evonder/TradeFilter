@@ -235,8 +235,7 @@ options = {
 							disabled = function()
 								return not TF3.db.profile.turnOn
 							end,
-							name = "TRADE Filters",
-							desc = "TRADE Filters",
+							name = L["TRADE Filters"],
 							args = {
 								optionsHeader1 = {
 									type	= "header",
@@ -315,8 +314,7 @@ options = {
 							disabled = function()
 								return not TF3.db.profile.turnOn
 							end,
-							name = "BASE Filters",
-							desc = "BASE Filters",
+							name = L["BASE Filters"],
 							args = {
 								optionsHeader1 = {
 									type	= "header",
@@ -395,8 +393,7 @@ options = {
 							disabled = function()
 								return not TF3.db.profile.turnOn
 							end,
-							name = "BG Filters",
-							desc = "BG Filters",
+							name = L["BG Filters"],
 							args = {
 								optionsHeader1 = {
 									type	= "header",
@@ -930,9 +927,10 @@ options = {
 						},
 					},
 				},
-				tableGroup = {
+				exemptGroupMain = {
 					type = "group",
 					handler = TF3,
+					childGroups = "tab",
 					order = 6,
 					disabled = function()
 						return not TF3.db.profile.turnOn
@@ -940,59 +938,79 @@ options = {
 					name = L["Exempt List"],
 					desc = L["Current Exempt List"],
 					args = {
-						optionsHeader7 = {
-							type = 'header',
+						enable_exempt_party = {
+							type = 'toggle',
 							order = 1,
-							name = L["Exempt Party Members"],
+							disabled = false,
+							name = "Party Members",
+							desc = "If enabled party members will be exempt from filtration.",
+							get = function() return TF3.db.profile.exmptparty end,
+							set = function() TF3.db.profile.exmptparty = not TF3.db.profile.exmptparty end,
 						},
-						currentPartyMembers_table_content = {
-							type = 'description',
-							fontSize = "medium",
-							disabled = true,
+						enable_exempt_friends = {
+							type = 'toggle',
 							order = 2,
-							name = function()
-								local ret = ""
-								for k,v in pairs(TF3.currentPartyMembers) do
-									if ret == "" then
-										ret = v
-									else
-										ret = ret .. "\n" .. v
-									end
-								end
-								return ret
-							end,
+							disabled = false,
+							name = "Friends",
+							desc = "If enabled your friends list will be exempt from filtration.",
+							get = function() return TF3.db.profile.exmptfriendslist end,
+							set = function() TF3.db.profile.exmptfriendslist = not TF3.db.profile.exmptfriendslist end,
 						},
-						blank_space3 = {
-							type = 'description',
+						exemptGroupParty = {
+							type = "group",
+							handler = TF3,
 							order = 3,
-							name = "\n",
-						},
-						optionsHeader8 = {
-							type = 'header',
-							order = 4,
-							name = L["Exempt Friend List"],
-						},
-						currentFriends_table_content = {
-							type = 'description',
-							fontSize = "medium",
-							disabled = true,
-							order = 5,
-							name = function()
-								local ret = ""
-								for k,v in pairs(TF3.db.profile.friendslist) do
-									if ret == "" then
-										ret = v
-									else
-										ret = ret .. "\n" .. v
-									end
-								end
-								return ret
+							disabled = function()
+								return not TF3.db.profile.turnOn
 							end,
+							name = L["Exempt Party Members"],
+							args = {
+								currentPartyMembers_table_content = {
+									type = 'description',
+									fontSize = "medium",
+									disabled = true,
+									order = 1,
+									name = function()
+										local ret = ""
+										for k,v in pairs(TF3.currentPartyMembers) do
+											if ret == "" then
+												ret = v
+											else
+												ret = ret .. "\n" .. v
+											end
+										end
+										return ret
+									end,
+								},
+							},
 						},
-						blank_space4 = {
-							type = 'description',
-							order = 6,
-							name = "\n",
+						exemptGroupFriends = {
+							type = "group",
+							handler = TF3,
+							order = 4,
+							disabled = function()
+								return not TF3.db.profile.turnOn
+							end,
+							name = L["Exempt Friend List"],
+							args = {
+								currentFriends_table_content = {
+									type = 'description',
+									fontSize = "medium",
+									disabled = true,
+									order = 1,
+									name = function()
+										local ret = ""
+										for k,v in pairs(TF3.db.profile.friendslist) do
+											if ret == "" then
+												ret = v
+											else
+												ret = ret .. "\n" .. v
+											end
+										end
+										return ret
+									end,
+								},
+							},
 						},
 					},
 				},

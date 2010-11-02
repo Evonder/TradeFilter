@@ -91,6 +91,8 @@ defaults = {
 		editfilterTRADE_enable = false,
 		editfilterBASE_enable = false,
 		editfilterBG_enable = false,
+		exmptfriendslist = true,
+		exmptparty = true,
 		ebl = false,
 		ewl = false,
 		blacklist_enable = true,
@@ -124,7 +126,7 @@ function TF3:OnInitialize()
 	local AC = LibStub("AceConsole-3.0")
 	AC:RegisterChatCommand("tf", function() TF3:OpenOptions() end)
 	AC:RegisterChatCommand("filter", function() TF3:OpenOptions() end)
-	AC:Print(L.TOC.Title .. " " .. TF3.version .. " " .. L["ENABLED"])
+	AC:Print(L.TOC.Title .. ": " .. TF3.version .. " " .. L["ENABLED"])
 
 	local ACR = LibStub("AceConfigRegistry-3.0")
 	ACR:RegisterOptionsTable("TradeFilter3", options)
@@ -271,12 +273,12 @@ function TF3:GetColoredName(userID, cName)
 		if (englishClass) then
 			local classColorTable = RAID_CLASS_COLORS[englishClass]
 			if (not classColorTable) then
-				return userID;
+				return userID
 			end
 				return string.format("\124cff%.2x%.2x%.2x", classColorTable.r*255, classColorTable.g*255, classColorTable.b*255)..userID.."\124r"
 		end
 	end
-	return userID;
+	return userID
 end
 
 --[[ Party Functions ]]--
@@ -302,7 +304,7 @@ function TF3:GetParty()
 		for i=1, numPartyMembers do
 			local partymember = UnitName("party"..i)
 			if partymember then
-				currentParty[i] = partymember
+				TF3.currentParty[i] = partymember
 			end
 		end
 		if (TF3.db.profile.debug) then
@@ -319,6 +321,7 @@ function TF3:GetParty()
 end
 
 function TF3:IsParty(userID)
+	if not(TF3.db.profile.exmptparty) then return false end
 	local currentParty = TF3.currentPartyMembers
 	for _,partymember in ipairs(currentParty) do
 		if find(userID,partymember) then
@@ -380,6 +383,7 @@ function TF3:Removed(event, name)
 end
 
 function TF3:IsFriend(userID)
+	if not(TF3.db.profile.exmptfriendslist) then return false end
 	local friends = TF3.db.profile.friendslist
 	for _,name in ipairs(friends) do
 		if find(userID,name) then
@@ -519,9 +523,7 @@ function TF3:FindFrame(toFrame, msg)
 			return
 		end
 	end
-	if (toFrame ~= name) then
-		TF3:CreateFrame(toFrame, msg)
-	end
+	TF3:CreateFrame(toFrame, msg)
 end
 
 function TF3:CreateFrame(newFrame, msg)
