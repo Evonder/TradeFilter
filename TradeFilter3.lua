@@ -273,7 +273,7 @@ function TF3:GetParty()
 			end
 		end		
 		if (TF3.db.profile.debug) then
-			for k,v in pairs(currentParty) do
+			for _,v in pairs(currentParty) do
 				TF3:FindFrame(debugFrame, "|cFFFFFF80" .. v .. " " .. L["PADD"] .. "|r\n")
 			end
 		end
@@ -286,7 +286,7 @@ function TF3:GetParty()
 			end
 		end
 		if (TF3.db.profile.debug) then
-			for k,v in pairs(currentParty) do
+			for _,v in pairs(currentParty) do
 				TF3:FindFrame(debugFrame, "|cFFFFFF80" .. v .. " " .. L["PADD"] .. "|r\n")
 			end
 		end
@@ -386,13 +386,13 @@ end
 
 --[[ BlackList Func ]]--
 --[[ Base blacklist words from BadBoy(Funkydude) ]]--
-function TF3:BlackList(msg, userID, msgID, coloredName, arg)
+function TF3:BlackList(msg, userID, msgID, coloredName)
 	if (TF3.db.profile.blacklist == nil) then
 		TF3.db.profile.blacklist = L.BLACKLIST
 	end
 	local blword = TF3.db.profile.blacklist
 	local msg = lower(msg)
-	if (arg == "whitelist" and TF3.db.profile.wlblbp == true) then
+	if (TF3.db.profile.wlblbp == true) then
 		return false
 	else
 		if (TF3.db.profile.blacklist_enable) then
@@ -404,6 +404,7 @@ function TF3:BlackList(msg, userID, msgID, coloredName, arg)
 							TF3:FindFrame(debugFrame, L["MATCHED"] .. " |cFFFF0000" .. word .. "|r")
 							if not (TF3.db.profile.redirect_blacklist) then
 								lastmsgID = msgID
+								TF3:LDBUpdate("ldbblack")
 							end
 						end
 					end
@@ -412,9 +413,9 @@ function TF3:BlackList(msg, userID, msgID, coloredName, arg)
 							TF3:FindFrame(redirectFrame, "|cFFFF0000[" .. L["bLists"] .. "]|r |Hplayer:" .. userID .. ":" .. msgID .. "|h[" .. coloredName .. "]|h |cFFC08080: " .. msg .. "|r")
 							TF3:FindFrame(redirectFrame, L["MATCHED"] .. " |cFFFF0000" .. word .. "|r")
 							lastmsgID = msgID
+							TF3:LDBUpdate("ldbblack")
 						end
 					end
-					TF3:LDBUpdate("ldbblack")
 					return true
 				end
 			end
@@ -432,7 +433,7 @@ function TF3:WhiteList(msg, userID, msgID, coloredName)
 	local msg = lower(msg)
 	if (TF3.db.profile.whitelist_enable) then
 		for _,word in pairs(wlword) do
-			if (find(msg,lower(word)) and TF3:BlackList(msg, userID, msgID, coloredName, "whitelist") == false) then
+			if (find(msg,lower(word))) then
 				if (TF3.db.profile.debug) then
 					if (msgID ~= lastmsgID) then
 						TF3:FindFrame(debugFrame, "|cFFFFFF80[" .. L["wLists"] .. "]|r |Hplayer:" .. userID .. ":" .. msgID .. "|h[" .. coloredName .. "]|h |cFFC08080: " .. msg .. "|r")
@@ -491,12 +492,16 @@ local function PreFilterFunc_Addon(self, event, ...)
 	local msgID = arg11 or select(11, ...)
 	local cName = arg12 or select(12, ...)
 	local coloredName = TF3:GetColoredName(userID, cName)
+	local blacklisted = TF3:BlackList(msg, userID, msgID, coloredName)
+	local whitelisted = TF3:WhiteList(msg, userID, msgID, coloredName)
 	if (TF3.db.profile.filterGAC) then
 		if (find(prefix,"ET") and distType == "GUILD") then
 			if (TF3:IsFriend(userID) == false) then
-				if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false or TF3:WhiteList(msg, userID, msgID, coloredName) == true) then
+				if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false) then
 					filtered = false
-				elseif (TF3:BlackList(msg, userID, msgID, coloredName) == true) then
+				elseif (whitelisted == true and blacklisted == false) then
+					filtered = false
+				elseif (blacklisted == true) then
 					filtered = true
 				else
 					filtered = TF3:FilterFunc(...)
@@ -518,12 +523,16 @@ local function PreFilterFunc_Say(self, event, ...)
 	local msgID = arg11 or select(11, ...)
 	local cName = arg12 or select(12, ...)
 	local coloredName = TF3:GetColoredName(userID, cName)
+	local blacklisted = TF3:BlackList(msg, userID, msgID, coloredName)
+	local whitelisted = TF3:WhiteList(msg, userID, msgID, coloredName)
 	if (TF3.db.profile.filterSAY) then
 		if (event == "CHAT_MSG_SAY") then
 			if (TF3:IsFriend(userID) == false and TF3:IsParty(userID) == false) then
-				if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false or TF3:WhiteList(msg, userID, msgID, coloredName) == true) then
+				if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false) then
 					filtered = false
-				elseif (TF3:BlackList(msg, userID, msgID, coloredName) == true) then
+				elseif (whitelisted == true and blacklisted == false) then
+					filtered = false
+				elseif (blacklisted == true) then
 					filtered = true
 				else
 					filtered = TF3:FilterFunc("0. " .. L["Say/Yell"], ...)
@@ -544,12 +553,16 @@ local function PreFilterFunc_Yell(self, event, ...)
 	local msgID = arg11 or select(11, ...)
 	local cName = arg12 or select(12, ...)
 	local coloredName = TF3:GetColoredName(userID, cName)
+	local blacklisted = TF3:BlackList(msg, userID, msgID, coloredName)
+	local whitelisted = TF3:WhiteList(msg, userID, msgID, coloredName)
 	if (TF3.db.profile.filterYELL) then
 		if (event == "CHAT_MSG_YELL") then
 			if (TF3:IsFriend(userID) == false and TF3:IsParty(userID) == false) then
-				if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false or TF3:WhiteList(msg, userID, msgID, coloredName) == true) then
+				if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false) then
 					filtered = false
-				elseif (TF3:BlackList(msg, userID, msgID, coloredName) == true) then
+				elseif (whitelisted == true and blacklisted == false) then
+					filtered = false
+				elseif (blacklisted == true) then
 					filtered = true
 				else
 					filtered = TF3:FilterFunc("0. " .. L["Say/Yell"], ...)
@@ -570,12 +583,16 @@ local function PreFilterFunc_BG(self, event, ...)
 	local msgID = arg11 or select(11, ...)
 	local cName = arg12 or select(12, ...)
 	local coloredName = TF3:GetColoredName(userID, cName)
+	local blacklisted = TF3:BlackList(msg, userID, msgID, coloredName)
+	local whitelisted = TF3:WhiteList(msg, userID, msgID, coloredName)
 	if (TF3.db.profile.filterBG) then
 		if (event == "CHAT_MSG_BATTLEGROUND" or event == "CHAT_MSG_BATTLEGROUND_LEADER") then
 			if (TF3:IsFriend(userID) == false) then
-				if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false or TF3:WhiteList(msg, userID, msgID, coloredName) == true) then
+				if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false) then
 					filtered = false
-				elseif (TF3:BlackList(msg, userID, msgID, coloredName) == true) then
+				elseif (whitelisted == true and blacklisted == false) then
+					filtered = false
+				elseif (blacklisted == true) then
 					filtered = true
 				else
 					filtered = TF3:FilterFunc("0. BG", ...)
@@ -599,13 +616,17 @@ local function PreFilterFunc(self, event, ...)
 	local msgID = arg11 or select(11, ...)
 	local cName = arg12 or select(12, ...)
 	local coloredName = TF3:GetColoredName(userID, cName)
+	local blacklisted = TF3:BlackList(msg, userID, msgID, coloredName)
+	local whitelisted = TF3:WhiteList(msg, userID, msgID, coloredName)
 	--[[ Check for Trade Channel and User setting ]]--
 	if (zoneID == 2) then
 		if (TF3.db.profile.filtertrade) then
 			if (TF3:IsFriend(userID) == false) then
-				if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false or TF3:WhiteList(msg, userID, msgID, coloredName) == true) then
+				if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false) then
 					filtered = false
-				elseif (TF3:BlackList(msg, userID, msgID, coloredName) == true) then
+				elseif (whitelisted == true and blacklisted == false) then
+					filtered = false
+				elseif (blacklisted == true) then
 					filtered = true
 				else
 					filtered = TF3:FilterFunc("2. " .. L["Trade"], ...)
@@ -618,9 +639,11 @@ local function PreFilterFunc(self, event, ...)
 	elseif (chanID == 1) then
 		if (TF3.db.profile.filtergeneral) then
 			if (TF3:IsFriend(userID) == false) then
-				if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false or TF3:WhiteList(msg, userID, msgID, coloredName) == true) then
+				if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false) then
 					filtered = false
-				elseif (TF3:BlackList(msg, userID, msgID, coloredName) == true) then
+				elseif (whitelisted == true and blacklisted == false) then
+					filtered = false
+				elseif (blacklisted == true) then
 					filtered = true
 				else
 					filtered = TF3:FilterFunc("1. " .. L["General"], ...)
@@ -633,9 +656,11 @@ local function PreFilterFunc(self, event, ...)
 	elseif (zoneID == 26) then
 		if (TF3.db.profile.filterLFG) then
 			if (TF3:IsFriend(userID) == false) then
-				if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false or TF3:WhiteList(msg, userID, msgID, coloredName) == true) then
+				if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false) then
 					filtered = false
-				elseif (TF3:BlackList(msg, userID, msgID, coloredName) == true) then
+				elseif (whitelisted == true and blacklisted == false) then
+					filtered = false
+				elseif (blacklisted == true) then
 					filtered = true
 				else
 					filtered = TF3:FilterFunc("26. " .. L["LFG"], ...)
@@ -648,9 +673,11 @@ local function PreFilterFunc(self, event, ...)
 	elseif (TF3:SpecialChans(chanName) == true) then	
 		if (TF3.db.profile.special_enable) then
 			if (TF3:IsFriend(userID) == false) then
-				if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false or TF3:WhiteList(msg, userID, msgID, coloredName) == true) then
+				if (userID == UnitName("Player") and TF3.db.profile.filterSELF == false) then
 					filtered = false
-				elseif (TF3:BlackList(msg, userID, msgID, coloredName) == true) then
+				elseif (whitelisted == true and blacklisted == false) then
+					filtered = false
+				elseif (blacklisted == true) then
 					filtered = true
 				else
 					filtered = TF3:FilterFunc("X. " .. chanName, ...)
@@ -686,16 +713,16 @@ function TF3:FilterFunc(chan, ...)
 			if (TF3.db.profile.filters.TRADE == nil) then
 				TF3.db.profile.filters.TRADE = L.FILTERS.TRADE
 			end
-			for k,v in pairs(TF3.db.profile.filters.TRADE) do
+			for _,word in pairs(TF3.db.profile.filters.TRADE) do
 				if (TF3.db.profile.debug and not TF3.db.profile.debug_checking) then
 					if (lastmsg ~= msg or lastuserID ~= userID) then
-						TF3:FindFrame(debugFrame, L["CFM"] .. " " .. v)
+						TF3:FindFrame(debugFrame, L["CFM"] .. " " .. word)
 					end
 				end
-				if (find(msg,lower(v))) then
+				if (find(msg,lower(word))) then
 					if (TF3.db.profile.debug) then
 						if (lastmsg ~= msg or lastuserID ~= userID) then
-							TF3:FindFrame(debugFrame, L["MATCHED"] .. " |cffff8080" .. v .. "|r")
+							TF3:FindFrame(debugFrame, L["MATCHED"] .. " |cffff8080" .. word .. "|r")
 							lastmsg, lastuserID = msg, userID
 						end
 					end
@@ -706,16 +733,16 @@ function TF3:FilterFunc(chan, ...)
 			if (TF3.db.profile.filters.BG == nil) then
 				TF3.db.profile.filters.BG = L.FILTERS.BG
 			end
-			for k,v in pairs(TF3.db.profile.filters.BG) do
+			for _,word in pairs(TF3.db.profile.filters.BG) do
 				if (TF3.db.profile.debug and not TF3.db.profile.debug_checking) then
 					if (lastmsg ~= msg or lastuserID ~= userID) then
-						TF3:FindFrame(debugFrame, L["CFM"] .. " " .. v)
+						TF3:FindFrame(debugFrame, L["CFM"] .. " " .. word)
 					end
 				end
-				if (find(msg,lower(v))) then
+				if (find(msg,lower(word))) then
 					if (TF3.db.profile.debug) then
 						if (lastmsg ~= msg or lastuserID ~= userID) then
-							TF3:FindFrame(debugFrame, L["MATCHED"] .. " |cffff8080" .. v .. "|r")
+							TF3:FindFrame(debugFrame, L["MATCHED"] .. " |cffff8080" .. word .. "|r")
 							lastmsg, lastuserID = msg, userID
 						end
 					end
@@ -726,16 +753,16 @@ function TF3:FilterFunc(chan, ...)
 			if (TF3.db.profile.filters.BASE == nil) then
 				TF3.db.profile.filters.BASE = L.FILTERS.BASE
 			end
-			for k,v in pairs(TF3.db.profile.filters.BASE) do
+			for _,word in pairs(TF3.db.profile.filters.BASE) do
 				if (TF3.db.profile.debug and not TF3.db.profile.debug_checking) then
 					if (lastmsg ~= msg or lastuserID ~= userID) then
-						TF3:FindFrame(debugFrame, L["CFM"] .. " " .. v)
+						TF3:FindFrame(debugFrame, L["CFM"] .. " " .. word)
 					end
 				end
-				if (find(msg,lower(v))) then
+				if (find(msg,lower(word))) then
 					if (TF3.db.profile.debug) then
 						if (lastmsg ~= msg or lastuserID ~= userID) then
-							TF3:FindFrame(debugFrame, L["MATCHED"] .. " |cffff8080" .. v .. "|r")
+							TF3:FindFrame(debugFrame, L["MATCHED"] .. " |cffff8080" .. word .. "|r")
 							lastmsg, lastuserID = msg, userID
 						end
 					end
