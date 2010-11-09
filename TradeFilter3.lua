@@ -152,7 +152,7 @@ function TF3:FirstLogin()
 	TF3.db.profile.whitelist = L.WHITELIST
 	TF3.db.profile.blacklist = L.BLACKLIST
 	TF3.db.profile.filters = L.FILTERS
-	Print(L.TOC.Title .. ": " .. TF3.version .. " " .. L["ENABLED"])
+	print(L.TOC.Title .. ": " .. TF3.version .. " " .. L["ENABLED"])
 end
 
 function TF3:IsLoggedIn()
