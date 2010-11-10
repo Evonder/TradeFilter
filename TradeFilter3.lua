@@ -706,7 +706,7 @@ function TF3:FilterFunc(chan, ...)
 				TF3:FindFrame(debugFrame, "|cFFC08080[" .. chan .. "]|r |cFFD9D9D9[" .. msgID .. "]|r |Hplayer:" .. userID .. ":" .. msgID .. "|h[" .. coloredName .. "]|h |cFFC08080: " .. msg .. "|r")
 			end
 		end
-		if (zoneID == 2) then
+		if (zoneID == 2 or chan == "X. " .. chanName) then
 			if (TF3.db.profile.filters.TRADE == nil) then
 				TF3.db.profile.filters.TRADE = L.FILTERS.TRADE
 			end
