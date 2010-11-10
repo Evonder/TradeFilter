@@ -203,8 +203,10 @@ function TF3:getOptions()
 										TF3:WipeTable(TF3.db.profile.filters.SPECIAL)
 										local tbl = { strsplit("\n", value) }
 										for k, v in pairs(tbl) do
-											key = "FILTER"
-											TF3.db.profile.filters.SPECIAL[key..k] = v
+											if (v ~= "") then
+												key = "FILTER"
+												TF3.db.profile.filters.SPECIAL[key..k] = v
+											end
 										end
 									end,
 								},
@@ -293,8 +295,10 @@ function TF3:getOptions()
 												TF3:WipeTable(TF3.db.profile.filters.TRADE)
 												local tbl = { strsplit("\n", value) }
 												for k, v in pairs(tbl) do
-													key = "FILTER"
-													TF3.db.profile.filters.TRADE[key..k] = v
+													if (v ~= "") then
+														key = "FILTER"
+														TF3.db.profile.filters.TRADE[key..k] = v
+													end
 												end
 											end,
 										},
@@ -372,8 +376,10 @@ function TF3:getOptions()
 												TF3:WipeTable(TF3.db.profile.filters.BASE)
 												local tbl = { strsplit("\n", value) }
 												for k, v in pairs(tbl) do
-													key = "FILTER"
-													TF3.db.profile.filters.BASE[key..k] = v
+													if (v ~= "") then
+														key = "FILTER"
+														TF3.db.profile.filters.BASE[key..k] = v
+													end
 												end
 											end,
 										},
@@ -451,8 +457,10 @@ function TF3:getOptions()
 												TF3:WipeTable(TF3.db.profile.filters.BG)
 												local tbl = { strsplit("\n", value) }
 												for k, v in pairs(tbl) do
-													key = "FILTER"
-													TF3.db.profile.filters.BG[key..k] = v
+													if (v ~= "") then
+														key = "FILTER"
+														TF3.db.profile.filters.BG[key..k] = v
+													end
 												end
 											end,
 										},
@@ -550,8 +558,10 @@ function TF3:getOptions()
 												TF3:WipeTable(TF3.db.profile.blacklist)
 												local tbl = { strsplit("\n", value) }
 												for k, v in pairs(tbl) do
-													key = "BLIST"
-													TF3.db.profile.blacklist[key..k] = v
+													if (v ~= "") then
+														key = "BLIST"
+														TF3.db.profile.blacklist[key..k] = v
+													end
 												end
 											end,
 										},
@@ -648,8 +658,10 @@ function TF3:getOptions()
 												TF3:WipeTable(TF3.db.profile.whitelist)
 												local tbl = { strsplit("\n", value) }
 												for k, v in pairs(tbl) do
-													key = "WLIST"
-													TF3.db.profile.whitelist[key..k] = v
+													if (v ~= "") then
+														key = "WLIST"
+														TF3.db.profile.whitelist[key..k] = v
+													end
 												end
 											end,
 										},
@@ -838,7 +850,7 @@ function TF3:getOptions()
 								},
 							},
 						},				
-						L["Profiles"] = LibStub("AceDBOptions-3.0"):GetOptionsTable(TF3.db),
+						Profiles = LibStub("AceDBOptions-3.0"):GetOptionsTable(TF3.db),
 					},
 				},
 			},
