@@ -115,19 +115,15 @@ function TF3:OnInitialize()
 
 	self.db = LibStub("AceDB-3.0"):New("TradeFilter3DB", defaults);
 
-	local ACP = LibStub("AceDBOptions-3.0"):GetOptionsTable(TradeFilter3.db);
-
 	local AC = LibStub("AceConsole-3.0")
 	AC:RegisterChatCommand("tf", function() TF3:OpenOptions() end)
 	AC:RegisterChatCommand("filter", function() TF3:OpenOptions() end)
 
-	local ACR = LibStub("AceConfigRegistry-3.0")
-	ACR:RegisterOptionsTable("TradeFilter3", options)
-	ACR:RegisterOptionsTable("TradeFilter3P", ACP)
+	local ACfg = LibStub("AceConfig-3.0")
+	ACfg:RegisterOptionsTable("TradeFilter3", TF3:getOptions())
 
 	-- Set up options panels.
 	self.OptionsPanel = ACD:AddToBlizOptions(self.name, L["TFR"], nil, "generalGroup")
-	self.OptionsPanel.profiles = ACD:AddToBlizOptions("TradeFilter3P", L["Profiles"], self.name)
 	self.OptionsPanel.about = LAP.new(self.name, self.name)
 	
 	if (TF3.db.profile.firstlogin == true) then
@@ -144,7 +140,6 @@ end
 
 -- :OpenOptions(): Opens the options window.
 function TF3:OpenOptions()
-	InterfaceOptionsFrame_OpenToCategory(self.OptionsPanel.profiles)
 	InterfaceOptionsFrame_OpenToCategory(self.OptionsPanel)
 end
 
