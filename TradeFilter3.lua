@@ -99,7 +99,6 @@ defaults = {
 		redirect_blacklist = false,
 		wlbp = false,
 		wlblbp = false,
-		repeat_enable = true,
 		special_enable = false,
 		friendslist = {},
 		whitelist = {},
