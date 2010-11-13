@@ -13,7 +13,7 @@
 ## Notes-zhTW: @localization(locale="zhTW", key="Notes", namespace="TOC")@
 ## Notes-frFR: @localization(locale="frFR", key="Notes", namespace="TOC")@
 
-## Author: @project-author@
+## Author: @project-author@ (Rebar - US-Proudmoore/Alliance)
 ## X-Date: @project-date-iso@
 ## X-Credits: Inspiration: crashmstr  Translations: Contiki
 ## X-eMail: evonder AT gmail DOT com
