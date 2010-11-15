@@ -183,7 +183,7 @@ function TF3:getOptions()
 									get = function(info)
 										local a = {}
 										local ret = ""
-										if (TF3.db.profile.filters.SPECIAL == nil) then
+										if not (TF3.db.profile.filters.SPECIAL) then
 											TF3.db.profile.filters.SPECIAL = L.FILTERS.SPECIAL
 										end
 										for _,v in pairs(TF3.db.profile.filters.SPECIAL) do
@@ -275,7 +275,7 @@ function TF3:getOptions()
 											get = function(info)
 												local a = {}
 												local ret = ""
-												if (TF3.db.profile.filters.TRADE == nil) then
+												if not (TF3.db.profile.filters.TRADE) then
 													TF3.db.profile.filters.TRADE = L.FILTERS.TRADE
 												end
 												for _,v in pairs(TF3.db.profile.filters.TRADE) do
@@ -356,7 +356,7 @@ function TF3:getOptions()
 											get = function(info)
 												local a = {}
 												local ret = ""
-												if (TF3.db.profile.filters.BASE == nil) then
+												if not (TF3.db.profile.filters.BASE) then
 													TF3.db.profile.filters.BASE = L.FILTERS.BASE
 												end
 												for _,v in pairs(TF3.db.profile.filters.BASE) do
@@ -437,7 +437,7 @@ function TF3:getOptions()
 											get = function(info)
 												local a = {}
 												local ret = ""
-												if (TF3.db.profile.filters.BG == nil) then
+												if not (TF3.db.profile.filters.BG) then
 													TF3.db.profile.filters.BG = L.FILTERS.BG
 												end
 												for _,v in pairs(TF3.db.profile.filters.BG) do
@@ -538,7 +538,7 @@ function TF3:getOptions()
 											get = function(info)
 												local a = {}
 												local ret = ""
-												if (TF3.db.profile.blacklist == nil) then
+												if not (TF3.db.profile.blacklist) then
 													TF3.db.profile.blacklist = L.BLACKLIST
 												end
 												for _,v in pairs(TF3.db.profile.blacklist) do
@@ -638,7 +638,7 @@ function TF3:getOptions()
 											get = function(info)
 												local a = {}
 												local ret = ""
-												if (TF3.db.profile.whitelist == nil) then
+												if not (TF3.db.profile.whitelist) then
 													TF3.db.profile.whitelist = L.WHITELIST
 												end
 												for _,v in pairs(TF3.db.profile.whitelist) do
