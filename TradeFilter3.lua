@@ -383,7 +383,7 @@ end
 --[[ BlackList Func ]]--
 --[[ Base blacklist words from BadBoy(Funkydude) ]]--
 function TF3:BlackList(msg, userID, msgID, coloredName)
-	if (TF3.db.profile.blacklist == nil) then
+	if not (TF3.db.profile.blacklist) then
 		TF3.db.profile.blacklist = L.BLACKLIST
 	end
 	local blword = TF3.db.profile.blacklist
@@ -422,7 +422,7 @@ end
 
 --[[ WhiteList Func ]]--
 function TF3:WhiteList(msg, userID, msgID, coloredName)
-	if (TF3.db.profile.whitelist == nil) then
+	if not (TF3.db.profile.whitelist) then
 		TF3.db.profile.whitelist = L.WHITELIST
 	end
 	local wlword = TF3.db.profile.whitelist
@@ -446,7 +446,7 @@ end
 
 --[[ Special Channels Func ]]--
 function TF3:SpecialChans(chanName)
-	if (TF3.db.profile.filters.SPECIAL == nil) then
+	if not (TF3.db.profile.filters.SPECIAL) then
 		TF3.db.profile.filters = L.FILTERS.SPECIAL
 	end
 	local schans = TF3.db.profile.filters.SPECIAL
@@ -706,7 +706,7 @@ function TF3:FilterFunc(chan, ...)
 			end
 		end
 		if (zoneID == 2 or chan == "X. " .. chanName) then
-			if (TF3.db.profile.filters.TRADE == nil) then
+			if not (TF3.db.profile.filters.TRADE) then
 				TF3.db.profile.filters.TRADE = L.FILTERS.TRADE
 			end
 			for _,word in pairs(TF3.db.profile.filters.TRADE) do
@@ -726,7 +726,7 @@ function TF3:FilterFunc(chan, ...)
 				end
 			end
 		elseif (chan == "0. BG") then
-			if (TF3.db.profile.filters.BG == nil) then
+			if not (TF3.db.profile.filters.BG) then
 				TF3.db.profile.filters.BG = L.FILTERS.BG
 			end
 			for _,word in pairs(TF3.db.profile.filters.BG) do
@@ -746,7 +746,7 @@ function TF3:FilterFunc(chan, ...)
 				end
 			end
 		else
-			if (TF3.db.profile.filters.BASE == nil) then
+			if not (TF3.db.profile.filters.BASE) then
 				TF3.db.profile.filters.BASE = L.FILTERS.BASE
 			end
 			for _,word in pairs(TF3.db.profile.filters.BASE) do
