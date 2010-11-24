@@ -286,7 +286,7 @@ function TF3:GetParty()
 				TF3:FindFrame(debugFrame, "|cFFFFFF80" .. v .. " " .. L["PADD"] .. "|r\n")
 			end
 		end
-	elseif (numPartyMembers or numRaidMembers == 0) then
+	elseif (numPartyMembers == 0 or numRaidMembers == 0) then
 		if (TF3.db.profile.debug) then
 			TF3:FindFrame(debugFrame, "|cFFFFFF80" .. L["Wiping party exempt list"] .. "|r")
 		end
