@@ -15,9 +15,9 @@
 
 ## Author: @project-author@ (Rebar - US-Proudmoore/Alliance)
 ## X-Date: @project-date-iso@
-## X-Credits: Inspiration: crashmstr  Translations: Contiki
+## X-Credits: Translations: Contiki(deDE)
 ## X-eMail: evonder AT gmail DOT com
-## X-Website: http://www.wowace.com/projects/trade-filter/
+## X-Website: http://www.wowace.com/addons/trade-filter/
 ## X-Category: Chat & Communication
 ## X-Localizations: enUS, deDE
 ## X-License: BSD
@@ -37,7 +37,6 @@ libs\AceConsole-3.0\AceConsole-3.0.xml
 libs\AceDB-3.0\AceDB-3.0.xml
 libs\AceDBOptions-3.0\AceDBOptions-3.0.xml
 libs\AceEvent-3.0\AceEvent-3.0.xml
-libs\AceTimer-3.0\AceTimer-3.0.xml
 libs\AceGUI-3.0\AceGUI-3.0.xml
 libs\AceLocale-3.0\AceLocale-3.0.xml
 libs\AceConfig-3.0\AceConfig-3.0.xml

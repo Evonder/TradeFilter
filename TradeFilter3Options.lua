@@ -45,7 +45,7 @@ function TF3:getOptions()
 							desc = L["TurnOnDesc"],
 							get = function() return TF3.db.profile.turnOn end,
 							set = function()
-								if (TF3.db.profile.turnOn == false) then
+								if not (TF3.db.profile.turnOn) then
 									print(L.TOC.Title .. " " .. TF3.version .. " " .. L["ENABLED"])
 									TF3.db.profile.turnOn = not TF3.db.profile.turnOn
 								else
