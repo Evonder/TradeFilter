@@ -401,7 +401,9 @@ function TF3:BlackList(msg, userID, msgID, coloredName)
 							TF3:FindFrame(debugFrame, L["MATCHED"] .. " |cFFFF0000" .. word .. "|r")
 							if not (TF3.db.profile.redirect_blacklist) then
 								lastmsgID = msgID
-								TF3:LDBUpdate("ldbblack")
+								if (LDB) then
+									TF3:LDBUpdate("ldbblack")
+								end
 							end
 						end
 					end
@@ -759,10 +761,12 @@ function TF3:FilterFunc(chan, ...)
 			if (lastmsg ~= msg or lastuserID ~= userID) then
 				if (TF3.db.profile.debug) then
 					TF3:FindFrame(debugFrame, L["NOMATCH"])
-					TF3:LDBUpdate("ldbfilter")
 				end
 				if (TF3.db.profile.redirect) then
 					TF3:FindFrame(redirectFrame, "|cFFC08080[" .. chan .. "]|r |cFFD9D9D9[" .. msgID .. "]|r |Hplayer:" .. userID .. ":" .. msgID .. "|h[" .. coloredName .. "]|h |cFFC08080: " .. msg .. "|r")
+				end
+				if (LDB) then
+					TF3:LDBUpdate("ldbfilter")
 				end
 				lastmsg, lastuserID = msg, userID
 			end
