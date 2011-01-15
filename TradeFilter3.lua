@@ -261,33 +261,29 @@ function TF3:GetParty()
 	local currentParty = TF3.currentPartyMembers
 	local numPartyMembers = GetNumPartyMembers()
 	local numRaidMembers = GetNumRaidMembers()
-	if (numRaidMembers >= 0 and #currentParty ~= numRaidMembers) then
+	if (numRaidMembers > 0 and #currentParty ~= numRaidMembers) then
 		TF3:WipeTable(TF3.currentPartyMembers)
 		for i=1, numRaidMembers do
 			local partymember = UnitName("raid"..i)
 			if partymember then
 				currentParty[i] = partymember
+				if (TF3.db.profile.debug) then
+					TF3:FindFrame(debugFrame, "|cFFFFFF80" .. currentParty[i] .. " " .. L["PADD"] .. "|r\n")
+				end
 			end
 		end		
-		if (TF3.db.profile.debug) then
-			for _,v in pairs(currentParty) do
-				TF3:FindFrame(debugFrame, "|cFFFFFF80" .. v .. " " .. L["PADD"] .. "|r\n")
-			end
-		end
-	elseif (numPartyMembers >= 0 and #currentParty ~= numPartyMembers) then
+	elseif (numPartyMembers > 0 and #currentParty ~= numPartyMembers) then
 		TF3:WipeTable(currentParty)
 		for i=1, numPartyMembers do
 			local partymember = UnitName("party"..i)
 			if partymember then
 				currentParty[i] = partymember
+				if (TF3.db.profile.debug) then
+					TF3:FindFrame(debugFrame, "|cFFFFFF80" .. currentParty[i] .. " " .. L["PADD"] .. "|r\n")
+				end
 			end
 		end
-		if (TF3.db.profile.debug) then
-			for _,v in pairs(currentParty) do
-				TF3:FindFrame(debugFrame, "|cFFFFFF80" .. v .. " " .. L["PADD"] .. "|r\n")
-			end
-		end
-	else
+	elseif (numPartyMembers == 0 and numRaidMembers == 0) then
 		if (TF3.db.profile.debug) then
 			TF3:FindFrame(debugFrame, "|cFFFFFF80" .. L["Wiping party exempt list"] .. "|r")
 		end
