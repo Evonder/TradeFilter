@@ -795,17 +795,23 @@ function TF3:getOptions()
 									end,
 									name = L["Exempt Party Members"],
 									args = {
-		--~ 								rescan_party = {
-		--~ 									type = 'execute',
-		--~ 									order = 1,
-		--~ 									name = "GetParty()",
-		--~ 									func = function() TF3:GetParty() end,
-		--~ 								},									
+--~ 		 								rescan_party = {
+--~ 		 									type = 'execute',
+--~ 		 									order = 1,
+--~ 		 									name = "GetParty(\"pary\")",
+--~ 		 									func = function() TF3:GetParty("party") end,
+--~ 		 								},
+--~ 		 								rescan_raid = {
+--~ 		 									type = 'execute',
+--~ 		 									order = 2,
+--~ 		 									name = "GetParty(\"raid\")",
+--~ 		 									func = function() TF3:GetParty("raid") end,
+--~ 		 								},
 										currentPartyMembers_table_content = {
 											type = 'description',
 											fontSize = "medium",
 											disabled = true,
-											order = 2,
+											order = 3,
 											name = function()
 												local ret = ""
 												for k,v in pairs(TF3.currentPartyMembers) do

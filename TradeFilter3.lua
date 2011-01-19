@@ -255,37 +255,61 @@ function TF3:GetColoredName(userID, cName)
 end
 
 --[[ Party Functions ]]--
-function TF3:GetParty()
+function TF3:GetParty(arg)
 	local currentParty = TF3.currentPartyMembers
 	local numPartyMembers = GetNumPartyMembers()
 	local numRaidMembers = GetNumRaidMembers()
-	if (numRaidMembers > 0 and #currentParty ~= numRaidMembers) then
-		TF3:WipeTable(TF3.currentPartyMembers)
-		for i=1, numRaidMembers do
-			local partymember = UnitName("raid"..i)
-			if partymember then
-				currentParty[i] = partymember
-				if (TF3.db.profile.debug) then
-					TF3:FindFrame(debugFrame, "|cFFFFFF80" .. currentParty[i] .. " " .. L["PADD"] .. "|r\n")
+	if (arg == "raid") then
+		if (numRaidMembers > 0 and #currentParty ~= numRaidMembers) then
+			TF3:WipeTable(TF3.currentPartyMembers)
+			for i=1, numRaidMembers, 1 do
+				local partyid = GetPartyMember(i)
+				local partymember = UnitName("raid"..i)
+				if (partymember and partyid and partymember ~= UNKNOWN) then
+					currentParty[i] = partymember
+					if (TF3.db.profile.debug) then
+						TF3:FindFrame(debugFrame, "|cFFFFFF80" .. partymember .. " " .. L["PADD"] .. "|r\n")
+					end
+				elseif (partymember == UNKNOWN or not partyid) then
+					if (TF3.db.profile.debug) then
+						TF3:FindFrame(debugFrame, "|cFFFFFF80" .. L["MIPM"] .. "|r")
+					end
+					self:ScheduleTimer("GetParty", 10, "raid")
+					break
 				end
 			end
-		end		
-	elseif (numPartyMembers > 0 and #currentParty ~= numPartyMembers) then
-		TF3:WipeTable(currentParty)
-		for i=1, numPartyMembers do
-			local partymember = UnitName("party"..i)
-			if partymember then
-				currentParty[i] = partymember
-				if (TF3.db.profile.debug) then
-					TF3:FindFrame(debugFrame, "|cFFFFFF80" .. currentParty[i] .. " " .. L["PADD"] .. "|r\n")
+		elseif (numPartyMembers == 0) then
+			if (TF3.db.profile.debug) then
+				TF3:FindFrame(debugFrame, "|cFFFFFF80" .. L["Wiping party exempt list"] .. "|r")
+			end
+			TF3:WipeTable(currentParty)
+		end
+	end
+	if (arg == "party") then
+		if (numPartyMembers > 0 and #currentParty ~= numPartyMembers) then
+			TF3:WipeTable(currentParty)
+			for i=1, numPartyMembers, 1 do
+				local partyid = GetPartyMember(i)
+				local partymember = UnitName("party"..i)
+				if (partymember and partyid and partymember ~= UNKNOWN) then
+					currentParty[i] = partymember
+					if (TF3.db.profile.debug) then
+						TF3:FindFrame(debugFrame, "|cFFFFFF80" .. partymember .. " " .. L["PADD"] .. "|r\n")
+					end
+				elseif (partymember == UNKNOWN or not partyid) then
+					if (TF3.db.profile.debug) then
+						TF3:FindFrame(debugFrame, "|cFFFFFF80" .. L["MIPM"] .. "|r")
+					end
+					self:ScheduleTimer("GetParty", 10, "party")
+					break
 				end
 			end
+		elseif (numPartyMembers == 0) then
+			if (TF3.db.profile.debug) then
+				TF3:FindFrame(debugFrame, "|cFFFFFF80" .. L["Wiping party exempt list"] .. "|r")
+			end
+			TF3:WipeTable(currentParty)
 		end
-	elseif (numPartyMembers == 0 and numRaidMembers == 0) then
-		if (TF3.db.profile.debug) then
-			TF3:FindFrame(debugFrame, "|cFFFFFF80" .. L["Wiping party exempt list"] .. "|r")
-		end
-		TF3:WipeTable(currentParty)
 	end
 end
 
