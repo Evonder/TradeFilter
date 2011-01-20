@@ -150,7 +150,8 @@ end
 
 function TF3:IsLoggedIn()
 	self:RegisterEvent("FRIENDLIST_UPDATE", "GetFriends")
-	self:RegisterEvent("PARTY_MEMBERS_CHANGED", "GetParty")
+	self:RegisterEvent("PARTY_MEMBERS_CHANGED", "GetParty", "party")
+	self:RegisterEvent("RAID_ROSTER_UPDATE", "GetParty", "raid")
 	libfriends.RegisterCallback(self, "Added")
 	libfriends.RegisterCallback(self, "Removed")
 	self:UnregisterEvent("PLAYER_LOGIN")
