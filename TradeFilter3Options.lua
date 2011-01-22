@@ -171,6 +171,9 @@ function TF3:getOptions()
 								},
 								specialfilters = {
 									type = 'input',
+									hidden = function()
+										return not TF3.db.profile.special_enable
+									end,
 									disabled = function()
 										return not TF3.db.profile.special_enable
 									end,
@@ -212,6 +215,9 @@ function TF3:getOptions()
 								},
 								reset_specialfilters = {
 									type = 'execute',
+									hidden = function()
+										return not TF3.db.profile.special_enable
+									end,
 									disabled = function()
 										return not TF3.db.profile.special_enable
 									end,
@@ -795,18 +801,24 @@ function TF3:getOptions()
 									end,
 									name = L["Exempt Party Members"],
 									args = {
---~ 		 								rescan_party = {
---~ 		 									type = 'execute',
---~ 		 									order = 1,
---~ 		 									name = "GetParty(\"pary\")",
---~ 		 									func = function() TF3:GetParty("party") end,
---~ 		 								},
---~ 		 								rescan_raid = {
---~ 		 									type = 'execute',
---~ 		 									order = 2,
---~ 		 									name = "GetParty(\"raid\")",
---~ 		 									func = function() TF3:GetParty("raid") end,
---~ 		 								},
+ 		 								rescan_party = {
+ 		 									type = 'execute',
+ 		 									order = 1,
+ 		 									name = "GetParty(\"pary\")",
+											hidden = function()
+												return not TF3.db.profile.debug
+											end,
+ 		 									func = function() TF3:GetParty("party") end,
+ 		 								},
+ 		 								rescan_raid = {
+ 		 									type = 'execute',
+ 		 									order = 2,
+ 		 									name = "GetParty(\"raid\")",
+											hidden = function()
+												return not TF3.db.profile.debug
+											end,
+ 		 									func = function() TF3:GetParty("raid") end,
+ 		 								},
 										currentPartyMembers_table_content = {
 											type = 'description',
 											fontSize = "medium",
