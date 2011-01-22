@@ -32,7 +32,7 @@ File Date: @file-date-iso@
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 --]]
 
-TradeFilter3 = LibStub("AceAddon-3.0"):NewAddon("TradeFilter3", "AceEvent-3.0")
+TradeFilter3 = LibStub("AceAddon-3.0"):NewAddon("TradeFilter3", "AceEvent-3.0", "AceTimer-3.0")
 local L =  LibStub("AceLocale-3.0"):GetLocale("TradeFilter3", true)
 local libfriends = LibStub("LibFriends-1.0")
 local LDB = LibStub("LibDataBroker-1.1", true)
