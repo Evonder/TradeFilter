@@ -275,7 +275,9 @@ function TF3:GetParty(arg)
 					if (TF3.db.profile.debug) then
 						TF3:FindFrame(debugFrame, "|cFFFFFF80" .. L["MIPM"] .. "|r")
 					end
-					self:ScheduleTimer("GetParty", 10, "raid")
+					if not (self:TimeLeft(self.RaidTimer)) then
+						self.RaidTimer = self:ScheduleTimer("GetParty", 10, "raid")
+					end
 					break
 				end
 			end
@@ -283,6 +285,7 @@ function TF3:GetParty(arg)
 			if (TF3.db.profile.debug) then
 				TF3:FindFrame(debugFrame, "|cFFFFFF80" .. L["Wiping party exempt list"] .. "|r")
 			end
+			self:CancelAllTimers()
 			TF3:WipeTable(currentParty)
 		end
 	end
@@ -301,7 +304,9 @@ function TF3:GetParty(arg)
 					if (TF3.db.profile.debug) then
 						TF3:FindFrame(debugFrame, "|cFFFFFF80" .. L["MIPM"] .. "|r")
 					end
-					self:ScheduleTimer("GetParty", 10, "party")
+					if not (self:TimeLeft(self.PartyTimer)) then
+						self.PartyTimer = self:ScheduleTimer("GetParty", 10, "party")
+					end
 					break
 				end
 			end
@@ -309,6 +314,7 @@ function TF3:GetParty(arg)
 			if (TF3.db.profile.debug) then
 				TF3:FindFrame(debugFrame, "|cFFFFFF80" .. L["Wiping party exempt list"] .. "|r")
 			end
+			self:CancelAllTimers()
 			TF3:WipeTable(currentParty)
 		end
 	end
