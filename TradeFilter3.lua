@@ -264,14 +264,14 @@ function TF3:GetParty(arg)
 		if (numRaidMembers > 0 and #currentParty ~= numRaidMembers) then
 			TF3:WipeTable(TF3.currentPartyMembers)
 			for i=1, numRaidMembers, 1 do
-				local partyid = GetPartyMember(i)
+				local raidid = UnitInRaid(i)
 				local partymember = UnitName("raid"..i)
-				if (partymember and partyid and partymember ~= UNKNOWN) then
+				if (partymember and raidid and partymember ~= UNKNOWN) then
 					currentParty[i] = partymember
 					if (TF3.db.profile.debug) then
 						TF3:FindFrame(debugFrame, "|cFFFFFF80" .. partymember .. " " .. L["PADD"] .. "|r\n")
 					end
-				elseif (partymember == UNKNOWN or not partyid) then
+				elseif (partymember == UNKNOWN or not raidid) then
 					if (TF3.db.profile.debug) then
 						TF3:FindFrame(debugFrame, "|cFFFFFF80" .. L["MIPM"] .. "|r")
 					end
