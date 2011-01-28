@@ -44,6 +44,7 @@ local pairs = pairs
 local find = string.find
 local sub = string.sub
 local gsub = string.gsub
+local len = string.len
 local lower = string.lower
 local format = string.format
 local insert = table.insert
@@ -66,10 +67,10 @@ local partyTimer = false
 TF3.currentPartyMembers = {}
 
 local MAJOR_VERSION = GetAddOnMetadata("TradeFilter3", "Version")
-if (select(3,find(MAJOR_VERSION, "(%a+)")) == "v") then
+if (len(MAJOR_VERSION)<=6) then
 	TF3.version = sub(MAJOR_VERSION, 0, 6)
 else
-	TF3.version = sub(MAJOR_VERSION, 0, 15) .. " DEV"
+	TF3.version = MAJOR_VERSION .. " DEV"
 end
 TF3.date = "@file-date-iso@"
 
