@@ -61,8 +61,8 @@ local lastmsg
 local lastuserID
 local msgsFiltered = 0
 local msgsBlackFiltered = 0
-local raidTimer = false
-local partyTimer = false
+local raidTimer = nil
+local partyTimer = nil
 
 TF3.currentPartyMembers = {}
 
@@ -268,24 +268,23 @@ function TF3:GetParty(arg)
 		if (numRaidMembers > 0 and #currentParty ~= numRaidMembers) then
 			TF3:WipeTable(TF3.currentPartyMembers)
 			for i=1, numRaidMembers, 1 do
-				local raidid = UnitInRaid(i)
 				local partymember = UnitName("raid"..i)
-				if (partymember and raidid and partymember ~= UNKNOWN) then
+				if (partymember and partymember ~= UNKNOWNOBJECT and partymember ~= UKNOWNBEING) then
 					currentParty[i] = partymember
 					if (TF3.db.profile.debug) then
 						TF3:FindFrame(debugFrame, "|cFFFFFF80" .. partymember .. " " .. L["PADD"] .. "|r\n")
 					end
-				elseif (partymember == UNKNOWN or not raidid) then
+				elseif (partymember == UNKNOWNOBJECT or partymember == UKNOWNBEING) then
 					if (TF3.db.profile.debug) then
 						TF3:FindFrame(debugFrame, "|cFFFFFF80" .. L["MIPM"] .. "|r")
 					end
 					if not (self:TimeLeft(raidTimer)) then
-						raidTimer = self:ScheduleTimer("GetParty", 10, "raid")
+						raidTimer = self:ScheduleTimer("GetParty", 15, "raid")
 					end
 					break
 				end
 			end
-		elseif (numPartyMembers == 0) then
+		elseif (numRaidMembers == 0) then
 			if (TF3.db.profile.debug) then
 				TF3:FindFrame(debugFrame, "|cFFFFFF80" .. L["Wiping party exempt list"] .. "|r")
 			end
@@ -294,17 +293,16 @@ function TF3:GetParty(arg)
 		end
 	end
 	if (arg == "party") then
-		if (numPartyMembers > 0 and #currentParty ~= numPartyMembers) then
+		if (numPartyMembers > 0 and #currentParty ~= numPartyMembers and numRaidMembers == 0) then
 			TF3:WipeTable(currentParty)
 			for i=1, numPartyMembers, 1 do
-				local partyid = GetPartyMember(i)
 				local partymember = UnitName("party"..i)
-				if (partymember and partyid and partymember ~= UNKNOWN) then
+				if (partymember and partymember ~= UNKNOWNOBJECT and partymember ~= UKNOWNBEING) then
 					currentParty[i] = partymember
 					if (TF3.db.profile.debug) then
 						TF3:FindFrame(debugFrame, "|cFFFFFF80" .. partymember .. " " .. L["PADD"] .. "|r\n")
 					end
-				elseif (partymember == UNKNOWN or not partyid) then
+				elseif (partymember == UNKNOWNOBJECT or partymember == UKNOWNBEING) then
 					if (TF3.db.profile.debug) then
 						TF3:FindFrame(debugFrame, "|cFFFFFF80" .. L["MIPM"] .. "|r")
 					end
