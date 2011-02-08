@@ -61,9 +61,9 @@ local lastmsg
 local lastuserID
 local msgsFiltered = 0
 local msgsBlackFiltered = 0
-local raidTimer = nil
-local partyTimer = nil
 
+TF3.raidTimer = nil
+TF3.partyTimer = nil
 TF3.currentPartyMembers = {}
 
 local MAJOR_VERSION = GetAddOnMetadata("TradeFilter3", "Version")
@@ -278,8 +278,8 @@ function TF3:GetParty(arg)
 					if (TF3.db.profile.debug) then
 						TF3:FindFrame(debugFrame, "|cFFFFFF80" .. L["MIPM"] .. "|r")
 					end
-					if not (self:TimeLeft(raidTimer)) then
-						raidTimer = self:ScheduleTimer("GetParty", 15, "raid")
+					if not (TF3:TimeLeft(TF3.raidTimer)) then
+						TF3.raidTimer = TF3:ScheduleTimer("GetParty", 15, "raid")
 					end
 					break
 				end
@@ -306,8 +306,8 @@ function TF3:GetParty(arg)
 					if (TF3.db.profile.debug) then
 						TF3:FindFrame(debugFrame, "|cFFFFFF80" .. L["MIPM"] .. "|r")
 					end
-					if not (self:TimeLeft(partyTimer)) then
-						partyTimer = self:ScheduleTimer("GetParty", 10, "party")
+					if not (TF3:TimeLeft(TF3.partyTimer)) then
+						TF3.partyTimer = TF3:ScheduleTimer("GetParty", 10, "party")
 					end
 					break
 				end
