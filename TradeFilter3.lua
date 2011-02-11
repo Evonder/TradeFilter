@@ -325,7 +325,7 @@ end
 function TF3:IsParty(userID)
 	if not (TF3.db.profile.exmptparty) then return false end
 	local currentParty = TF3.currentPartyMembers
-	for _,partymember in ipairs(currentParty) do
+	for _,partymember in pairs(currentParty) do
 		if find(userID,partymember) then
 			return true
 		end
@@ -391,7 +391,7 @@ end
 function TF3:IsFriend(userID)
 	if not (TF3.db.profile.exmptfriendslist) then return false end
 	local friends = TF3.db.profile.friendslist
-	for _,name in ipairs(friends) do
+	for _,name in pairs(friends) do
 		if find(userID,name) then
 			return true
 		end
@@ -553,7 +553,7 @@ local function PreFilterFunc_Say(self, event, ...)
 	local whitelisted = TF3:WhiteList(msg, userID, msgID, coloredName)
 	if (TF3.db.profile.filterSAY) then
 		if (event == "CHAT_MSG_SAY") then
-			if not (TF3:IsFriend(userID) and not TF3:IsParty(userID)) then
+			if not (TF3:IsFriend(userID)) and not (TF3:IsParty(userID)) then
 				if (userID == UnitName("Player") and not TF3.db.profile.filterSELF) then
 					filtered = false
 				elseif (whitelisted and not blacklisted) then
@@ -581,7 +581,7 @@ local function PreFilterFunc_Yell(self, event, ...)
 	local whitelisted = TF3:WhiteList(msg, userID, msgID, coloredName)
 	if (TF3.db.profile.filterYELL) then
 		if (event == "CHAT_MSG_YELL") then
-			if not (TF3:IsFriend(userID) and not TF3:IsParty(userID)) then
+			if not (TF3:IsFriend(userID)) and not (TF3:IsParty(userID)) then
 				if (userID == UnitName("Player") and not TF3.db.profile.filterSELF) then
 					filtered = false
 				elseif (whitelisted and not blacklisted) then
