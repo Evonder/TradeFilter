@@ -1,5 +1,5 @@
-== Not just any old filter!
-//Please help localize this project// [[http://www.wowace.com/projects/trade-filter/localization/|HERE]]\\
+== Not just any old spam filter!
+//Please help localize this project // [[http://www.wowace.com/projects/trade-filter/localization/|HERE]]\\
 
 TradeFilter does not only filter trade but has the ability to filter General, LookingforGroup, Say and Yell channels all which are configurable through the blizzard options panel. 
 
@@ -23,4 +23,4 @@ Nothing planned
 [[http://www.wowace.com/addons/trade-filter/pages/change-log/|ChangeLog Page]]\\
 
 === Supported Translations
-//Please help localize this project// [[http://www.wowace.com/projects/trade-filter/localization/|HERE]]\\
+//Please help localize this project // [[http://www.wowace.com/projects/trade-filter/localization/|HERE]]\\
