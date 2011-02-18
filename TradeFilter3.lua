@@ -32,7 +32,7 @@ File Date: @file-date-iso@
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 --]]
 
-TradeFilter3 = LibStub("AceAddon-3.0"):NewAddon("TradeFilter3", "AceEvent-3.0", "AceTimer-3.0")
+TradeFilter3 = LibStub("AceAddon-3.0"):NewAddon("TradeFilter3", "AceEvent-3.0")
 local L =  LibStub("AceLocale-3.0"):GetLocale("TradeFilter3", true)
 local libfriends = LibStub("LibFriends-1.0")
 local LDB = LibStub("LibDataBroker-1.1", true)
@@ -61,10 +61,6 @@ local lastmsg
 local lastuserID
 local msgsFiltered = 0
 local msgsBlackFiltered = 0
-
-TF3.raidTimer = nil
-TF3.partyTimer = nil
-TF3.currentPartyMembers = {}
 
 local MAJOR_VERSION = GetAddOnMetadata("TradeFilter3", "Version")
 if (len(MAJOR_VERSION)<=6) then
@@ -153,8 +149,6 @@ end
 
 function TF3:IsLoggedIn()
 	self:RegisterEvent("FRIENDLIST_UPDATE", "GetFriends")
-	self:RegisterEvent("PARTY_MEMBERS_CHANGED", "GetParty", "party")
-	self:RegisterEvent("RAID_ROSTER_UPDATE", "GetParty", "raid")
 	libfriends.RegisterCallback(self, "Added")
 	libfriends.RegisterCallback(self, "Removed")
 	self:UnregisterEvent("PLAYER_LOGIN")
@@ -259,77 +253,25 @@ function TF3:GetColoredName(userID, cName)
 end
 
 --[[ Party Functions ]]--
-function TF3:GetParty(arg)
-	if not (TF3.db.profile.exmptparty) then return end
-	local currentParty = TF3.currentPartyMembers
-	local numPartyMembers = GetNumPartyMembers()
-	local numRaidMembers = GetNumRaidMembers()
-	if (arg == "raid") then
-		if (numRaidMembers > 0 and #currentParty ~= numRaidMembers) then
-			TF3:WipeTable(TF3.currentPartyMembers)
-			for i=1, numRaidMembers, 1 do
-				local partymember = UnitName("raid"..i)
-				if (partymember and partymember ~= UNKNOWNOBJECT and partymember ~= UKNOWNBEING) then
-					currentParty[i] = partymember
-					if (TF3.db.profile.debug) then
-						TF3:FindFrame(debugFrame, "|cFFFFFF80" .. partymember .. " " .. L["PADD"] .. "|r\n")
-					end
-				elseif (partymember == UNKNOWNOBJECT or partymember == UKNOWNBEING) then
-					if (TF3.db.profile.debug) then
-						TF3:FindFrame(debugFrame, "|cFFFFFF80" .. L["MIPM"] .. "|r")
-					end
-					if not (TF3:TimeLeft(TF3.raidTimer)) then
-						TF3.raidTimer = TF3:ScheduleTimer("GetParty", 15, "raid")
-					end
-					break
-				end
-			end
-		elseif (numRaidMembers == 0) then
-			if (TF3.db.profile.debug) then
-				TF3:FindFrame(debugFrame, "|cFFFFFF80" .. L["Wiping party exempt list"] .. "|r")
-			end
-			self:CancelAllTimers()
-			TF3:WipeTable(currentParty)
-		end
-	end
-	if (arg == "party") then
-		if (numPartyMembers > 0 and #currentParty ~= numPartyMembers and numRaidMembers == 0) then
-			TF3:WipeTable(currentParty)
-			for i=1, numPartyMembers, 1 do
-				local partymember = UnitName("party"..i)
-				if (partymember and partymember ~= UNKNOWNOBJECT and partymember ~= UKNOWNBEING) then
-					currentParty[i] = partymember
-					if (TF3.db.profile.debug) then
-						TF3:FindFrame(debugFrame, "|cFFFFFF80" .. partymember .. " " .. L["PADD"] .. "|r\n")
-					end
-				elseif (partymember == UNKNOWNOBJECT or partymember == UKNOWNBEING) then
-					if (TF3.db.profile.debug) then
-						TF3:FindFrame(debugFrame, "|cFFFFFF80" .. L["MIPM"] .. "|r")
-					end
-					if not (TF3:TimeLeft(TF3.partyTimer)) then
-						TF3.partyTimer = TF3:ScheduleTimer("GetParty", 10, "party")
-					end
-					break
-				end
-			end
-		elseif (numPartyMembers == 0) then
-			if (TF3.db.profile.debug) then
-				TF3:FindFrame(debugFrame, "|cFFFFFF80" .. L["Wiping party exempt list"] .. "|r")
-			end
-			self:CancelAllTimers()
-			TF3:WipeTable(currentParty)
-		end
-	end
-end
-
 function TF3:IsParty(userID)
 	if not (TF3.db.profile.exmptparty) then return false end
-	local currentParty = TF3.currentPartyMembers
-	for _,partymember in pairs(currentParty) do
-		if find(userID,partymember) then
-			return true
-		end
-	end
+	local numPartyMembers = GetNumPartyMembers()
+	local numRaidMembers = GetNumRaidMembers()
+  if (numRaidMembers > 0) then
+    for i=1, numRaidMembers, 1 do
+      local partymember = UnitName("raid"..i)
+      if find(userID,partymember) then
+        return true
+      end
+    end
+  elseif (numPartyMembers > 0 and numRaidMembers == 0) then
+    for i=1, numPartyMembers, 1 do
+      local partymember = UnitName("party"..i)
+      if find(userID,partymember) then
+        return true
+      end
+    end
+  end
 	return false
 end
 

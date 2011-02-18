@@ -685,10 +685,69 @@ function TF3:getOptions()
 								},
 							},
 						},
+						exemptGroupMain = {
+							type = "group",
+							handler = TF3,
+							childGroups = "tab",
+							order = 5,
+							disabled = function()
+								return not TF3.db.profile.turnOn
+							end,
+							name = L["Exempt List"],
+							desc = L["Current Exempt List"],
+							args = {
+								enable_exempt_party = {
+									type = 'toggle',
+									order = 1,
+									disabled = false,
+									name = L["Party Members"],
+									desc = L["If enabled party members will be exempt from filtration."],
+									get = function() return TF3.db.profile.exmptparty end,
+									set = function() TF3.db.profile.exmptparty = not TF3.db.profile.exmptparty end,
+								},
+								enable_exempt_friends = {
+									type = 'toggle',
+									order = 2,
+									disabled = false,
+									name = L["Friends"],
+									desc = L["If enabled your friends list will be exempt from filtration."],
+									get = function() return TF3.db.profile.exmptfriendslist end,
+									set = function() TF3.db.profile.exmptfriendslist = not TF3.db.profile.exmptfriendslist end,
+								},
+								exemptGroupFriends = {
+									type = "group",
+									handler = TF3,
+									order = 3,
+									disabled = function()
+										return not TF3.db.profile.turnOn
+									end,
+									name = L["Exempt Friend List"],
+									args = {
+										currentFriends_table_content = {
+											type = 'description',
+											fontSize = "medium",
+											disabled = true,
+											order = 1,
+											name = function()
+												local ret = ""
+												for k,v in pairs(TF3.db.profile.friendslist) do
+													if ret == "" then
+														ret = v
+													else
+														ret = ret .. "\n" .. v
+													end
+												end
+												return ret
+											end,
+										},
+									},
+								},
+							},
+						},
 						outputGroup = {
 							type = "group",
 							handler = TF3,
-							order = 5,
+							order = 6,
 							disabled = function()
 								return not TF3.db.profile.turnOn
 							end,
@@ -763,111 +822,6 @@ function TF3:getOptions()
 								},
 							},
 						},
-						exemptGroupMain = {
-							type = "group",
-							handler = TF3,
-							childGroups = "tab",
-							order = 6,
-							disabled = function()
-								return not TF3.db.profile.turnOn
-							end,
-							name = L["Exempt List"],
-							desc = L["Current Exempt List"],
-							args = {
-								enable_exempt_party = {
-									type = 'toggle',
-									order = 1,
-									disabled = false,
-									name = L["Party Members"],
-									desc = L["If enabled party members will be exempt from filtration."],
-									get = function() return TF3.db.profile.exmptparty end,
-									set = function() TF3.db.profile.exmptparty = not TF3.db.profile.exmptparty end,
-								},
-								enable_exempt_friends = {
-									type = 'toggle',
-									order = 2,
-									disabled = false,
-									name = L["Friends"],
-									desc = L["If enabled your friends list will be exempt from filtration."],
-									get = function() return TF3.db.profile.exmptfriendslist end,
-									set = function() TF3.db.profile.exmptfriendslist = not TF3.db.profile.exmptfriendslist end,
-								},
-								exemptGroupParty = {
-									type = "group",
-									handler = TF3,
-									order = 3,
-									disabled = function()
-										return not TF3.db.profile.turnOn
-									end,
-									name = L["Exempt Party Members"],
-									args = {
- 		 								rescan_party = {
- 		 									type = 'execute',
- 		 									order = 1,
- 		 									name = "GetParty(\"pary\")",
-											hidden = function()
-												return not TF3.db.profile.debug
-											end,
- 		 									func = function() TF3:GetParty("party") end,
- 		 								},
- 		 								rescan_raid = {
- 		 									type = 'execute',
- 		 									order = 2,
- 		 									name = "GetParty(\"raid\")",
-											hidden = function()
-												return not TF3.db.profile.debug
-											end,
- 		 									func = function() TF3:GetParty("raid") end,
- 		 								},
-										currentPartyMembers_table_content = {
-											type = 'description',
-											fontSize = "medium",
-											disabled = true,
-											order = 3,
-											name = function()
-												local ret = ""
-												for k,v in pairs(TF3.currentPartyMembers) do
-													if ret == "" then
-														ret = v
-													else
-														ret = ret .. "\n" .. v
-													end
-												end
-												return ret
-											end,
-										},
-									},
-								},
-								exemptGroupFriends = {
-									type = "group",
-									handler = TF3,
-									order = 4,
-									disabled = function()
-										return not TF3.db.profile.turnOn
-									end,
-									name = L["Exempt Friend List"],
-									args = {
-										currentFriends_table_content = {
-											type = 'description',
-											fontSize = "medium",
-											disabled = true,
-											order = 1,
-											name = function()
-												local ret = ""
-												for k,v in pairs(TF3.db.profile.friendslist) do
-													if ret == "" then
-														ret = v
-													else
-														ret = ret .. "\n" .. v
-													end
-												end
-												return ret
-											end,
-										},
-									},
-								},
-							},
-						},				
 						Profiles = LibStub("AceDBOptions-3.0"):GetOptionsTable(TF3.db),
 					},
 				},
