@@ -419,7 +419,7 @@ end
 --[[ Special Channels Func ]]--
 function TF3:SpecialChans(chanName)
 	if not (TF3.db.profile.filters.SPECIAL) then
-		TF3.db.profile.filters = L.FILTERS.SPECIAL
+		TF3.db.profile.filters.SPECIAL = L.FILTERS.SPECIAL
 	end
 	local schans = TF3.db.profile.filters.SPECIAL
 	local chanName = lower(chanName)
