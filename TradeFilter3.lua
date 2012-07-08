@@ -64,7 +64,7 @@ local msgsBlackFiltered = 0
 
 local MAJOR_VERSION = GetAddOnMetadata("TradeFilter3", "Version")
 if (len(MAJOR_VERSION)<=6) then
-	TF3.version = sub(MAJOR_VERSION, 0, 6)
+	TF3.version = sub(MAJOR_VERSION, 0, 8)
 else
 	TF3.version = MAJOR_VERSION .. " DEV"
 end
@@ -255,8 +255,8 @@ end
 --[[ Party Functions ]]--
 function TF3:IsParty(userID)
 	if not (TF3.db.profile.exmptparty) then return false end
-	local numPartyMembers = GetNumPartyMembers()
-	local numRaidMembers = GetNumRaidMembers()
+	local numPartyMembers = GetNumSubgroupMembers()
+	local numRaidMembers = GetNumGroupMembers()
   if (numRaidMembers > 0) then
     for i=1, numRaidMembers, 1 do
       local partymember = UnitName("raid"..i)
