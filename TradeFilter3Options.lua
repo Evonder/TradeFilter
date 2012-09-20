@@ -76,8 +76,8 @@ function TF3:getOptions()
 									disabled = false,
 									name = L["TC"],
 									desc = L["TCD"],
-									get = function() return TF3.db.profile.filtertrade end,
-									set = function() TF3.db.profile.filtertrade = not TF3.db.profile.filtertrade end,
+									get = function() return TF3.db.profile.filterTrade end,
+									set = function() TF3.db.profile.filterTrade = not TF3.db.profile.filterTrade end,
 								},
 								generalChannel = {
 									type = 'toggle',
@@ -86,8 +86,8 @@ function TF3:getOptions()
 									disabled = false,
 									name = L["GC"],
 									desc = L["GCD"],
-									get = function() return TF3.db.profile.filtergeneral end,
-									set = function() TF3.db.profile.filtergeneral = not TF3.db.profile.filtergeneral end,
+									get = function() return TF3.db.profile.filterGeneral end,
+									set = function() TF3.db.profile.filterGeneral = not TF3.db.profile.filterGeneral end,
 								},
 								LFGChannel = {
 									type = 'toggle',
