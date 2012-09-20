@@ -63,7 +63,7 @@ local msgsFiltered = 0
 local msgsBlackFiltered = 0
 
 local MAJOR_VERSION = GetAddOnMetadata("TradeFilter3", "Version")
-if (len(MAJOR_VERSION)<=6) then
+if (len(MAJOR_VERSION)<=8) then
 	TF3.version = sub(MAJOR_VERSION, 0, 8)
 else
 	TF3.version = MAJOR_VERSION .. " DEV"
@@ -84,10 +84,11 @@ defaults = {
 		filterLFG = false,
 		filterBG = false,
 		filterGeneral = false,
+		filterDuelSpam = false,
 		filterTrade = true,
-		editfilterTRADE_enable = false,
-		editfilterBASE_enable = false,
-		editfilterBG_enable = false,
+		addfilterTRADE_enable = false,
+		addfilterBASE_enable = false,
+		addfilterBG_enable = false,
 		exmptfriendslist = true,
 		exmptparty = true,
 		ebl = false,
@@ -122,12 +123,12 @@ function TF3:OnInitialize()
 	-- Set up options panels.
 	self.OptionsPanel = ACD:AddToBlizOptions(self.name, L["TFR"], nil, "generalGroup")
 	self.OptionsPanel.about = LAP.new(self.name, self.name)
-	
+
 	if (TF3.db.profile.firstlogin) then
 		TF3:FirstLogin()
 		TF3.db.profile.firstlogin = false
 	end
-	
+
 	if IsLoggedIn() then
 		self:IsLoggedIn()
 	else
@@ -153,7 +154,7 @@ function TF3:IsLoggedIn()
 	libfriends.RegisterCallback(self, "Removed")
 	self:UnregisterEvent("PLAYER_LOGIN")
 	TF3:DuelFilter()
-	
+
 	--[[ LibDataBroker object ]]--
 	if (LDB) then
 		TF3Frame = CreateFrame("Frame", "LDB_TradeFilter3")
@@ -348,7 +349,7 @@ function TF3:DuelFilter()
 	else
 		DUEL_WINNER_KNOCKOUT, DUEL_WINNER_RETREAT = L["DUEL_WINNER_KNOCKOUT"], L["DUEL_WINNER_RETREAT"]
 	end
-end	
+end
 
 --[[ BlackList Func ]]--
 --[[ Base blacklist words from BadBoy(Funkydude) ]]--
@@ -628,7 +629,7 @@ local function PreFilterFunc(self, event, ...)
 			end
 		end
 --[[ Check for Special Channel and User setting ]]--
-	elseif (TF3:SpecialChans(chanName)) then	
+	elseif (TF3:SpecialChans(chanName)) then
 		if (TF3.db.profile.special_enable) then
 			if not (TF3:IsFriend(userID)) then
 				if (userID == UnitName("Player") and not TF3.db.profile.filterSELF) then
