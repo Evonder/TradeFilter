@@ -85,7 +85,7 @@ defaults = {
 		filterBG = false,
 		filterGeneral = false,
 		filterDuelSpam = false,
-		filterTrade = true,
+		filterTrade = false,
 		addfilterTRADE_enable = false,
 		addfilterBASE_enable = false,
 		addfilterBG_enable = false,
@@ -583,7 +583,7 @@ local function PreFilterFunc(self, event, ...)
 	local whitelisted = TF3:WhiteList(msg, userID, msgID, coloredName)
 	--[[ Check for Trade Channel and User setting ]]--
 	if (zoneID == 2) then
-		if (TF3.db.profile.filtertrade) then
+		if (TF3.db.profile.filterTrade) then
 			if not (TF3:IsFriend(userID)) then
 				if (userID == UnitName("Player") and not TF3.db.profile.filterSELF) then
 					filtered = false
@@ -598,7 +598,7 @@ local function PreFilterFunc(self, event, ...)
 		end
 --[[ Check for General Channel and User setting ]]--
 	elseif (chanID == 1) then
-		if (TF3.db.profile.filtergeneral) then
+		if (TF3.db.profile.filterGeneral) then
 			if not (TF3:IsFriend(userID)) then
 				if (userID == UnitName("Player") and not TF3.db.profile.filterSELF) then
 					filtered = false
