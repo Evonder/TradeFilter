@@ -2,11 +2,21 @@
 ## Version: @project-version@
 ## X-WoWI-ID: 13784
 
+#@non-alpha@
 ## Title: @localization(locale="enUS", key="Title", namespace="ToC")@
 ## Title-deDE: @localization(locale="deDE", key="Title", namespace="TOC")@
 ## Title-zhCN: @localization(locale="zhCN", key="Title", namespace="TOC")@
 ## Title-zhTW: @localization(locale="zhTW", key="Title", namespace="TOC")@
 ## Title-frFR: @localization(locale="frFR", key="Title", namespace="TOC")@
+#@end-non-alpha@
+#@alpha@
+## Title: @localization(locale="enUS", key="Title", namespace="ToC")@ DEV: @project-version@
+## Title-deDE: @localization(locale="deDE", key="Title", namespace="TOC")@ DEV: @project-version@
+## Title-zhCN: @localization(locale="zhCN", key="Title", namespace="TOC")@ DEV: @project-version@
+## Title-zhTW: @localization(locale="zhTW", key="Title", namespace="TOC")@ DEV: @project-version@
+## Title-frFR: @localization(locale="frFR", key="Title", namespace="TOC")@ DEV: @project-version@
+#@end-alpha@
+
 ## Notes: @localization(locale="enUS", key="Notes", namespace="TOC")@
 ## Notes-deDE: @localization(locale="deDE", key="Notes", namespace="TOC")@
 ## Notes-zhCN: @localization(locale="zhCN", key="Notes", namespace="TOC")@
