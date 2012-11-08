@@ -10,11 +10,11 @@
 ## Title-frFR: @localization(locale="frFR", key="Title", namespace="TOC")@
 #@end-non-alpha@
 #@alpha@
-## Title: @localization(locale="enUS", key="Title", namespace="ToC")@ DEV: @project-version@
-## Title-deDE: @localization(locale="deDE", key="Title", namespace="TOC")@ DEV: @project-version@
-## Title-zhCN: @localization(locale="zhCN", key="Title", namespace="TOC")@ DEV: @project-version@
-## Title-zhTW: @localization(locale="zhTW", key="Title", namespace="TOC")@ DEV: @project-version@
-## Title-frFR: @localization(locale="frFR", key="Title", namespace="TOC")@ DEV: @project-version@
+## Title: @localization(locale="enUS", key="Title", namespace="ToC")@ DEV
+## Title-deDE: @localization(locale="deDE", key="Title", namespace="TOC")@ DEV
+## Title-zhCN: @localization(locale="zhCN", key="Title", namespace="TOC")@ DEV
+## Title-zhTW: @localization(locale="zhTW", key="Title", namespace="TOC")@ DEV
+## Title-frFR: @localization(locale="frFR", key="Title", namespace="TOC")@ DEV
 #@end-alpha@
 
 ## Notes: @localization(locale="enUS", key="Notes", namespace="TOC")@
