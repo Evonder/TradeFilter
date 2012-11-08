@@ -1,4 +1,10 @@
 == ChangeLog
+*v3.5.1
+**++Remove commit hash from AddOn list++\\
+**++Update changelog.txt++\\
+**++Update change log++\\
+**++Change TOC Title to include version++\\
+**++Merge MoP branch++\\
 *v3.5.0
 **++Filter trade by default Fix various db key typos Fix version output in configuration panel++\\
 **++TOC bump to MoP++\\
