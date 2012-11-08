@@ -1,4 +1,89 @@
 == ChangeLog
+*v3.5.0
+**++Filter trade by default Fix various db key typos Fix version output in configuration panel++\\
+**++TOC bump to MoP++\\
+**++Create branch Mists of Pandaria++\\
+**++Change version output++\\
+**++Fix GetNumPartyMembers() -> GetNumSubgroupMembers() Fix GetNumRaidMembers() -> GetNumGroupMembers()++\\
+*v3.4.11
+**++Update Docs/main.txt++\\
+*v3.4.9
+**++Fix typo++\\
+**++Changed the way TradeFilter checks for party/raid members say/yell filtration++\\
+*v3.4.8
+**++Add spam keyword to Docs/main.txt for site searches++\\
+**++Fix Say/Yell logic++\\
+*v3.4.7
+**++Change AceTimer var to global to fix callback error++\\
+*v3.4.6
+**++Fix bad global and poor logic in GetParty() function++\\
+**++No point gathering raid/party members if you do not choose to exempt them++\\
+**++Push for WowAce packager++\\
+**++Change version output++\\
+**++Fix GetParty() raid/party exempt list AceTimer issue.(ticket 6++)++\\
+**++Add check to see if timer is already active.(ticket 6+)++\\
+**++Fix trying to GetPartyMember() on a raid member.(drycode)(ticket 6)++\\
+*v3.4.5
+**++Modify GUI to hide features when disabled++\\
+**++Add AceTimer-3.0 as embedded lib++\\
+**++Fix missing var for registered party and raid events++\\
+**++Fix Party/Raid exempt list++\\
+**++Add AceTimer-3.0 for said exempt list if an UNKNOWN party member is discovered++\\
+**++Modify project version output++\\
+**++Wowinterface needs more Git keyword substitutions++\\
+*v3.4.4
+**++Fix exempt party function from adding "unknown"++\\
+*3.4.3-release
+**++Fix unintentional wipe of current party exemption table++\\
+*3.4.2-release
+**++Fix LDB counting of filtered messages when debug is off, also make sure that LDB is loaded before calling LDBUpdate()++\\
+**++Code cleanup Remove AceTimer and AceConsole++\\
+*3.4.1-release
+**++Fix typo in GetParty() function++\\
+*3.4.0-release
+**++Replace nil with not++\\
+**++Replace various expressions++\\
+**++Remove unused variables++\\
+**++Add name and realm to TOC++\\
+**++Fix black/white list documentation++\\
+**++Fix license++\\
+*3.3.4-beta
+**++Fix allowing a blank entry into any list++\\
+**++Add check in FilterFunc() for special channels++\\
+**++Move profile management into TradeFilter GUI frame++\\
+*3.3.1-release
+**++Fix Print() line 155++\\
+*3.3.0-release
+**++Fix in-game version/tag output++\\
+*g30ede13
+**++Rewrite blacklist/whitelist check logic++\\
+**++Fix LDB blacklist counter++\\
+*3.2.5-beta
+**++Patch 4.0.1 code changes++\\
+**++Remove repeat detection and all related functions/configurations++\\
+**++Add LDB now shows all Filtered/Blacklist blocks++\\
+**++Remove loading message print(now prints to debug window)++\\
+**++Fix party exemption list from premature table wipes++\\
+**++Remove friends list initial import print(now prints to debug window)++\\
+**++Fix insure all tables exist before trying to iterate them++\\
+**++Fix case sensitivity++\\
+*3.2.4-beta
+**++Add allow friends/party to be filtered even if on exempt list [Ticket #5]++\\
+**++Fix project version output++\\
+*g49e9d0a
+**++Fix party exempt debug messages++\\
+**++Remove X-Compatible-With:++\\
+**++Fix TOC embeds++\\
+**++Fix party/raid exemption spam++\\
+**++Add exempt locales++\\
+*g5ce0454
+**++Fix party/raid exemption spam++\\
+**++Add exempt locales++\\
+*3.2.0-release
+**++Fix typo++\\
+**++Code cleanup++\\
+*r20101019064625
+**++SVN to Git conversion++\\
 *r216
 **++TOC to 40000++\\
 **++Add current party members to exempt list for say/yell++\\
