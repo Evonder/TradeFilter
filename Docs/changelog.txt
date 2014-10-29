@@ -1,4 +1,11 @@
 == ChangeLog
+*v3.5.3
+**++Verify API compatibility++\\
+**++TOC Bump++\\
+**++Localization update++\\
+**++Docs update++\\
+*v3.5.2
+**++TOC Bump++\\
 *v3.5.1
 **++Remove commit hash from AddOn list++\\
 **++Update changelog.txt++\\

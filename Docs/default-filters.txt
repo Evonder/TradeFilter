@@ -60,4 +60,4 @@ BG = {
 <</code>>
 
 Note: Adding a set, e.g. [xXyY], will attempt to find a match for any character given in a set. Example: lf[wWeEmM] will match for lfw, lfe and lfm.
-  e.g. http://www.wowwiki.com/Pattern_matching
+  e.g. http://wowpedia.org/Pattern_matching
