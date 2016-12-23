@@ -68,7 +68,7 @@ if (len(MAJOR_VERSION)<=8) then
 else
 	TF3.version = MAJOR_VERSION .. " DEV"
 end
-TF3.date = "@file-date-iso@"
+TF3.date = GetAddOnMetadata("TradeFilter3", "X-Date")
 
 --[[ Database Defaults ]]--
 defaults = {
@@ -138,6 +138,7 @@ end
 
 -- :OpenOptions(): Opens the options window.
 function TF3:OpenOptions()
+	InterfaceOptionsFrame_OpenToCategory(self.OptionsPanel)
 	InterfaceOptionsFrame_OpenToCategory(self.OptionsPanel)
 end
 
