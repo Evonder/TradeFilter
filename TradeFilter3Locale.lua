@@ -10,7 +10,7 @@ debug = true
 
 local L =  LibStub("AceLocale-3.0"):NewLocale("TradeFilter3", "enUS", true)
 if L then
---@localization(locale="enUS", format="lua_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat", namespace-delimiter=".")@
+--@localization(locale="enUS", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="subtable")@
 if GetLocale() == "enUS" then return end
 end
 
