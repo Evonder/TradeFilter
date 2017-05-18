@@ -2,7 +2,7 @@
 File Author: @file-author@
 File Revision: @file-abbreviated-hash@
 File Date: @file-date-iso@
-]]--
+]]-- 
 local debug = false
 --@debug@
 debug = true
