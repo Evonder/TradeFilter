@@ -243,7 +243,7 @@ end
 
 function TF3:GetColoredName(userID, cName)
 	if (cName ~= "") then
-		local localizedClass, englishClass, localizedRace, englishRace, sex = GetPlayerInfoByGUID(cName)
+		local localizedClass, englishClass, localizedRace, englishRace, sex, name, realm = GetPlayerInfoByGUID(cName)
 		if (englishClass) then
 			local classColorTable = RAID_CLASS_COLORS[englishClass]
 			if not (classColorTable) then
