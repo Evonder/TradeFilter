@@ -76,8 +76,9 @@ defaults = {
 	profile = {
 		turnOn = true,
 		firstlogin = true,
-		redirect = false,
+		redirect = true,
 		debug = false,
+		debug_checking = true,
 		filterSAY = false,
 		filterYELL = false,
 		filterGAC = false,
@@ -86,7 +87,7 @@ defaults = {
 		filterBG = false,
 		filterGeneral = false,
 		filterDuelSpam = false,
-		filterTrade = false,
+		filterTrade = true,
 		addfilterTRADE_enable = false,
 		addfilterBASE_enable = false,
 		addfilterBG_enable = false,
@@ -242,7 +243,7 @@ function TF3:GetNumElements(t)
 end
 
 function TF3:GetColoredName(userID, cName)
-	if (cName ~= "") then
+	if (userID or cName ~= "") then
 		local localizedClass, englishClass, localizedRace, englishRace, sex, name, realm = GetPlayerInfoByGUID(cName)
 		if (englishClass) then
 			local classColorTable = RAID_CLASS_COLORS[englishClass]
