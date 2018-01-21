@@ -9,9 +9,10 @@ addons:
 
 branches:
   only:
-  - /^v\d+\.\d+(\.\d+)?(-\S*)?$/
+  master
+  #~ - /^v\d+\.\d+(\.\d+)?(-\S*)?$/
 
-script: curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh | bash
+script: curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh -p 16408 | bash
 
 notifications:
   email:
