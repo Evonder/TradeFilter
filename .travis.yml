@@ -13,7 +13,7 @@ branches:
 
 script: 
   - curl -sO https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh
-  - bash release.sh -es -p trade-filter -w 13784
+  - bash release.sh -p trade-filter -w 13784 -g 7.3.0
 
 notifications:
   email:
