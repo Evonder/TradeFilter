@@ -35,9 +35,6 @@ externals:
  libs/AceDB-3.0:
   url: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceDB-3.0
   tag: latest
- libs/AceGUI-3.0:
-  url: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceGUI-3.0
-  tag: latest
  libs/AceAddon-3.0:
   url: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceAddon-3.0
   tag: latest
@@ -49,7 +46,4 @@ externals:
   tag: latest
  libs/LibDataBroker-1.1:
   url: git://git.wowace.com/wow/libdatabroker-1-1/mainline.git
-  tag: latest
- libs/LibDBIcon-1.0:
-  url: svn://svn.wowace.com/wow/libdbicon-1-0/mainline/trunk
   tag: latest
