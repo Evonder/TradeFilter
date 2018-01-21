@@ -243,7 +243,7 @@ function TF3:GetNumElements(t)
 end
 
 function TF3:GetColoredName(userID, cName)
-	if (userID or cName ~= "") then
+	if (userID and cName) then
 		local localizedClass, englishClass, localizedRace, englishRace, sex, name, realm = GetPlayerInfoByGUID(cName)
 		if (englishClass) then
 			local classColorTable = RAID_CLASS_COLORS[englishClass]
@@ -385,7 +385,9 @@ function TF3:BlackList(msg, userID, msgID, coloredName)
 							TF3:FindFrame(redirectFrame, "|cFFFF0000[" .. L["bLists"] .. "]|r |Hplayer:" .. userID .. ":" .. msgID .. "|h[" .. coloredName .. "]|h |cFFC08080: " .. msg .. "|r")
 							TF3:FindFrame(redirectFrame, L["MATCHED"] .. " |cFFFF0000" .. word .. "|r")
 							lastmsgID = msgID
-							TF3:LDBUpdate("ldbblack")
+							if (LDB) then
+								TF3:LDBUpdate("ldbblack")
+							end
 						end
 					end
 					return true
@@ -662,6 +664,7 @@ function TF3:FilterFunc(chan, ...)
 	local cName = arg12 or select(12, ...)
 	local coloredName = TF3:GetColoredName(userID, cName)
 	local msg = lower(msg)
+	local filtered
 	if (filterFuncList and TF3.db.profile.turnOn) then
 		filtered = true
 		if (TF3.db.profile.debug) then

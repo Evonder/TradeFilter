@@ -9,9 +9,6 @@ ignore:
  - .docmeta
  - Docs
 
-tools-used:
- - fprof
-
 externals:
  libs/LibStub:
   url: svn://svn.wowace.com/wow/libstub/mainline/trunk
@@ -55,3 +52,6 @@ externals:
  libs/LibDBIcon-1.0:
   url: svn://svn.wowace.com/wow/libdbicon-1-0/mainline/trunk
   tag: latest
+
+ignore:
+  - .travis.yml
