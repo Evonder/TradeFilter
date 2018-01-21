@@ -5,8 +5,9 @@ license-output: LICENSE.txt
 enable-nolib-creation: yes
 
 ignore:
- - .pkgmeta
+ - pkgmeta.yaml
  - .docmeta
+ - .travis.yml
  - Docs
 
 externals:
@@ -52,6 +53,3 @@ externals:
  libs/LibDBIcon-1.0:
   url: svn://svn.wowace.com/wow/libdbicon-1-0/mainline/trunk
   tag: latest
-
-ignore:
-  - .travis.yml
