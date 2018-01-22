@@ -12,10 +12,10 @@ branches:
   #~ - /^v\d+\.\d+(\.\d+)?(-\S*)?$/
 
 script: 
-  - curl -sO https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh
-  - bash release.sh -p trade-filter -w 13784 -g 7.3.0
+  - curl -sO https://raw.githubusercontent.com/Evonder/packager/master/release.sh
+  - bash release.sh -p 16408 -w 13784
 
 notifications:
   email:
     on_success: always
-    on_failure: always
+    on_failure: false

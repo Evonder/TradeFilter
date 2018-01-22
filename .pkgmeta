@@ -8,6 +8,7 @@ ignore:
  - .pkgmeta
  - .docmeta
  - .travis.yml
+ - .gitignore
  - Docs
 
 externals:
@@ -42,8 +43,8 @@ externals:
   url: svn://svn.wowace.com/wow/libfriends-1-0/mainline/trunk/LibFriends-1.0
   tag: latest
  libs/LibAboutPanel:
-  url: git://git.curseforge.net/wow/libaboutpanel/mainline.git
+  url: https://repos.curseforge.com/wow/libaboutpanel
   tag: latest
  libs/LibDataBroker-1.1:
-  url: git://git.wowace.com/wow/libdatabroker-1-1/mainline.git
+  url: https://repos.wowace.com/wow/libdatabroker-1-1
   tag: latest
