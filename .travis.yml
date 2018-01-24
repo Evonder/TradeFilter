@@ -4,18 +4,29 @@ language: c
 addons:
   apt:
     packages:
-    - pandoc
-    
+    - luarocks
+    # - pandoc
+
+install:
+  - eval $(luarocks path --bin)
+  - luarocks install --local luacheck
+
 branches:
   only:
   - master
   #~ - /^v\d+\.\d+(\.\d+)?(-\S*)?$/
 
-script: 
-  - curl -sO https://raw.githubusercontent.com/Evonder/packager/master/release.sh
-  - bash release.sh -p 16408 -w 13784
+script:
+  - /home/travis/.luarocks/bin/luacheck . --no-color -qo "011"
+  # - curl -sO https://raw.githubusercontent.com/Evonder/packager/master/release.sh
+  # - bash release.sh -p 16408 -w 13784
 
 notifications:
   email:
+    on_failure: always
     on_success: always
-    on_failure: false
+
+cache:
+  apt: true
+  directories:
+    - $HOME/.luarocks

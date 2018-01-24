@@ -1,0 +1,28 @@
+Markdown test
+
+== A Simple World of Warcraft Spam Filter!
+//Please help localize this project // [[http://www.wowace.com/projects/trade-filter/localization/|HERE]]\\
+
+TradeFilter does not only filter trade but has the ability to filter General, LookingforGroup, Say and Yell channels all which are configurable through the blizzard options panel.
+
+=== Channel Filters
+TradeFilter has a set of patterns for trade channel and separate set of patterns for all other channels, or "base" channels as we will call them. This allows the user to define what patterns may be good for trade but not other channels and vise versa. The user also has the ability to add patterns of their own to be matched against for both trade and "base" channel filters.\\
+
+[[http://www.wowace.com/projects/trade-filter/pages/default-filters/|Default Channel Filters]]\\
+
+=== Black and White Lists
+TradeFilter also has a built in Black and White list. Refer to the [[http://www.wowace.com/addons/trade-filter/pages/flow/|flowchart]] for how Black and White lists are checked.
+
+[[http://www.wowace.com/projects/trade-filter/pages/default-lists/|Default Black/White Lists]]\\
+
+=== Configuration
+<<code php>>/tf or /filter<</code>>
+
+=== To Do ===
+Nothing planned
+
+==== ChangeLog
+[[http://www.wowace.com/addons/trade-filter/pages/change-log/|ChangeLog Page]]\\
+
+=== Supported Translations
+//Please help localize this project // [[http://www.wowace.com/projects/trade-filter/localization/|HERE]]\\

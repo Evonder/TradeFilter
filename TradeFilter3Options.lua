@@ -11,7 +11,6 @@ local TF3 = TradeFilter3
 --[[ Locals ]]--
 local ipairs = ipairs
 local pairs = pairs
-local format = string.format
 local insert = table.insert
 local sort = table.sort
 local sub = string.sub

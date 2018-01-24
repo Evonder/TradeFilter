@@ -44,16 +44,11 @@ local ipairs = ipairs
 local pairs = pairs
 local find = string.find
 local sub = string.sub
-local gsub = string.gsub
 local len = string.len
 local lower = string.lower
 local format = string.format
 local insert = table.insert
 local remove = table.remove
-local sort = table.sort
-local floor = math.floor
-local power = math.pow
-local timerCount = 0
 local currentFriend
 local redirectFrame = L["redirectFrame"]
 local debugFrame = L["debugFrame"]

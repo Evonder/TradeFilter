@@ -9,6 +9,8 @@ ignore:
  - .docmeta
  - .travis.yml
  - .gitignore
+ - README.md
+ - _config.yml
  - Docs
 
 externals:
