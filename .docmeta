@@ -18,7 +18,3 @@
   type: markdown
   input-file: Docs/default-lists.txt
   output-page: "default-lists"
--
-  type: markdown
-  input-file: Docs/test.md
-  output-page: "test"

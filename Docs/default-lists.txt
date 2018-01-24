@@ -1,7 +1,8 @@
-TradeFilters default Black/White lists:
+## TradeFilters default Black/White lists:
 
-##White List##:
-<<code php>>
+### White List:
+
+```lua
 L.WHITELIST = {
 	WLIST1 = "enchant:%d+[^%a%d]",
 	WLIST2 = "item:%d+[^%a%d]",
@@ -10,10 +11,11 @@ L.WHITELIST = {
 	WLIST5 = "achievement:%d+[^%a%d]",
 	WLIST6 = "quest:%d+[^%a%d]",
 }
-<</code>>
+```
 
-##Black List##:
-<<code php>>
+### Black List:
+
+```lua
 L.BLACKLIST = {
 	BLIST1 = "%[.*%].*rectum",
 	BLIST10 = "%[.*%].*%[dirge%]",
@@ -26,7 +28,8 @@ L.BLACKLIST = {
 	BLIST8 = "%[.*%].*%[willy%]",
 	BLIST9 = "%[dirge%].*%[.*%]",
 }
-<</code>>
+```
 
-Note: Adding a set, e.g. [xXyY], will attempt to find a match for any character given in a set. Example: lf[wWeEmM] will match for lfw, lfe and lfm.
-  e.g. http://wowpedia.org/Pattern_matching
+_**Note**_: Adding a set, e.g. ```[xXyY]```, will attempt to find a match for any character given in a set. Example: lf ```[wWeEmM]``` will match for lfw, lfe and lfm.
+
+[Pattern Matching](http://wowpedia.org/Pattern_matching)

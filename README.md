@@ -9,20 +9,20 @@ TradeFilter has a set of patterns for trade channel and separate set of patterns
 [Default Channel Filters](http://www.wowace.com/projects/trade-filter/pages/default-filters/)
 
 ### Black and White Lists
-TradeFilter also has a built in Black and White list. Refer to the [flowchart](http://www.wowace.com/addons/trade-filter/pages/flow/) for how Black and White lists are checked.
+TradeFilter also has a built in Black and White list. Refer to the [flowchart](http://www.wowace.com/projects/trade-filter/pages/flow/) for how Black and White lists are checked.
 
 [Default Black/White Lists](http://www.wowace.com/projects/trade-filter/pages/default-lists/)
 
 ### Configuration
-'''
+```
 /tf or /filter
-'''
+```
 
 ### To Do
 Nothing planned
 
 #### ChangeLog
-[ChangeLog Page](http://www.wowace.com/addons/trade-filter/pages/change-log/)
+[ChangeLog Page](http://www.wowace.com/projects/trade-filter/pages/change-log/)
 
-### Supported Translations
+#### Supported Translations
 _Please help localize this project [HERE](http://www.wowace.com/projects/trade-filter/localization/)_
