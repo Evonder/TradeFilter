@@ -1,20 +1,24 @@
 -
-  type: creole
-  input-file: Docs/main.txt
+  type: markdown
+  input-file: README.md
   output-page: "Main"
 -
-  type: creole
+  type: markdown
   input-file: Docs/changelog.txt
   output-page: "ChangeLog"
 -
-  type: creole
+  type: markdown
   input-file: Docs/flow.txt
   output-page: "Flow"
 -
-  type: creole
+  type: markdown
   input-file: Docs/default-filters.txt
   output-page: "default-filters"
 -
-  type: creole
+  type: markdown
   input-file: Docs/default-lists.txt
   output-page: "default-lists"
+-
+  type: markdown
+  input-file: Docs/test.md
+  output-page: "test"
