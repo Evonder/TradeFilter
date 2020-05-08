@@ -1,4 +1,4 @@
-## Interface: 70300
+## Interface: 80300
 ## Version: @project-version@
 ## X-Curse-Project-ID: 16408
 ## X-WoWI-ID: 13784
