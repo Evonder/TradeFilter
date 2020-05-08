@@ -14,7 +14,7 @@ ignore:
  - Docs
 
 externals:
- libs/LibStub:
+ libs/LibStub
   url: svn://svn.wowace.com/wow/libstub/mainline/trunk
   tag: latest
  libs/CallbackHandler-1.0:
@@ -40,6 +40,9 @@ externals:
   tag: latest
  libs/AceAddon-3.0:
   url: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceAddon-3.0
+  tag: latest
+ lib/AceGUI-3.0:
+  url: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceGUI-3.0
   tag: latest
  libs/LibFriends-1.0:
   url: svn://svn.wowace.com/wow/libfriends-1-0/mainline/trunk/LibFriends-1.0
