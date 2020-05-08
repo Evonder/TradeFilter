@@ -13,7 +13,6 @@ before_script:
   - /home/travis/.luarocks/bin/luacheck . --no-color -q
 
 script:
-  #- /home/travis/.luarocks/bin/luacheck . --no-color -qo "011"
   - curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh | bash
 
 notifications:
