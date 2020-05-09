@@ -1,23 +1,12 @@
 sudo: false
-language: bash
-
+language: c
+ 
 addons:
   apt:
     packages:
-    - luarocks
     - pandoc
 
-before_script:
-- luarocks install --local luacheck
-- PATH=$HOME/.luarocks/bin:$PATH
-- eval $(luarocks path --bin)
-
-script:
-- luacheck .
-
 before_deploy:
-- lua .release/libstrip
-- lua .release/changelog > CHANGELOG.md
 - curl -s https://raw.githubusercontent.com/Rainrider/packager/wowace/release.sh -o .release/release.sh
 
 deploy:
@@ -28,7 +17,15 @@ deploy:
     tags: true
     condition: '"$TRAVIS_TAG" =~ ^[0-9]+\.[0-9]+\.[0-9]+$'
 
+#script: curl -sO https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh
+#after_script: bash release.sh -L -w 13784
+ 
+#branches:
+#  only:
+  #- master
+  #- /^v\d+\.\d+(\.\d+)?(-\S*)?$/
+
 notifications:
   email:
     on_failure: always
-    on_success: never
+    on_success: never 
