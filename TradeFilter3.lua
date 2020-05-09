@@ -33,7 +33,7 @@ File Date: @file-date-iso@
 ... is it fixed?
 --]]
 
-TradeFilter3 = LibStub("AceAddon-3.0"):NewAddon("TradeFilter3", "AceEvent-3.0")
+local TradeFilter3 = TradeFilter3 or LibStub("AceAddon-3.0"):NewAddon("TradeFilter3", "AceEvent-3.0")
 local L =  LibStub("AceLocale-3.0"):GetLocale("TradeFilter3", true)
 local libfriends = LibStub("LibFriends-1.0")
 local LDB = LibStub("LibDataBroker-1.1", true)
