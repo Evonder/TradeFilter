@@ -7,7 +7,7 @@ addons:
     - pandoc
 
 before_deploy:
-- curl -s https://raw.githubusercontent.com/Rainrider/packager/wowace/release.sh -o .release/release.sh
+- curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh -o .release/release.sh
 
 deploy:
   provider: script
