@@ -1,31 +1,15 @@
 sudo: false
 language: c
  
-addons:
-  apt:
-    packages:
-    - pandoc
-
-before_deploy:
-- curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh -o .release/release.sh
-
-deploy:
-  provider: script
-  script: bash .release/release.sh -- -L
-  skip_cleanup: true
-  on:
-    tags: true
-    condition: '"$TRAVIS_TAG" =~ ^[0-9]+\.[0-9]+\.[0-9]+$'
-
-#script: curl -sO https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh
-#after_script: bash release.sh -L -w 13784
+script: curl -sO https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh
+after_script: bash release.sh -- -L
  
-#branches:
-#  only:
+branches:
+  only:
   #- master
-  #- /^v\d+\.\d+(\.\d+)?(-\S*)?$/
+  - /^v\d+\.\d+(\.\d+)?(-\S*)?$/
 
 notifications:
   email:
     on_failure: always
-    on_success: never 
+    on_success: never
