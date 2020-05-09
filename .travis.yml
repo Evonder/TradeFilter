@@ -6,12 +6,13 @@ addons:
     packages:
     - pandoc
  
-script: curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh -L -w 13784 | bash
+script: curl -sO https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh
+after_script: bash release.sh -L -w 13784
  
 branches:
   only:
-  - master
-  #- /^v\d+\.\d+(\.\d+)?(-\S*)?$/
+  #- master
+  - /^v\d+\.\d+(\.\d+)?(-\S*)?$/
 
 notifications:
   email:

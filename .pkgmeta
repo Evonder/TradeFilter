@@ -12,6 +12,7 @@ ignore:
  - README.md
  - _config.yml
  - Docs
+ - .circleci
 
 externals:
  libs/AceAddon-3.0: https://repos.wowace.com/wow/ace3/trunk/AceAddon-3.0
