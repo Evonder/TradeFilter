@@ -22,7 +22,7 @@ TradeFilter also has a built in Black and White list. Refer to the [flowchart](h
 Nothing planned
 
 #### ChangeLog
-[ChangeLog Page](http://www.wowace.com/projects/trade-filter/pages/change-log)
+[ChangeLog Page](https://github.com/Evonder/TradeFilter/commits/master)
 
 #### Supported Translations
 _Please help localize this project [HERE](http://www.wowace.com/projects/trade-filter/localization/)_
