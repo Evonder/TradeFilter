@@ -61,4 +61,5 @@ TradeFilter3Locale.lua
 
 ## Core ##
 TradeFilter3.lua
+TradeFilter3DB.lua
 TradeFilter3Options.lua

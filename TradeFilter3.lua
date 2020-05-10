@@ -140,9 +140,7 @@ function TF3:OpenOptions()
 end
 
 function TF3:FirstLogin()
-	TF3.db.profile.whitelist = L.WHITELIST
-	TF3.db.profile.blacklist = L.BLACKLIST
-	TF3.db.profile.filters = L.FILTERS
+	TF3:FixWowAceSubnamespaces()
 	print(L.TOC.Title .. ": " .. TF3.version .. " " .. L["ENABLED"])
 end
 
