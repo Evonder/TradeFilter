@@ -1,13 +1,13 @@
 sudo: false
 language: minimal
  
-script: curl -sO https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh
-after_script: bash release.sh -s -L
+beforescript: curl -sSO https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh
+script: bash release.sh
  
 branches:
   only:
-  #- master
-  - /^v\d+\.\d+(\.\d+)?(-\S*)?$/
+  - master
+  #- /^v\d+\.\d+(\.\d+)?(-\S*)?$/
 
 notifications:
   email:
