@@ -2,7 +2,7 @@ package-as: TradeFilter3
 
 license-output: LICENSE.txt
 
-enable-nolib-creation: yes
+enable-nolib-creation: no
 
 ignore:
  - .pkgmeta
