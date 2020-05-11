@@ -45,10 +45,10 @@ function TF3:getOptions()
 							get = function() return TF3.db.profile.turnOn end,
 							set = function()
 								if not (TF3.db.profile.turnOn) then
-									print(L.TOC.Title .. " " .. TF3.version .. " " .. L["ENABLED"])
+									print(L["TOC/Title"] .. " " .. TF3.version .. " " .. L["ENABLED"])
 									TF3.db.profile.turnOn = not TF3.db.profile.turnOn
 								else
-									print(L.TOC.Title .. " " .. TF3.version .. " " .. L["DISABLED"])
+									print(L["TOC/Title"] .. " " .. TF3.version .. " " .. L["DISABLED"])
 									TF3.db.profile.turnOn = not TF3.db.profile.turnOn
 								end
 							end,
@@ -186,7 +186,7 @@ function TF3:getOptions()
 										local a = {}
 										local ret = ""
 										if not (TF3.db.profile.filters.SPECIAL) then
-											TF3.db.profile.filters.SPECIAL = L.FILTERS.SPECIAL
+											TF3.db.profile.filters.SPECIAL = TF3:FixWowAceSubnamespaces("SPECIAL")
 										end
 										for _,v in pairs(TF3.db.profile.filters.SPECIAL) do
 											insert(a, v)
@@ -223,7 +223,10 @@ function TF3:getOptions()
 									order = 13,
 									name = L["RSF"],
 									desc = L["RSF"],
-									func = function() TF3.db.profile.filters.SPECIAL = TF3:CopyTable(L.FILTERS.SPECIAL) end,
+									func = function()
+										local t = TF3:FixWowAceSubnamespaces("SPECIAL")
+										TF3.db.profile.filters.SPECIAL = TF3:CopyTable(t)
+									end,
 								},
 							},
 						},
@@ -281,7 +284,7 @@ function TF3:getOptions()
 												local a = {}
 												local ret = ""
 												if not (TF3.db.profile.filters.TRADE) then
-													TF3.db.profile.filters.TRADE = L.FILTERS.TRADE
+													TF3.db.profile.filters.TRADE = TF3:FixWowAceSubnamespaces("TRADE")
 												end
 												for _,v in pairs(TF3.db.profile.filters.TRADE) do
 													insert(a, v)
@@ -315,7 +318,10 @@ function TF3:getOptions()
 											order = 5,
 											name = L["RTF"],
 											desc = L["RTF"],
-											func = function() TF3.db.profile.filters.TRADE = TF3:CopyTable(L.FILTERS.TRADE) end,
+											func = function()
+												local t = TF3:FixWowAceSubnamespaces("TRADE")
+												TF3.db.profile.filters.TRADE = TF3:CopyTable(t)
+											end,
 										},
 									},
 								},
@@ -362,7 +368,7 @@ function TF3:getOptions()
 												local a = {}
 												local ret = ""
 												if not (TF3.db.profile.filters.BASE) then
-													TF3.db.profile.filters.BASE = L.FILTERS.BASE
+													TF3.db.profile.filters.BASE = TF3:FixWowAceSubnamespaces("BASE")
 												end
 												for _,v in pairs(TF3.db.profile.filters.BASE) do
 													insert(a, v)
@@ -396,7 +402,10 @@ function TF3:getOptions()
 											order = 8,
 											name = L["RBF"],
 											desc = L["RBF"],
-											func = function() TF3.db.profile.filters.BASE = TF3:CopyTable(L.FILTERS.BASE) end,
+											func = function()
+												local t = TF3:FixWowAceSubnamespaces("BASE")
+												TF3.db.profile.filters.BASE = TF3:CopyTable(t)
+											end,
 										},
 									},
 								},
@@ -443,7 +452,7 @@ function TF3:getOptions()
 												local a = {}
 												local ret = ""
 												if not (TF3.db.profile.filters.BG) then
-													TF3.db.profile.filters.BG = L.FILTERS.BG
+													TF3.db.profile.filters.BG = TF3:FixWowAceSubnamespaces("BG")
 												end
 												for _,v in pairs(TF3.db.profile.filters.BG) do
 													insert(a, v)
@@ -477,7 +486,10 @@ function TF3:getOptions()
 											order = 8,
 											name = L["RBF"],
 											desc = L["RBF"],
-											func = function() TF3.db.profile.filters.BG = TF3:CopyTable(L.FILTERS.BG) end,
+											func = function()
+												local t = TF3:FixWowAceSubnamespaces("BG")
+												TF3.db.profile.filters.BG = TF3:CopyTable(t)
+											end,
 										},
 									},
 								},
@@ -544,7 +556,7 @@ function TF3:getOptions()
 												local a = {}
 												local ret = ""
 												if not (TF3.db.profile.blacklist) then
-													TF3.db.profile.blacklist = L.BLACKLIST
+													TF3.db.profile.blacklist = TF3:FixWowAceSubnamespaces("blacklist")
 												end
 												for _,v in pairs(TF3.db.profile.blacklist) do
 													insert(a, v)
@@ -578,7 +590,10 @@ function TF3:getOptions()
 											order = 5,
 											name = L["RBLS"],
 											desc = L["RBLS"],
-											func = function() TF3.db.profile.blacklist = TF3:CopyTable(L.BLACKLIST) end,
+											func = function()
+												local t = TF3:FixWowAceSubnamespaces("blacklist")
+												TF3.db.profile.blacklist = TF3:CopyTable(t)
+											end,
 										},
 									},
 								},
@@ -644,7 +659,7 @@ function TF3:getOptions()
 												local a = {}
 												local ret = ""
 												if not (TF3.db.profile.whitelist) then
-													TF3.db.profile.whitelist = L.WHITELIST
+													TF3.db.profile.whitelist = TF3:FixWowAceSubnamespaces("whitelist")
 												end
 												for _,v in pairs(TF3.db.profile.whitelist) do
 													insert(a, v)
@@ -678,7 +693,10 @@ function TF3:getOptions()
 											order = 7,
 											name = L["RWLS"],
 											desc = L["RWLS"],
-											func = function() TF3.db.profile.whitelist = TF3:CopyTable(L.WHITELIST) end,
+											func = function()
+												local t = TF3:FixWowAceSubnamespaces("whitelist")
+												TF3.db.profile.whitelist = TF3:CopyTable(t)
+											end,
 										},
 									},
 								},

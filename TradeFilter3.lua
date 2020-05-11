@@ -123,7 +123,6 @@ function TF3:OnInitialize()
 
 	if (TF3.db.profile.firstlogin) then
 		TF3:FirstLogin()
-		TF3.db.profile.firstlogin = false
 	end
 
 	if IsLoggedIn() then
@@ -140,8 +139,9 @@ function TF3:OpenOptions()
 end
 
 function TF3:FirstLogin()
-	TF3:FixWowAceSubnamespaces()
-	print(L.TOC.Title .. ": " .. TF3.version .. " " .. L["ENABLED"])
+	TF3:dbImportSV()
+	TF3.db.profile.firstlogin = false
+	print(L["TOC/Title"] .. ": " .. TF3.version .. " " .. L["ENABLED"])
 end
 
 function TF3:IsLoggedIn()
@@ -351,7 +351,7 @@ end
 --[[ Base blacklist words from BadBoy(Funkydude) ]]--
 function TF3:BlackList(msg, userID, msgID, coloredName)
 	if not (TF3.db.profile.blacklist) then
-		TF3.db.profile.blacklist = L.BLACKLIST
+		TF3.db.profile.blacklist = TF3:FixWowAceSubnamespaces("blacklist")
 	end
 	local blword = TF3.db.profile.blacklist
 	local msg = lower(msg)
@@ -394,7 +394,7 @@ end
 --[[ WhiteList Func ]]--
 function TF3:WhiteList(msg, userID, msgID, coloredName)
 	if not (TF3.db.profile.whitelist) then
-		TF3.db.profile.whitelist = L.WHITELIST
+		TF3.db.profile.whitelist = TF3:FixWowAceSubnamespaces("whitelist")
 	end
 	local wlword = TF3.db.profile.whitelist
 	local msg = lower(msg)
@@ -418,7 +418,7 @@ end
 --[[ Special Channels Func ]]--
 function TF3:SpecialChans(chanName)
 	if not (TF3.db.profile.filters.SPECIAL) then
-		TF3.db.profile.filters.SPECIAL = L.FILTERS.SPECIAL
+		TF3.db.profile.filters.SPECIAL = TF3:FixWowAceSubnamespaces("SPECIAL")
 	end
 	local schans = TF3.db.profile.filters.SPECIAL
 	local chanName = lower(chanName)
@@ -667,7 +667,7 @@ function TF3:FilterFunc(chan, ...)
 		end
 		if (zoneID == 2 or chan == "X. " .. chanName) then
 			if not (TF3.db.profile.filters.TRADE) then
-				TF3.db.profile.filters.TRADE = L.FILTERS.TRADE
+				TF3.db.profile.filters.TRADE = TF3:FixWowAceSubnamespaces("TRADE")
 			end
 			for _,word in pairs(TF3.db.profile.filters.TRADE) do
 				if (TF3.db.profile.debug and not TF3.db.profile.debug_checking) then
@@ -687,7 +687,7 @@ function TF3:FilterFunc(chan, ...)
 			end
 		elseif (chan == "0. BG") then
 			if not (TF3.db.profile.filters.BG) then
-				TF3.db.profile.filters.BG = L.FILTERS.BG
+				TF3.db.profile.filters.BG = TF3:FixWowAceSubnamespaces("BG")
 			end
 			for _,word in pairs(TF3.db.profile.filters.BG) do
 				if (TF3.db.profile.debug and not TF3.db.profile.debug_checking) then
@@ -707,7 +707,7 @@ function TF3:FilterFunc(chan, ...)
 			end
 		else
 			if not (TF3.db.profile.filters.BASE) then
-				TF3.db.profile.filters.BASE = L.FILTERS.BASE
+				TF3.db.profile.filters.BASE = TF3:FixWowAceSubnamespaces("BASE")
 			end
 			for _,word in pairs(TF3.db.profile.filters.BASE) do
 				if (TF3.db.profile.debug and not TF3.db.profile.debug_checking) then

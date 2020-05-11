@@ -15,16 +15,42 @@ ignore:
  - .circleci
 
 externals:
- libs/AceAddon-3.0: https://repos.wowace.com/wow/ace3/trunk/AceAddon-3.0
- libs/AceConfig-3.0: https://repos.wowace.com/wow/ace3/trunk/AceConfig-3.0
- libs/AceDB-3.0: https://repos.wowace.com/wow/ace3/trunk/AceDB-3.0
- libs/AceDBOptions-3.0: https://repos.wowace.com/wow/ace3/trunk/AceDBOptions-3.0
- libs/AceEvent-3.0: https://repos.wowace.com/wow/ace3/trunk/AceEvent-3.0
- libs/AceGUI-3.0: https://repos.wowace.com/wow/ace3/trunk/AceGUI-3.0
- libs/AceLocale-3.0: https://repos.wowace.com/wow/ace3/trunk/AceLocale-3.0
- libs/AceConsole-3.0: https://repos.wowace.com/wow/ace3/trunk/AceConsole-3.0
- libs/CallbackHandler-1.0: https://repos.wowace.com/wow/callbackhandler/trunk/CallbackHandler-1.0
- libs/LibFriends-1.0: https://repos.wowace.com/wow/libfriends-1-0/trunk
- libs/LibAboutPanel: https://repos.wowace.com/wow/libaboutpanel-2-0/trunk
- libs/LibDataBroker-1.1: git://github.com/tekkub/libdatabroker-1-1.git
- libs/LibStub: https://repos.wowace.com/wow/libstub/trunk
+ libs/AceAddon-3.0:
+  url: https://repos.wowace.com/wow/ace3/trunk/AceAddon-3.0
+  tag: latest
+ libs/AceConfig-3.0:
+  url: https://repos.wowace.com/wow/ace3/trunk/AceConfig-3.0
+  tag: latest
+ libs/AceDB-3.0:
+  url: https://repos.wowace.com/wow/ace3/trunk/AceDB-3.0
+  tag: latest
+ libs/AceDBOptions-3.0:
+  url: https://repos.wowace.com/wow/ace3/trunk/AceDBOptions-3.0
+  tag: latest
+ libs/AceEvent-3.0:
+  url: https://repos.wowace.com/wow/ace3/trunk/AceEvent-3.0
+  tag: latest
+ libs/AceGUI-3.0:
+  url: https://repos.wowace.com/wow/ace3/trunk/AceGUI-3.0
+  tag: latest
+ libs/AceLocale-3.0:
+  url: https://repos.wowace.com/wow/ace3/trunk/AceLocale-3.0
+  tag: latest
+ libs/AceConsole-3.0:
+  url: https://repos.wowace.com/wow/ace3/trunk/AceConsole-3.0
+  tag: latest
+ libs/CallbackHandler-1.0:
+  url: https://repos.wowace.com/wow/callbackhandler/trunk
+  tag: latest
+ libs/LibFriends-1.0:
+  url: https://repos.wowace.com/wow/libfriends-1-0/trunk
+  tag: latest
+ libs/LibAboutPanel:
+  url: https://repos.curseforge.com/wow/libaboutpanel
+  tag: latest
+ libs/LibDataBroker-1.1:
+  url: git://github.com/tekkub/libdatabroker-1-1.git
+  tag: latest
+ libs/LibStub:
+  url: https://repos.wowace.com/wow/libstub/trunk
+  tag: latest
