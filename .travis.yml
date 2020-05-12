@@ -2,7 +2,7 @@ sudo: false
 language: minimal
  
 beforescript: curl -sSO https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh
-script: bash release.sh -s
+script: bash release.sh
  
 branches:
   only:
