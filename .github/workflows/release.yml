@@ -1,8 +1,9 @@
 name: Release new AddOn version
 on:
   push:
-    tags:
+    branches:
       - master
+    tags:
       #- '**'
 jobs:
   release:
