@@ -1,4 +1,4 @@
-name: Release new AddOn version
+name: Release new AddOn no-lib version
 on:
   push:
     branches:
@@ -19,7 +19,7 @@ jobs:
 
       # use a specific version of release.sh (short-SHA)
       #- uses: BigWigsMods/packager@9a689b3
-      
+
     env:
       CF_API_KEY: ${{ secrets.CF_API_KEY }}
       WOWI_API_TOKEN: ${{ secrets.WOWI_API_TOKEN }}
