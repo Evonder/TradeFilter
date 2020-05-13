@@ -2,9 +2,9 @@ name: Release new AddOn version
 on:
   push:
     branches:
-      - master
+      #- master
     tags:
-      #- '**'
+      - '**'
 jobs:
   release:
     runs-on: ubuntu-latest
