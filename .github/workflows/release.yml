@@ -1,10 +1,11 @@
-name: Release new AddOn version
+name: Build Release
 on:
   push:
     branches:
       #- master
     tags:
       - '**'
+
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -12,19 +13,15 @@ jobs:
       # pull the repository (required)
       - uses: actions/checkout@v1
 
-      # run release.sh without any arguments (default)
-      - uses: Evonder/packager@master
-        with:
-          args: release.sh 
+      # fetch release from github and make executable
+      - name: Fetch Script
+        run: |
+          wget -O release.sh https://raw.githubusercontent.com/Evonder/packager/master/release.sh
+          chmod +x release.sh
 
-      # run release.sh with arguments
-      #- uses: BigWigsMods/packager@master
-      #  with:
-      #    args: release.sh -s        
-
-      # use a specific version of release.sh (short-SHA)
-      #- uses: BigWigsMods/packager@9a689b3      
-    env:
-      CF_API_KEY: ${{ secrets.CF_API_KEY }}
-      WOWI_API_TOKEN: ${{ secrets.WOWI_API_TOKEN }}
-      GH_API_TOKEN: ${{ secrets.GITHUB_API_TOKEN }}
+      - name: Package and Push
+        run: ./release.sh -p 26567 -w 13784
+        env:
+          CF_API_KEY: ${{ secrets.CF_API_KEY }}
+          GH_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WOWI_API_TOKEN: ${{ secrets.WOWI_API_TOKEN }}
