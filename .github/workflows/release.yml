@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v1
 
       # run release.sh without any arguments (default)
-      - uses: BigWigsMods/packager@master
+      - uses: Evonder/packager@master
         with:
           args: release.sh 
 
