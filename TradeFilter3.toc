@@ -26,7 +26,6 @@
 
 ## Author: @project-author@
 ## X-Date: @project-date-iso@
-## X-Credits: Translations: Contiki(deDE)
 ## X-eMail: evonder AT gmail DOT com
 ## X-Website: https://github.com/Evonder/TradeFilter
 ## X-Category: Chat & Communication
