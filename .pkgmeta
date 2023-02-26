@@ -46,5 +46,5 @@ externals:
   url: git://github.com/tekkub/libdatabroker-1-1.git
   tag: latest
  libs/LibStub:
-  url: https://repos.wowace.com/wow/libstub/trunk
+  url: https://github.com/wowace-clone/LibStub.git
   tag: latest
