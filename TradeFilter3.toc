@@ -1,4 +1,4 @@
-## Interface: 80300
+## Interface: 100005
 ## Version: @project-version@
 ## X-Curse-Project-ID: 16408
 ## X-WoWI-ID: 13784
@@ -28,14 +28,14 @@
 ## X-Date: @project-date-iso@
 ## X-Credits: Translations: Contiki(deDE)
 ## X-eMail: evonder AT gmail DOT com
-## X-Website: http://www.wowace.com/addons/trade-filter/
+## X-Website: https://github.com/Evonder/TradeFilter
 ## X-Category: Chat & Communication
 ## X-Localizations: enUS, deDE, zhTW
 ## X-License: BSD
 ## SavedVariables: TradeFilter3DB
 
-## OptionalDeps: Ace3, LibAboutPanel, LibDataBroker-1.1, LibFriends-1.0
-## X-Embeds: Ace3, LibAboutPanel, LibDataBroker-1.1, LibFriends-1.0
+## OptionalDeps: Ace3, LibDataBroker-1.1
+## X-Embeds: Ace3, LibDataBroker-1.1
 
 ## LoadManagers: AddonLoader
 ## X-LoadOn-Always: delayed
@@ -51,8 +51,6 @@ libs\AceEvent-3.0\AceEvent-3.0.xml
 libs\AceGUI-3.0\AceGUI-3.0.xml
 libs\AceLocale-3.0\AceLocale-3.0.xml
 libs\AceConfig-3.0\AceConfig-3.0.xml
-libs\LibFriends-1.0\LibFriends-1.0\lib.xml
-libs\LibAboutPanel\lib.xml
 libs\LibDataBroker-1.1\LibDataBroker-1.1.lua
 #@end-no-lib-strip@
 

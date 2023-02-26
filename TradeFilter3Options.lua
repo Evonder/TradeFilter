@@ -731,34 +731,6 @@ function TF3:getOptions()
 									get = function() return TF3.db.profile.exmptfriendslist end,
 									set = function() TF3.db.profile.exmptfriendslist = not TF3.db.profile.exmptfriendslist end,
 								},
-								exemptGroupFriends = {
-									type = "group",
-									handler = TF3,
-									order = 3,
-									disabled = function()
-										return not TF3.db.profile.turnOn
-									end,
-									name = L["Exempt Friend List"],
-									args = {
-										currentFriends_table_content = {
-											type = 'description',
-											fontSize = "medium",
-											disabled = true,
-											order = 1,
-											name = function()
-												local ret = ""
-												for k,v in pairs(TF3.db.profile.friendslist) do
-													if ret == "" then
-														ret = v
-													else
-														ret = ret .. "\n" .. v
-													end
-												end
-												return ret
-											end,
-										},
-									},
-								},
 							},
 						},
 						outputGroup = {
