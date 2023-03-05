@@ -3,26 +3,9 @@
 ## X-Curse-Project-ID: 16408
 ## X-WoWI-ID: 13784
 
-#@non-alpha@
-## Title: @localization(locale="enUS", key="Title", namespace="ToC")@
-## Title-deDE: @localization(locale="deDE", key="Title", namespace="TOC")@
-## Title-zhCN: @localization(locale="zhCN", key="Title", namespace="TOC")@
-## Title-zhTW: @localization(locale="zhTW", key="Title", namespace="TOC")@
-## Title-frFR: @localization(locale="frFR", key="Title", namespace="TOC")@
-#@end-non-alpha@
-#@alpha@
-## Title: @localization(locale="enUS", key="Title", namespace="ToC")@ DEV
-## Title-deDE: @localization(locale="deDE", key="Title", namespace="TOC")@ DEV
-## Title-zhCN: @localization(locale="zhCN", key="Title", namespace="TOC")@ DEV
-## Title-zhTW: @localization(locale="zhTW", key="Title", namespace="TOC")@ DEV
-## Title-frFR: @localization(locale="frFR", key="Title", namespace="TOC")@ DEV
-#@end-alpha@
+## Title: TradeFilter3
 
-## Notes: @localization(locale="enUS", key="Notes", namespace="TOC")@
-## Notes-deDE: @localization(locale="deDE", key="Notes", namespace="TOC")@
-## Notes-zhCN: @localization(locale="zhCN", key="Notes", namespace="TOC")@
-## Notes-zhTW: @localization(locale="zhTW", key="Notes", namespace="TOC")@
-## Notes-frFR: @localization(locale="frFR", key="Notes", namespace="TOC")@
+## Notes: A Simple World of Warcraft Spam Filter!
 
 ## Author: @project-author@
 ## X-Date: @project-date-iso@

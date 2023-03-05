@@ -35,7 +35,6 @@ File Date: @file-date-iso@
 
 local TradeFilter3 = TradeFilter3 or LibStub("AceAddon-3.0"):NewAddon("TradeFilter3", "AceEvent-3.0")
 local L =  LibStub("AceLocale-3.0"):GetLocale("TradeFilter3", true)
-local libfriends = LibStub("LibFriends-1.0")
 local LDB = LibStub("LibDataBroker-1.1", true)
 local TF3 = TradeFilter3
 
@@ -142,7 +141,6 @@ function TF3:FirstLogin()
 end
 
 function TF3:IsLoggedIn()
-	self:RegisterEvent("FRIENDLIST_UPDATE", "GetFriends")
 	self:UnregisterEvent("PLAYER_LOGIN")
 	TF3:DuelFilter()
 
@@ -245,41 +243,22 @@ function TF3:GetColoredName(userID, guid)
 end
 
 --[[ Party Functions ]]--
-function TF3:IsParty(userID)
+function TF3:IsParty(userName)
 	if not (TF3.db.profile.exmptparty) then return false end
-	local numPartyMembers = GetNumSubgroupMembers()
-	local numRaidMembers = GetNumGroupMembers()
-  if (numRaidMembers > 0) then
-    for i=1, numRaidMembers, 1 do
-      local partymember = UnitName("raid"..i)
-      if find(userID,partymember) then
-        return true
-      end
-    end
-  elseif (numPartyMembers > 0 and numRaidMembers == 0) then
-    for i=1, numPartyMembers, 1 do
-      local partymember = UnitName("party"..i)
-      if find(userID,partymember) then
-        return true
-      end
-    end
-  end
+	local UnitInRaid = UnitInRaid
+	local UnitInParty = UnitInParty
+	if (UnitInParty(userName) or UnitInRaid(userName)) then
+		return true
+	end
 	return false
 end
 
 --[[ Friends Functions ]]--
 function TF3:IsFriend(userID, guid)
-    if not (TF3.db.profile.exmptfriendslist) then return false end
+	if not (TF3.db.profile.exmptfriendslist) then return false end
     
-    local isBnetFriend
-	if C_BattleNet then -- Retail
-		isBnetFriend = C_BattleNet.GetGameAccountInfoByGUID(guid)
-	else -- XXX classic compat
-		local _, bNetFriend = BNGetGameAccountInfoByGUID(guid)
-		isBnetFriend = bNetFriend
-	end
-    
-	if isBnetFriend or IsFriend(guid) then
+	local IsFriend = C_FriendList.IsFriend(guid)
+	if IsFriend then
 		return true
 	end
 	return false
@@ -379,21 +358,21 @@ end
 
 --[[ Window and Chat Functions ]]--
 function TF3:FindFrame(toFrame, msg)
-	for i=1,FCF_GetNumActiveChatFrames() do
+	for i=1,NUM_CHAT_WINDOWS do
 		local name = GetChatWindowInfo(i)
 		if (toFrame == name) then
 			local msgFrame = _G["ChatFrame" .. i]
 			msgFrame:AddMessage(msg)
-        else
-            TF3:CreateFrame(toFrame, msg)
+			return
 		end
 	end
+	TF3:CreateFrame(toFrame, msg)
 end
 
-function TF3:CreateFrame(newFrame, msg)
-	local newFrame = FCF_OpenNewWindow(newFrame)
-	ChatFrame_RemoveAllMessageGroups(newFrame)
-  	ChatFrame_RemoveAllChannels(newFrame)
+function TF3:CreateFrame(toFrame, msg)
+	newFrame = FCF_OpenNewWindow(toFrame)
+	--ChatFrame_RemoveAllMessageGroups(newFrame)
+  	--ChatFrame_RemoveAllChannels(newFrame)
 	newFrame:AddMessage(msg)
 end
 
@@ -411,7 +390,7 @@ local function PreFilterFunc_Addon(self, event, ...)
 	local blacklisted = TF3:BlackList(msg, userID, msgID, coloredName)
 	local whitelisted = TF3:WhiteList(msg, userID, msgID, coloredName)
 	if (TF3.db.profile.filterGAC) then
-		if (find(prefix,"ET") and distType == "GUILD") then
+		if (distType == "GUILD") then
 			if not (TF3:IsFriend(userID, guid)) then
 				if (userID == UnitName("Player") and not TF3.db.profile.filterSELF) then
 					filtered = false
