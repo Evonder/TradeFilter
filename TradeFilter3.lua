@@ -48,7 +48,6 @@ local lower = string.lower
 local format = string.format
 local insert = table.insert
 local remove = table.remove
-local IsFriend = C_FriendList.IsFriend
 local redirectFrame = L["redirectFrame"]
 local debugFrame = L["debugFrame"]
 local lastmsgID
@@ -422,7 +421,7 @@ local function PreFilterFunc_Say(self, event, ...)
 	local whitelisted = TF3:WhiteList(msg, userID, msgID, coloredName)
 	if (TF3.db.profile.filterSAY) then
 		if (event == "CHAT_MSG_SAY") then
-			if not (TF3:IsFriend(userID, guid)) and not (TF3:IsParty(userID)) then
+			if not (TF3:IsFriend(userID, guid)) and not (TF3:IsParty(userName)) then
 				if (userID == UnitName("Player") and not TF3.db.profile.filterSELF) then
 					filtered = false
 				elseif (whitelisted and not blacklisted) then
@@ -450,7 +449,7 @@ local function PreFilterFunc_Yell(self, event, ...)
 	local whitelisted = TF3:WhiteList(msg, userID, msgID, coloredName)
 	if (TF3.db.profile.filterYELL) then
 		if (event == "CHAT_MSG_YELL") then
-			if not (TF3:IsFriend(userID, guid)) and not (TF3:IsParty(userID)) then
+			if not (TF3:IsFriend(userID, guid)) and not (TF3:IsParty(userName)) then
 				if (userID == UnitName("Player") and not TF3.db.profile.filterSELF) then
 					filtered = false
 				elseif (whitelisted and not blacklisted) then
