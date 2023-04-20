@@ -50,7 +50,8 @@ local insert = table.insert
 local remove = table.remove
 local redirectFrame = L["redirectFrame"]
 local debugFrame = L["debugFrame"]
-local lastmsgID
+local chatFrames = {}
+local lastmsgID = 0
 local msgsFiltered = 0
 local msgsBlackFiltered = 0
 
@@ -125,7 +126,11 @@ function TF3:OnInitialize()
     end
 
     TF3:LDBInitialize()
-end
+    
+    TF3:indexChatFrames()
+    self:RegisterEvent("ZONE_CHANGED", "indexChatFrames")
+    self:RegisterEvent("ZONE_CHANGED_INDOORS", "indexChatFrames")
+    self:RegisterEvent("ZONE_CHANGED_NEW_AREA", "indexChatFrames")end
 
 -- :OpenOptions(): Opens the options window.
 function TF3:OpenOptions()
@@ -275,28 +280,51 @@ function TF3:DuelFilter()
 end
 
 --[[ Window and Chat Functions ]]--
+function TF3:indexChatFrames()
+    local name, frame
+    local msg = "SENDING MESSAGE TO SPAM FRAME!"
+    for i=1,NUM_CHAT_WINDOWS do
+        name = GetChatWindowInfo(i)
+        frame = _G["ChatFrame" .. i]
+        chatFrames[name] = frame
+    end
+end
+        
 function TF3:FindFrame(toFrame, msg, msgID)
+    local frame
+    local keys = {}
     if (msgID == lastmsgID) then
         return
-    else
-        for i=1,NUM_CHAT_WINDOWS do
-            local name = GetChatWindowInfo(i)
-            if (toFrame == name) then
-                local msgFrame = _G["ChatFrame" .. i]
-                msgFrame:AddMessage(msg)
-                lastmsgID = msgID
-                return
-            end
+    end
+    for k,v in pairs(chatFrames) do
+        keys[#keys+1] = k
+    end
+    
+    for i=1, #keys do
+        if (keys[i] == toFrame and toFrame == redirectFrame) then
+            frame = chatFrames[redirectFrame]
+            frame:AddMessage(msg)
+            return
+        elseif (keys[i] == toFrame and toFrame == debugFrame) then
+            frame = chatFrames[debugFrame]
+            frame:AddMessage(msg)
+            return
         end
     end
-    TF3:createWindow(toFrame, msg)
+    TF3:createChatFrame(toFrame, msg, msgID) 
+    return
 end
 
-function TF3:createWindow(toFrame, msg)
-    newWindow = FCF_OpenNewWindow(toFrame)
-    ChatFrame_RemoveAllMessageGroups(newWindow)
-    ChatFrame_RemoveAllChannels(newWindow)
-    newWindow:AddMessage(msg)
+function TF3:createChatFrame(toFrame, msg, msgID)
+    local frame
+    frame = FCF_OpenNewWindow(toFrame)
+    ChatFrame_RemoveAllMessageGroups(frame)
+    ChatFrame_RemoveAllChannels(frame)
+--     SetChatWindowShown(toFrame, true);
+--     SetChatWindowLocked(toFrame, isLocked)
+    frame:AddMessage(msg)
+    lastmsgID = msgID
+    TF3:indexChatFrames()
 end
 
 --[[ BlackList Func ]]--
@@ -588,9 +616,9 @@ function TF3:FilterFunc(chan, msg, userID, zoneID, chanID, chanName, msgID, guid
                         TF3:FindFrame(debugFrame, L["MATCHED"] .. " |cffff8080" .. word .. "|r", msgID)
                     end
                     filtered = false
-                    end
                 end
             end
+        end
         if (filtered) then
             if (TF3.db.profile.debug) then
                 TF3:FindFrame(debugFrame, L["NOMATCH"], msgID)
@@ -607,6 +635,7 @@ function TF3:FilterFunc(chan, msg, userID, zoneID, chanID, chanName, msgID, guid
             end
         end
     end
+    lastmsgID = msgID
     return filtered
 end
 

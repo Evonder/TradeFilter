@@ -676,6 +676,9 @@ function TF3:getOptions()
 									type = 'toggle',
 									order = 3,
 									width = "full",
+									disabled = function()
+										return not TF3.db.profile.redirect
+									end,
 									name = L["RedirBL"],
 									desc = L["RedirDesc"],
 									get = function() return TF3.db.profile.redirect_blacklist end,
@@ -701,7 +704,9 @@ function TF3:getOptions()
 									type = 'toggle',
 									order = 6,
 									width = "full",
-									disabled = false,
+									disabled = function()
+										return not TF3.db.profile.debug
+									end,
 									hidden = false,
 									name = L["DebugChecking"],
 									desc = L["DebugCheckingD"],
