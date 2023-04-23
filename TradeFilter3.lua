@@ -33,7 +33,7 @@ File Date: @file-date-iso@
 ... is it fixed?
 --]]
 
-local TradeFilter3 = TradeFilter3 or LibStub("AceAddon-3.0"):NewAddon("TradeFilter3", "AceEvent-3.0")
+local TradeFilter3 = LibStub("AceAddon-3.0"):NewAddon("TradeFilter3", "AceEvent-3.0")
 local L =  LibStub("AceLocale-3.0"):GetLocale("TradeFilter3", true)
 local LDB = LibStub("LibDataBroker-1.1", true)
 local TF3 = TradeFilter3
@@ -64,7 +64,7 @@ end
 TF3.date = GetAddOnMetadata("TradeFilter3", "X-Date")
 
 --[[ Database Defaults ]]--
-defaults = {
+local defaults = {
     profile = {
         turnOn = true,
         firstlogin = true,
@@ -249,11 +249,11 @@ function TF3:GetColoredName(userID, guid)
 end
 
 --[[ Party Functions ]]--
-function TF3:IsParty(userName)
+function TF3:IsParty(userID)
     if not (TF3.db.profile.exmptparty) then return false end
     local UnitInRaid = UnitInRaid
     local UnitInParty = UnitInParty
-    if (UnitInParty(userName) or UnitInRaid(userName)) then
+    if (UnitInParty(userID) or UnitInRaid(userID)) then
         return true
     end
     return false
@@ -282,11 +282,10 @@ end
 --[[ Window and Chat Functions ]]--
 function TF3:indexChatFrames()
     local name, frame
-    local msg = "SENDING MESSAGE TO SPAM FRAME!"
     for i=1,NUM_CHAT_WINDOWS do
         name = GetChatWindowInfo(i)
         frame = _G["ChatFrame" .. i]
-        chatFrames[name] = frame
+        if (name ~= nil) then chatFrames[name] = frame end
     end
 end
         
@@ -397,7 +396,7 @@ local function PreFilterFunc_Say(self, event, ...)
     end
     if (TF3.db.profile.filterSAY) then
         if (event == "CHAT_MSG_SAY") then
-            if not (TF3:IsFriend(userID, guid)) and not (TF3:IsParty(userName)) then
+            if not (TF3:IsFriend(userID, guid)) and not (TF3:IsParty(userID)) then
                 if (userID == UnitName("Player") and not TF3.db.profile.filterSELF) then
                     return false
                 elseif (whitelisted and not blacklisted) then
@@ -435,7 +434,7 @@ local function PreFilterFunc_Yell(self, event, ...)
     end
     if (TF3.db.profile.filterYELL) then
         if (event == "CHAT_MSG_YELL") then
-            if not (TF3:IsFriend(userID, guid)) and not (TF3:IsParty(userName)) then
+            if not (TF3:IsFriend(userID, guid)) and not (TF3:IsParty(userID)) then
                 if (userID == UnitName("Player") and not TF3.db.profile.filterSELF) then
                     return false
                 elseif (whitelisted and not blacklisted) then

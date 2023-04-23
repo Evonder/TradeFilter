@@ -1,10 +1,11 @@
+---@diagnostic disable: undefined-field
 --[[
 File Author: @file-author@
 File Revision: @file-abbreviated-hash@
 File Date: @file-date-iso@
 ]]--
 
-local TradeFilter3 = TradeFilter3 or LibStub("AceAddon-3.0"):GetAddon("TradeFilter3")
+local TradeFilter3 = LibStub("AceAddon-3.0"):GetAddon("TradeFilter3")
 local L = LibStub("AceLocale-3.0"):GetLocale("TradeFilter3")
 local TF3 = TradeFilter3
 
