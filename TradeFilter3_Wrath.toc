@@ -1,5 +1,5 @@
-## Interface: 100007
-## Version: @project-version@
+## Interface: 30401
+## Version: v3.7.5
 ## X-Curse-Project-ID: 16408
 ## X-WoWI-ID: 13784
 ## X-Wago-ID: RNL99e6o
@@ -8,8 +8,8 @@
 
 ## Notes: A Simple World of Warcraft Spam Filter!
 
-## Author: @project-author@
-## X-Date: @project-date-iso@
+## Author: Erik Vonderscheer
+## X-Date: 2023-04-23T02:00:31Z
 ## X-eMail: evonder AT gmail DOT com
 ## X-Website: https://github.com/Evonder/TradeFilter
 ## X-Category: Chat & Communication

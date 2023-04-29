@@ -58,9 +58,7 @@ function TF3:getOptions()
 							type = "group",
 							handler = TF3,
 							order = 1,
-							disabled = function()
-								return not TF3.db.profile.turnOn
-							end,
+							disabled = function() return not TF3.db.profile.turnOn end,
 							name = L["channelGroup"],
 							desc = L["channelGroup"],
 							args = {
@@ -151,9 +149,7 @@ function TF3:getOptions()
 							childGroups = "tab",
 							handler = TF3,
 							order = 2,
-							disabled = function()
-								return not TF3.db.profile.turnOn
-							end,
+							disabled = function() return not TF3.db.profile.turnOn end,
 							name = L["EditFilterGroup"],
 							desc = L["EditFilterGD"],
 							args = {
@@ -161,9 +157,7 @@ function TF3:getOptions()
 									type = "group",
 									handler = TF3,
 									order = 1,
-									disabled = function()
-										return not TF3.db.profile.turnOn
-									end,
+									disabled = function() return not TF3.db.profile.turnOn end,
 									name = L["TRADE Filters"],
 									args = {
 										optionsHeader1 = {
@@ -187,9 +181,7 @@ function TF3:getOptions()
 										},
 										tradefilters = {
 											type = 'input',
-											disabled = function()
-												return not TF3.db.profile.addfilterTRADE_enable
-											end,
+											disabled = function() return not TF3.db.profile.addfilterTRADE_enable end,
 											multiline = 10,
 											order = 4,
 											width = "full",
@@ -228,9 +220,7 @@ function TF3:getOptions()
 										},
 										reset_tradefilters = {
 											type = 'execute',
-											disabled = function()
-												return not TF3.db.profile.addfilterTRADE_enable
-											end,
+											disabled = function() return not TF3.db.profile.addfilterTRADE_enable end,
 											order = 5,
 											name = L["RTF"],
 											desc = L["RTF"],
@@ -245,9 +235,7 @@ function TF3:getOptions()
 									type = "group",
 									handler = TF3,
 									order = 2,
-									disabled = function()
-										return not TF3.db.profile.turnOn
-									end,
+									disabled = function() return not TF3.db.profile.turnOn end,
 									name = L["BASE Filters"],
 									args = {
 										optionsHeader1 = {
@@ -271,9 +259,7 @@ function TF3:getOptions()
 										},
 										basefilters = {
 											type = 'input',
-											disabled = function()
-												return not TF3.db.profile.addfilterBASE_enable
-											end,
+											disabled = function() return not TF3.db.profile.addfilterBASE_enable end,
 											multiline = 10,
 											order = 7,
 											width = "full",
@@ -312,9 +298,7 @@ function TF3:getOptions()
 										},
 										reset_basefilters = {
 											type = 'execute',
-											disabled = function()
-												return not TF3.db.profile.addfilterBASE_enable
-											end,
+											disabled = function() return not TF3.db.profile.addfilterBASE_enable end,
 											order = 8,
 											name = L["RBF"],
 											desc = L["RBF"],
@@ -329,9 +313,7 @@ function TF3:getOptions()
 									type = "group",
 									handler = TF3,
 									order = 3,
-									disabled = function()
-										return not TF3.db.profile.turnOn
-									end,
+									disabled = function() return not TF3.db.profile.turnOn end,
 									name = L["BG Filters"],
 									args = {
 										optionsHeader1 = {
@@ -355,9 +337,7 @@ function TF3:getOptions()
 										},
 										bgfilters = {
 											type = 'input',
-											disabled = function()
-												return not TF3.db.profile.addfilterBG_enable
-											end,
+											disabled = function() return not TF3.db.profile.addfilterBG_enable end,
 											multiline = 10,
 											order = 7,
 											width = "full",
@@ -396,9 +376,7 @@ function TF3:getOptions()
 										},
 										reset_bgfilters = {
 											type = 'execute',
-											disabled = function()
-												return not TF3.db.profile.addfilterBG_enable
-											end,
+											disabled = function() return not TF3.db.profile.addfilterBG_enable end,
 											order = 8,
 											name = L["RBF"],
 											desc = L["RBF"],
@@ -416,9 +394,7 @@ function TF3:getOptions()
 							childGroups = "tab",
 							handler = TF3,
 							order = 3,
-							disabled = function()
-								return not TF3.db.profile.turnOn
-							end,
+							disabled = function() return not TF3.db.profile.turnOn end,
 							name = L["listsGroup"],
 							desc = L["listsGD"],
 							args = {
@@ -426,9 +402,7 @@ function TF3:getOptions()
 									type = "group",
 									handler = TF3,
 									order = 1,
-									disabled = function()
-										return not TF3.db.profile.turnOn
-									end,
+									disabled = function() return not TF3.db.profile.turnOn end,
 									name = L["bLists"],
 									desc = L["listsGD"],
 									args = {
@@ -449,9 +423,7 @@ function TF3:getOptions()
 										editblacklist = {
 											type = 'toggle',
 											order = 3,
-											disabled = function()
-												return not TF3.db.profile.blacklist_enable
-											end,
+											disabled = function() return not TF3.db.profile.blacklist_enable end,
 											width = "double",
 											name = L["EBL"],
 											desc = L["EBL"],
@@ -460,9 +432,7 @@ function TF3:getOptions()
 										},
 										blist = {
 											type = 'input',
-											disabled = function()
-												return not TF3.db.profile.ebl
-											end,
+											disabled = function() return not TF3.db.profile.ebl	end,
 											multiline = 10,
 											order = 4,
 											width = "full",
@@ -500,9 +470,7 @@ function TF3:getOptions()
 										},
 										reset_blist = {
 											type = 'execute',
-											disabled = function()
-												return not TF3.db.profile.ebl
-											end,
+											disabled = function() return not TF3.db.profile.ebl	end,
 											order = 5,
 											name = L["RBLS"],
 											desc = L["RBLS"],
@@ -540,9 +508,7 @@ function TF3:getOptions()
 										editwhitelist = {
 											type = 'toggle',
 											order = 3,
-											disabled = function()
-												return not TF3.db.profile.whitelist_enable
-											end,
+											disabled = function() return not TF3.db.profile.whitelist_enable end,
 											width = "double",
 											name = L["EWL"],
 											desc = L["EWL"],
@@ -552,9 +518,7 @@ function TF3:getOptions()
 										whitelist_blacklist_bypass = {
 											type = 'toggle',
 											order = 5,
-											disabled = function()
-												return not TF3.db.profile.whitelist_enable
-											end,
+											disabled = function() return not TF3.db.profile.whitelist_enable end,
 											width = "double",
 											name = L["BLBYPASS"],
 											desc = L["BLBYPASSD"],
@@ -563,9 +527,7 @@ function TF3:getOptions()
 										},
 										wlist = {
 											type = 'input',
-											disabled = function()
-												return not TF3.db.profile.ewl
-											end,
+											disabled = function() return not TF3.db.profile.ewl	end,
 											multiline = 10,
 											order = 6,
 											width = "full",
@@ -603,9 +565,7 @@ function TF3:getOptions()
 										},
 										reset_wlist = {
 											type = 'execute',
-											disabled = function()
-												return not TF3.db.profile.ewl
-											end,
+											disabled = function() return not TF3.db.profile.ewl	end,
 											order = 7,
 											name = L["RWLS"],
 											desc = L["RWLS"],
@@ -623,9 +583,7 @@ function TF3:getOptions()
 							handler = TF3,
 							childGroups = "tab",
 							order = 5,
-							disabled = function()
-								return not TF3.db.profile.turnOn
-							end,
+							disabled = function() return not TF3.db.profile.turnOn end,
 							name = L["Exempt List"],
 							desc = L["Current Exempt List"],
 							args = {
@@ -677,9 +635,7 @@ function TF3:getOptions()
 									type = 'toggle',
 									order = 3,
 									width = "full",
-									disabled = function()
-										return not TF3.db.profile.redirect
-									end,
+									disabled = function() return not TF3.db.profile.redirect end,
 									name = L["RedirBL"],
 									desc = L["RedirDesc"],
 									get = function() return TF3.db.profile.redirect_blacklist end,
@@ -705,9 +661,7 @@ function TF3:getOptions()
 									type = 'toggle',
 									order = 6,
 									width = "full",
-									disabled = function()
-										return not TF3.db.profile.debug
-									end,
+									disabled = function() return not TF3.db.profile.debug end,
 									hidden = false,
 									name = L["DebugChecking"],
 									desc = L["DebugCheckingD"],
