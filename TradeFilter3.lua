@@ -398,7 +398,7 @@ local function PreFilterFunc_Say(self, event, ...)
     end
     if (TF3.db.profile.filterSAY) then
         if (event == "CHAT_MSG_SAY") then
-            if (not isparty) or not (isfriend) then
+            if (not isparty or not isfriend) then
                 if (find(lower(userID),lower(UnitName("player"))) and not TF3.db.profile.filterSELF) then
                     return false
                 elseif (whitelisted and not blacklisted) then
@@ -447,7 +447,7 @@ local function PreFilterFunc_Yell(self, event, ...)
     end
     if (TF3.db.profile.filterYELL) then
         if (event == "CHAT_MSG_YELL") then
-            if (not isparty) and not (isfriend) then
+            if (not isparty or not isfriend) then
                 if (find(lower(userID),lower(UnitName("player"))) and not TF3.db.profile.filterSELF) then
                     return false
                 elseif (whitelisted and not blacklisted) then
