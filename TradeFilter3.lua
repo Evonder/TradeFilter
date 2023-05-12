@@ -240,7 +240,7 @@ end
 
 --[[ Party Functions ]]--
 function TF3:IsParty(userID)
-    if (not TF3.db.profile.exmptparty) then return false end
+    if (not TF3.db.profile.exmptparty or not userID) then return false end
     local UnitInRaid = UnitInRaid
     local UnitInParty = UnitInParty
     if (UnitInParty(userID) or UnitInRaid(userID)) then
@@ -252,11 +252,12 @@ end
 --[[ Friends Functions ]]--
 function TF3:IsFriend(userID, guid)
     if (not TF3.db.profile.exmptfriendslist) then return false end
-    local IsFriend = C_FriendList.IsFriend(guid)
-    if (IsFriend) then
-        return true
+    if (guid) then
+        return C_FriendList.IsFriend(guid)
+    else
+        return false
     end
-    return false
+    --return false
 end
 
 --[[ Duel Spam Functions ]]--
