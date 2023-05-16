@@ -16,6 +16,7 @@
 ## X-Localizations: enUS, deDE, zhTW
 ## X-License: BSD
 ## SavedVariables: TradeFilter3DB
+## IconTexture: Interface\ICONS\ability_warrior_rallyingcry.blp
 
 ## OptionalDeps: Ace3, LibDataBroker-1.1
 ## X-Embeds: Ace3, LibDataBroker-1.1

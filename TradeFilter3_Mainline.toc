@@ -1,4 +1,4 @@
-## Interface: 100007
+## Interface: 100100
 ## Version: @project-version@
 ## X-Curse-Project-ID: 16408
 ## X-WoWI-ID: 13784
@@ -16,6 +16,7 @@
 ## X-Localizations: enUS, deDE, zhTW
 ## X-License: BSD
 ## SavedVariables: TradeFilter3DB
+## IconTexture: Interface\ICONS\ability_warrior_rallyingcry.blp
 
 ## OptionalDeps: Ace3, LibDataBroker-1.1
 ## X-Embeds: Ace3, LibDataBroker-1.1
