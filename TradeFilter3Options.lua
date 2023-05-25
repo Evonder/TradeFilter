@@ -3,6 +3,7 @@
 File Author: @file-author@
 File Revision: @file-abbreviated-hash@
 File Date: @file-date-iso@
+Project Revision: @project-revision@
 ]]--
 
 local TradeFilter3 = LibStub("AceAddon-3.0"):GetAddon("TradeFilter3")

@@ -5,8 +5,9 @@ TradeFilter3
 File Author: @file-author@
 File Revision: @file-abbreviated-hash@
 File Date: @file-date-iso@
+Project Revision: @project-revision@
 
-* Copyright (c) 2008-10, @file-author@
+* Copyright (c) 2008-23, @file-author@
 * All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
@@ -483,10 +484,10 @@ local function PreFilterFunc_BG(self, event, ...)
         return
     end
     if (TF3.db.profile.whitelist_enable) then
-        whitelisted = TF3:WhiteList(msg, userID, L["Say/Yell"], msgID, coloredName)
+        whitelisted = TF3:WhiteList(msg, userID, L["Battle Ground"], msgID, coloredName)
     end
     if (TF3.db.profile.blacklist_enable) then
-        blacklisted = TF3:BlackList(msg, userID, L["Say/Yell"], msgID, coloredName, whitelisted)
+        blacklisted = TF3:BlackList(msg, userID, L["Battle Ground"], msgID, coloredName, whitelisted)
     end
     if (TF3.db.profile.exmptparty) then
         isparty = TF3:IsParty(userID)
@@ -533,10 +534,10 @@ local function PreFilterFunc(self, event, ...)
     end
     if (chanId == 5) then return end
     if (TF3.db.profile.whitelist_enable) then
-        whitelisted = TF3:WhiteList(msg, userID, L["Say/Yell"], msgID, coloredName)
+        whitelisted = TF3:WhiteList(msg, userID, chanName, msgID, coloredName)
     end
     if (TF3.db.profile.blacklist_enable) then
-        blacklisted = TF3:BlackList(msg, userID, L["Say/Yell"], msgID, coloredName, whitelisted)
+        blacklisted = TF3:BlackList(msg, userID, chanName, msgID, coloredName, whitelisted)
     end
     if (TF3.db.profile.exmptfriendslist) then
         isfriend = TF3:IsFriend(userID, guid)
