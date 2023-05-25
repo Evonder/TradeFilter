@@ -56,6 +56,7 @@ local chatFrames = {}
 local lastmsgID = 0
 local msgsFiltered = 0
 local msgsBlackFiltered = 0
+local instanceType = ""
 
 local MAJOR_VERSION = GetAddOnMetadata("TradeFilter3", "Version")
 if (len(MAJOR_VERSION)<=8) then
@@ -281,6 +282,7 @@ function TF3:indexChatFrames()
     for k,v in pairs(currentChatFrames) do
         chatFrames[#chatFrames+1] = k
     end
+    _, instanceType = IsInInstance()
 end
         
 function TF3:FindFrame(toFrame, msg, msgID)
@@ -484,19 +486,16 @@ local function PreFilterFunc_BG(self, event, ...)
         return
     end
     if (TF3.db.profile.whitelist_enable) then
-        whitelisted = TF3:WhiteList(msg, userID, L["Battle Ground"], msgID, coloredName)
+        whitelisted = TF3:WhiteList(msg, userID, chanName, msgID, coloredName)
     end
     if (TF3.db.profile.blacklist_enable) then
-        blacklisted = TF3:BlackList(msg, userID, L["Battle Ground"], msgID, coloredName, whitelisted)
-    end
-    if (TF3.db.profile.exmptparty) then
-        isparty = TF3:IsParty(userID)
+        blacklisted = TF3:BlackList(msg, userID, chanName, msgID, coloredName, whitelisted)
     end
     if (TF3.db.profile.exmptfriendslist) then
         isfriend = TF3:IsFriend(userID, guid)
     end
     if (TF3.db.profile.filterBG) then
-        if (event == "CHAT_MSG_BATTLEGROUND" or event == "CHAT_MSG_BATTLEGROUND_LEADER") then
+        if (event == "CHAT_MSG_INSTANCE_CHAT" and instanceType == "pvp" or event == "CHAT_MSG_INSTANCE_CHAT_LEADER" and instanceType == "pvp") then
             if (not isfriend) then
                 if (find(lower(userID),lower(UnitName("player"))) and not TF3.db.profile.filterSELF) then
                     return false
@@ -678,6 +677,6 @@ end
 --[[ Pass ALL chat messages to PreFilter function ]]--
 ChatFrame_AddMessageEventFilter("CHAT_MSG_SAY", PreFilterFunc_Say)
 ChatFrame_AddMessageEventFilter("CHAT_MSG_YELL", PreFilterFunc_Yell)
-ChatFrame_AddMessageEventFilter("CHAT_MSG_BATTLEGROUND", PreFilterFunc_BG)
-ChatFrame_AddMessageEventFilter("CHAT_MSG_BATTLEGROUND_LEADER", PreFilterFunc_BG)
+ChatFrame_AddMessageEventFilter("CHAT_MSG_INSTANCE_CHAT", PreFilterFunc_BG)
+ChatFrame_AddMessageEventFilter("CHAT_MSG_INSTANCE_CHAT_LEADER", PreFilterFunc_BG)
 ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", PreFilterFunc)
