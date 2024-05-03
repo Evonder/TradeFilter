@@ -1,4 +1,4 @@
-## Interface: 11403
+## Interface: 11500
 ## Version: @project-version@
 ## X-Curse-Project-ID: 16408
 ## X-WoWI-ID: 13784
@@ -8,7 +8,7 @@
 
 ## Notes: A Simple World of Warcraft Spam Filter!
 
-## Author: @project-author@
+## Author: Networkerror
 ## X-Date: @project-date-iso@
 ## X-eMail: evonder AT gmail DOT com
 ## X-Website: https://github.com/Evonder/TradeFilter
@@ -26,7 +26,6 @@
 
 #@no-lib-strip@
 libs\LibStub\LibStub.lua
-libs\CallbackHandler-1.0\CallbackHandler-1.0.xml
 libs\AceAddon-3.0\AceAddon-3.0.xml
 libs\AceConsole-3.0\AceConsole-3.0.xml
 libs\AceDB-3.0\AceDB-3.0.xml
