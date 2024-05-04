@@ -280,7 +280,9 @@ function TF3:indexChatFrames()
     for i=1,NUM_CHAT_WINDOWS do
         name = GetChatWindowInfo(i)
         frame = _G["ChatFrame" .. i]
-        if (name ~= nil) then currentChatFrames[name] = frame end
+        if (name ~= nil) then
+            currentChatFrames[name] = frame
+        end
     end
     for k,v in pairs(currentChatFrames) do
         chatFrames[#chatFrames+1] = k
