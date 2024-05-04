@@ -8,7 +8,7 @@ TradeFilter has a set of patterns for trade channel and separate set of patterns
 
 ### Black and White Lists
 TradeFilter also has a built in Black and White list. Refer to the Flowchart for how Black and White lists are checked.
-![Flowchart](/assets/TradeFilter_Flow.png)
+![Flowchart](./assets/TradeFilter_Flow.png)
 
 ### Configuration
 ```
