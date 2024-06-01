@@ -39,15 +39,13 @@ local LDB = LibStub("LibDataBroker-1.1", true)
 local TF3 = TradeFilter3
 
 --[[ Locals ]]--
-local ipairs = ipairs
 local pairs = pairs
 local find = string.find
 local sub = string.sub
 local len = string.len
 local lower = string.lower
 local format = string.format
-local insert = table.insert
-local remove = table.remove
+local TF3Frame
 local redirectFrame = L["redirectFrame"]
 local debugFrame = L["debugFrame"]
 local currentChatFrames = {}
@@ -284,11 +282,11 @@ function TF3:indexChatFrames()
             currentChatFrames[name] = frame
         end
     end
-    for k,v in pairs(currentChatFrames) do
+    for k,_ in pairs(currentChatFrames) do
         chatFrames[#chatFrames+1] = k
     end
 end
-        
+
 function TF3:FindFrame(toFrame, msg, msgID)
     local frame
     if (msgID == lastmsgID or msgID == wlmsgID) then
@@ -302,11 +300,10 @@ function TF3:FindFrame(toFrame, msg, msgID)
         elseif (chatFrames[i] == toFrame and toFrame == debugFrame) then
             frame = currentChatFrames[debugFrame]
             frame:AddMessage(msg)
-            wlmsgID = msgID -- keep whitelist from repeating in debugFrame *hackey
             return
         end
     end
-    TF3:createChatFrame(toFrame, msg, msgID) 
+    TF3:createChatFrame(toFrame, msg, msgID)
     return
 end
 
@@ -355,7 +352,7 @@ end
 
 --[[ WhiteList Func ]]--
 function TF3:WhiteList(msg, userID, chanName, msgID, coloredName)
-    if (msgID == lastmsgID) then
+    if (msgID == wlmsgID) then
         return
     end
     if (not TF3.db.profile.whitelist) then
@@ -368,6 +365,7 @@ function TF3:WhiteList(msg, userID, chanName, msgID, coloredName)
                 TF3:FindFrame(debugFrame, "|cFFFFFF80[" .. L["wLists"] .. "]|r |cFFC08080[" .. chanName .. "]|r |Hplayer:" .. userID .. ":" .. msgID .. "|h[" .. coloredName .. "]|h |cFFC08080: " .. msg .. "|r", msgID)
                 TF3:FindFrame(debugFrame, L["MATCHED"] .. " |cFFFFFF80" .. word .. "|r", msgID)
             end
+            wlmsgID = msgID
             return true
         end
     end
@@ -387,8 +385,8 @@ local function PreFilterFunc_Say(self, event, ...)
     local guid = arg12 or select(12, ...)
     local coloredName = TF3:GetColoredName(userID, guid)
     local msg = lower(msg)
-    local blacklisted
-    local whitelisted
+    local blacklisted = nil
+    local whitelisted = nil
     if (msgID == lastmsgID) then
         return
     end
@@ -431,8 +429,8 @@ local function PreFilterFunc_Yell(self, event, ...)
     local guid = arg12 or select(12, ...)
     local coloredName = TF3:GetColoredName(userID, guid)
     local msg = lower(msg)
-    local blacklisted
-    local whitelisted
+    local blacklisted = nil
+    local whitelisted = nil
     if (msgID == lastmsgID) then
         return
     end
@@ -521,8 +519,8 @@ local function PreFilterFunc(self, event, ...)
     local guid = arg12 or select(12, ...)
     local coloredName = TF3:GetColoredName(userID, guid)
     local msg = lower(msg)
-    local blacklisted
-    local whitelisted
+    local blacklisted = nil
+    local whitelisted = nil
     if (msgID == lastmsgID) then
         return
     end
@@ -578,7 +576,7 @@ end
 
 --[[ Filter Func ]]--
 function TF3:FilterFunc(chan, msg, userID, zoneID, chanID, chanName, msgID, guid, coloredName)
-    if (msgID == lastmsgID) then
+    if (msgID == lastmsgID or msgID == wlmsgID) then
         return
     end
     local filterFuncList = ChatFrame_GetMessageEventFilters("CHAT_MSG_CHANNEL")

@@ -680,7 +680,6 @@ function TF3:getOptions()
 									order = 8,
 									width = "double",
 									disabled = function() return not TF3.db.profile.debug end,
-									disabled = false,
 									name = L["FSELF"],
 									desc = L["FSELFD"],
 									get = function() return TF3.db.profile.filterSELF end,
