@@ -1,4 +1,3 @@
----@diagnostic disable: undefined-field
 --[[
 File Author: @file-author@
 File Revision: @file-abbreviated-hash@
@@ -98,7 +97,7 @@ function TF3:getOptions()
 									get = function() return TF3.db.profile.filterLFG end,
 									set = function() TF3.db.profile.filterLFG = not TF3.db.profile.filterLFG end,
 								},
---[[ 								Battlegrounds = {
+								Battlegrounds = {
 									type = 'toggle',
 									order = 4,
 									width = "double",
@@ -107,7 +106,7 @@ function TF3:getOptions()
 									desc = L["BGCD"],
 									get = function() return TF3.db.profile.filterBG end,
 									set = function() TF3.db.profile.filterBG = not TF3.db.profile.filterBG end,
-								}, ]]
+								},
 								SAYChannel = {
 									type = 'toggle',
 									order = 5,
@@ -310,7 +309,7 @@ function TF3:getOptions()
 										},
 									},
 								},
- 								--[[ editFilterGroupBG = {
+ 								editFilterGroupBG = {
 									type = "group",
 									handler = TF3,
 									order = 3,
@@ -387,7 +386,7 @@ function TF3:getOptions()
 											end,
 										},
 									},
-								}, ]]
+								},
  							},
 						},
 						listsGroup = {

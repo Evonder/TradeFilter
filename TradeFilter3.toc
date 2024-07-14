@@ -4,9 +4,9 @@
 ## X-WoWI-ID: 13784
 ## X-Wago-ID: RNL99e6o
 
-## Title: TradeFilter3
+## Title: @localization(locale="enUS", key="Title", namespace="ToC")@
 
-## Notes: A Simple World of Warcraft Spam Filter!
+## Notes: @localization(locale="enUS", key="Notes", namespace="TOC")@
 
 ## Author: Networkerror
 ## X-Date: @project-date-iso@
