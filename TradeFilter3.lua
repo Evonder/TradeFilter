@@ -439,10 +439,12 @@ local function PreFilterFunc(self, event, ...)
     if (event == "CHAT_MSG_SAY" and TF3.db.profile.filterYELL) then
         if (find(lower(userID),lower(UnitName("player"))) and not TF3.db.profile.filterSELF) then
             return false
-        elseif (TF3.db.profile.exmptfriendslist and TF3:IsFriend(userID, guid)) then
-            return false
-        elseif (numGroupMembers ~= 0 or subGroupMembers ~= 0) then
-            if (TF3.db.profile.exmptparty and TF3:IsParty(userID, msgID)) then
+        elseif (TF3.db.profile.exmptfriendslist) then
+            if (TF3:IsFriend(userID, guid)) then
+                return false
+            end
+        elseif (TF3.db.profile.exmptparty and numGroupMembers ~= 0 or TF3.db.profile.exmptparty and subGroupMembers ~= 0) then
+            if (TF3:IsParty(userID, msgID)) then
                 return false
             end
         elseif (whitelisted and not blacklisted) then
@@ -456,10 +458,12 @@ local function PreFilterFunc(self, event, ...)
     elseif (event == "CHAT_MSG_YELL" and TF3.db.profile.filterYELL) then
         if (find(lower(userID),lower(UnitName("player"))) and not TF3.db.profile.filterSELF) then
             return false
-        elseif (TF3.db.profile.exmptfriendslist and TF3:IsFriend(userID, guid)) then
-            return false
-        elseif (numGroupMembers ~= 0 or subGroupMembers ~= 0) then
-            if (TF3.db.profile.exmptparty and TF3:IsParty(userID, msgID)) then
+        elseif (TF3.db.profile.exmptfriendslist) then
+            if (TF3:IsFriend(userID, guid)) then
+                return false
+            end
+        elseif (TF3.db.profile.exmptparty and numGroupMembers ~= 0 or TF3.db.profile.exmptparty and subGroupMembers ~= 0) then
+            if (TF3:IsParty(userID, msgID)) then
                 return false
             end
         elseif (whitelisted and not blacklisted) then
@@ -473,10 +477,12 @@ local function PreFilterFunc(self, event, ...)
     elseif (zoneID == 2 and TF3.db.profile.filterTrade) then
         if (find(lower(userID),lower(UnitName("player"))) and not TF3.db.profile.filterSELF) then
             return false
-        elseif (TF3.db.profile.exmptfriendslist and TF3:IsFriend(userID, guid)) then
-            return false
-        elseif (numGroupMembers ~= 0 or subGroupMembers ~= 0) then
-            if (TF3.db.profile.exmptparty and TF3:IsParty(userID, msgID)) then
+        elseif (TF3.db.profile.exmptfriendslist) then
+            if (TF3:IsFriend(userID, guid)) then
+                return false
+            end
+        elseif (TF3.db.profile.exmptparty and numGroupMembers ~= 0 or TF3.db.profile.exmptparty and subGroupMembers ~= 0) then
+            if (TF3:IsParty(userID, msgID)) then
                 return false
             end
         elseif (whitelisted and not blacklisted) then
@@ -490,10 +496,12 @@ local function PreFilterFunc(self, event, ...)
     elseif (zoneID == 1 and TF3.db.profile.filterGeneral) then
         if (find(lower(userID),lower(UnitName("player"))) and not TF3.db.profile.filterSELF) then
             return false
-        elseif (TF3.db.profile.exmptfriendslist and TF3:IsFriend(userID, guid)) then
-            return false
-        elseif (numGroupMembers ~= 0 or subGroupMembers ~= 0) then
-            if (TF3.db.profile.exmptparty and TF3:IsParty(userID, msgID)) then
+        elseif (TF3.db.profile.exmptfriendslist) then
+            if (TF3:IsFriend(userID, guid)) then
+                return false
+            end
+        elseif (TF3.db.profile.exmptparty and numGroupMembers ~= 0 or TF3.db.profile.exmptparty and subGroupMembers ~= 0) then
+            if (TF3:IsParty(userID, msgID)) then
                 return false
             end
         elseif (whitelisted and not blacklisted) then
@@ -507,10 +515,12 @@ local function PreFilterFunc(self, event, ...)
     elseif (zoneID == 26 and TF3.db.profile.filterLFG) then
         if (find(lower(userID),lower(UnitName("player"))) and not TF3.db.profile.filterSELF) then
             return false
-        elseif (TF3.db.profile.exmptfriendslist and TF3:IsFriend(userID, guid)) then
-            return false
-        elseif (numGroupMembers ~= 0 or subGroupMembers ~= 0) then
-            if (TF3.db.profile.exmptparty and TF3:IsParty(userID, msgID)) then
+        elseif (TF3.db.profile.exmptfriendslist) then
+            if (TF3:IsFriend(userID, guid)) then
+                return false
+            end
+        elseif (TF3.db.profile.exmptparty and numGroupMembers ~= 0 or TF3.db.profile.exmptparty and subGroupMembers ~= 0) then
+            if (TF3:IsParty(userID, msgID)) then
                 return false
             end
         elseif (whitelisted and not blacklisted) then
@@ -524,10 +534,12 @@ local function PreFilterFunc(self, event, ...)
     elseif (event == "CHAT_MSG_INSTANCE_CHAT" and TF3:instanceType() == "pvp" and TF3.db.profile.filterBG or event == "CHAT_MSG_INSTANCE_CHAT_LEADER" and TF3:instanceType() == "pvp" and TF3.db.profile.filterBG) then
         if (find(lower(userID),lower(UnitName("player"))) and not TF3.db.profile.filterSELF) then
             return false
-        elseif (TF3:IsFriend(userID, guid) and TF3.db.profile.exmptfriendslist) then
-            return false
-        elseif (numGroupMembers ~= 0 or subGroupMembers ~= 0) then
-            if (TF3.db.profile.exmptparty and TF3:IsParty(userID, msgID)) then
+        elseif (TF3.db.profile.exmptfriendslist) then
+            if (TF3:IsFriend(userID, guid)) then
+                return false
+            end
+        elseif (TF3.db.profile.exmptparty and numGroupMembers ~= 0 or TF3.db.profile.exmptparty and subGroupMembers ~= 0) then
+            if (TF3:IsParty(userID, msgID)) then
                 return false
             end
         elseif (whitelisted and not blacklisted) then

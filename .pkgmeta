@@ -9,12 +9,10 @@ enable-nolib-creation: no
 ignore:
  - .pkgmeta
  - .docmeta
- - .travis.yml
  - .gitignore
  - README.md
  - _config.yml
- - Docs
- - .circleci
+ - docs
 
 externals:
  libs/AceAddon-3.0:
