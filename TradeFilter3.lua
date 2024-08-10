@@ -50,14 +50,13 @@ local redirectFrame = L["redirectFrame"]
 local debugFrame = L["debugFrame"]
 local currentChatFrames = {}
 local chatFrames = {}
-local currentmsgID = 0
 local lastmsgID = 0
 local wlmsgID = 0
 local msgsFiltered = 0
 local msgsBlackFiltered = 0
-local instanceType = ""
 local numGroupMembers = 0
 local subGroupMembers = 0
+local OptionsPanel
 local GetAddOnMetadata = C_AddOns.GetAddOnMetadata
 
 local MAJOR_VERSION = GetAddOnMetadata("TradeFilter3", "Version")
@@ -117,7 +116,7 @@ function TF3:OnInitialize()
     ACfg:RegisterOptionsTable("TradeFilter3", TF3:getOptions())
 
     -- Set up options panels.
-    self.OptionsPanel = ACD:AddToBlizOptions(self.name, L["TFR"], nil, "generalGroup")
+    _, OptionsPanel = ACD:AddToBlizOptions(self.name, L["TFR"], nil, "generalGroup")
 
     if (TF3.db.profile.firstlogin) then
         TF3:FirstLogin()
@@ -140,8 +139,7 @@ end
 
 -- :OpenOptions(): Opens the options window.
 function TF3:OpenOptions()
-    InterfaceOptionsFrame_OpenToCategory(self.OptionsPanel)
-    InterfaceOptionsFrame_OpenToCategory(self.OptionsPanel)
+    Settings.OpenToCategory(OptionsPanel)
 end
 
 function TF3:FirstLogin()
@@ -231,7 +229,7 @@ end
 
 function TF3:GetColoredName(userID, guid)
     if (userID and guid) then
-        local localizedClass, englishClass, localizedRace, englishRace, sex, name, realm = GetPlayerInfoByGUID(guid)
+        local _, englishClass, _, _, _, _, _ = GetPlayerInfoByGUID(guid)
         if (englishClass) then
             local classColorTable = RAID_CLASS_COLORS[englishClass]
             if (not classColorTable) then
@@ -276,7 +274,7 @@ function TF3:IsParty(userID, msgID)
 end
 
 --[[ Friends Functions ]]--
-function TF3:IsFriend(userID, guid)
+function TF3:IsFriend(guid)
     if (guid) then
         return C_FriendList.IsFriend(guid)
     else
@@ -340,7 +338,7 @@ end
 
 --[[ BlackList Func ]]--
 --[[ Base blacklist words from BadBoy(Funkydude) ]]--
-function TF3:BlackList(msg, userID, chanName, msgID, coloredName, whitelisted)
+local function TF3:BlackList(msg, userID, chanName, msgID, coloredName, whitelisted)
     if (msgID == lastmsgID) then
         return
     end
@@ -384,7 +382,7 @@ function TF3:BlackList(msg, userID, chanName, msgID, coloredName, whitelisted)
 end
 
 --[[ WhiteList Func ]]--
-function TF3:WhiteList(event, msg, userID, chanName, msgID, coloredName)
+local function TF3:WhiteList(event, msg, userID, chanName, msgID, coloredName)
     if (msgID == wlmsgID) then
         return
     end
@@ -441,7 +439,7 @@ local function PreFilterFunc(self, event, ...)
             return false
         end
         if (TF3.db.profile.exmptfriendslist) then
-            if (TF3:IsFriend(userID, guid)) then
+            if (TF3:IsFriend(guid)) then
                 return false
             end
         end
@@ -456,14 +454,14 @@ local function PreFilterFunc(self, event, ...)
         if (blacklisted) then
             return true
         end
-        filtered = TF3:FilterFunc(L["Say/Yell"], msg, userID, zoneID, chanID, chanName, msgID, guid, coloredName)
+        filtered = TF3:FilterFunc(L["Say/Yell"], msg, userID, zoneID, chanName, msgID, coloredName)
     --[[ Check for YELL Channel and User setting ]]--
     elseif (event == "CHAT_MSG_YELL" and TF3.db.profile.filterYELL) then
         if (find(lower(userID),lower(UnitName("player"))) and not TF3.db.profile.filterSELF) then
             return false
         end
         if (TF3.db.profile.exmptfriendslist) then
-            if (TF3:IsFriend(userID, guid)) then
+            if (TF3:IsFriend(guid)) then
                 return false
             end
         end
@@ -478,14 +476,14 @@ local function PreFilterFunc(self, event, ...)
         if (blacklisted) then
             return true
         end
-        filtered = TF3:FilterFunc(L["Say/Yell"], msg, userID, zoneID, chanID, chanName, msgID, guid, coloredName)
+        filtered = TF3:FilterFunc(L["Say/Yell"], msg, userID, zoneID, chanName, msgID, coloredName)
     --[[ Check for Trade Channel and User setting ]]--
     elseif (zoneID == 2 and TF3.db.profile.filterTrade) then
         if (find(lower(userID),lower(UnitName("player"))) and not TF3.db.profile.filterSELF) then
             return false
         end
         if (TF3.db.profile.exmptfriendslist) then
-            if (TF3:IsFriend(userID, guid)) then
+            if (TF3:IsFriend(guid)) then
                 return false
             end
         end
@@ -500,14 +498,14 @@ local function PreFilterFunc(self, event, ...)
         if (blacklisted) then
             return true
         end
-        filtered = TF3:FilterFunc(nil, msg, userID, zoneID, chanID, chanName, msgID, guid, coloredName)
+        filtered = TF3:FilterFunc(nil, msg, userID, zoneID, chanName, msgID, coloredName)
     --[[ Check for General Channel and User setting ]]--
     elseif (zoneID == 1 and TF3.db.profile.filterGeneral) then
         if (find(lower(userID),lower(UnitName("player"))) and not TF3.db.profile.filterSELF) then
             return false
         end
         if (TF3.db.profile.exmptfriendslist) then
-            if (TF3:IsFriend(userID, guid)) then
+            if (TF3:IsFriend(guid)) then
                 return false
             end
         end
@@ -522,14 +520,14 @@ local function PreFilterFunc(self, event, ...)
         if (blacklisted) then
             return true
         end
-        filtered = TF3:FilterFunc(nil, msg, userID, zoneID, chanID, chanName, msgID, guid, coloredName)
+        filtered = TF3:FilterFunc(nil, msg, userID, zoneID, chanName, msgID, coloredName)
     --[[ Check for LFG Channel and User setting ]]--
     elseif (zoneID == 26 and TF3.db.profile.filterLFG) then
         if (find(lower(userID),lower(UnitName("player"))) and not TF3.db.profile.filterSELF) then
             return false
         end
         if (TF3.db.profile.exmptfriendslist) then
-            if (TF3:IsFriend(userID, guid)) then
+            if (TF3:IsFriend(guid)) then
                 return false
             end
         end
@@ -544,14 +542,14 @@ local function PreFilterFunc(self, event, ...)
         if (blacklisted) then
             return true
         end
-        filtered = TF3:FilterFunc(nil, msg, userID, zoneID, chanID, chanName, msgID, guid, coloredName)
+        filtered = TF3:FilterFunc(nil, msg, userID, zoneID, chanName, msgID, coloredName)
     --[[ Check for Battleground Channel and User setting ]]--
     elseif (event == "CHAT_MSG_INSTANCE_CHAT" and TF3:instanceType() == "pvp" and TF3.db.profile.filterBG or event == "CHAT_MSG_INSTANCE_CHAT_LEADER" and TF3:instanceType() == "pvp" and TF3.db.profile.filterBG) then
         if (find(lower(userID),lower(UnitName("player"))) and not TF3.db.profile.filterSELF) then
             return false
         end
         if (TF3.db.profile.exmptfriendslist) then
-            if (TF3:IsFriend(userID, guid)) then
+            if (TF3:IsFriend(guid)) then
                 return false
             end
         end
@@ -566,13 +564,13 @@ local function PreFilterFunc(self, event, ...)
         if (blacklisted) then
             return true
         end
-        filtered = TF3:FilterFunc("BG", msg, userID, zoneID, chanID, chanName, msgID, guid, coloredName)
+        filtered = TF3:FilterFunc("BG", msg, userID, zoneID, chanName, msgID, coloredName)
     end
     return filtered
 end
 
 --[[ Filter Func ]]--
-function TF3:FilterFunc(chan, msg, userID, zoneID, chanID, chanName, msgID, guid, coloredName)
+local function TF3:FilterFunc(chan, msg, userID, zoneID, chanName, msgID, coloredName)
     if (msgID == lastmsgID or msgID == wlmsgID) then
         return
     end

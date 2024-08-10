@@ -12,7 +12,7 @@ local TF3 = TradeFilter3
 function TF3:FixWowAceSubnamespaces(db)
 	if (db == "whitelist") then
 		-- print("Importing whitelist")
-		whitelist = {
+		local whitelist = {
 			["WLIST1"] = L["WHITELIST/WLIST1"],
 			["WLIST2"] = L["WHITELIST/WLIST2"],
 			["WLIST3"] = L["WHITELIST/WLIST3"],
@@ -24,7 +24,7 @@ function TF3:FixWowAceSubnamespaces(db)
 		return whitelist
 	elseif (db == "blacklist") then
 		-- print("Importing blacklist")
-		blacklist =  {
+		local blacklist =  {
 			["BLIST1"] = L["BLACKLIST/BLIST1"],
 			["BLIST10"] = L["BLACKLIST/BLIST10"],
 			["BLIST11"] = L["BLACKLIST/BLIST11"],
@@ -47,7 +47,7 @@ function TF3:FixWowAceSubnamespaces(db)
 		return blacklist
 	elseif (db == "BASE") then
 		-- print("Importing Base filters")
-		BASE = {
+		local BASE = {
 			["FILTER1"] = L["FILTERS/BASE/FILTER1"],
 			["FILTER2"] = L["FILTERS/BASE/FILTER2"],
 			["FILTER3"] = L["FILTERS/BASE/FILTER3"],
@@ -61,7 +61,7 @@ function TF3:FixWowAceSubnamespaces(db)
 		return BASE
 	elseif (db == "BG") then
 		-- print("Importing BG filters")
-		BG = {
+		local BG = {
 			["FILTER1"] = L["FILTERS/BG/FILTER1"],
 			["FILTER10"] = L["FILTERS/BG/FILTER10"],
 			["FILTER11"] = L["FILTERS/BG/FILTER11"],
@@ -88,7 +88,7 @@ function TF3:FixWowAceSubnamespaces(db)
 		return BG
 	elseif (db == "TRADE") then
 		-- print("Importing TRADE filters")
-		TRADE = {
+		local TRADE = {
 			["FILTER1"] = L["FILTERS/TRADE/FILTER1"],
 			["FILTER10"] = L["FILTERS/TRADE/FILTER10"],
 			["FILTER2"] = L["FILTERS/TRADE/FILTER2"],
@@ -103,7 +103,7 @@ function TF3:FixWowAceSubnamespaces(db)
 		return TRADE
 	elseif (db == "SPECIAL") then
 		-- print("Importing SPECIAL filters")
-		SPECIAL = {
+		local SPECIAL = {
 			["FILTER1"] = L["FILTERS/SPECIAL/FILTER1"],
 			["FILTER2"] = L["FILTERS/SPECIAL/FILTER2"],
 		}
