@@ -62,7 +62,7 @@ function TF3:getOptions()
 							name = L["channelGroup"],
 							desc = L["channelGroup"],
 							args = {
-								optionsHeader1 = {
+								optionsHeader1a = {
 									type	= "header",
 									order	= 1,
 									name	= L["channelGroup"],
@@ -127,20 +127,35 @@ function TF3:getOptions()
 									get = function() return TF3.db.profile.filterYELL end,
 									set = function() TF3.db.profile.filterYELL = not TF3.db.profile.filterYELL end,
 								},
-								optionsHeader1a = {
+								optionsHeader1b = {
 									type	= "header",
 									order	= 7,
+									name	= "Filter Repeats",
+								},
+								filterRepeats = {
+									type = 'toggle',
+									order = 8,
+									width = "double",
+									disabled = false,
+									name = L["Filter Repeats"],
+									desc = L["Filter repeat messages"],
+									get = function() return TF3.db.profile.filterRepeats end,
+									set = function() TF3.db.profile.filterRepeats = not TF3.db.profile.filterRepeats end,
+								},
+								optionsHeader1c = {
+									type	= "header",
+									order	= 9,
 									name	= L["FDS"],
 								},
 								filterDuelSpam = {
 									type = 'toggle',
-									order = 8,
+									order = 10,
 									width = "double",
 									disabled = false,
 									name = L["FDS"],
 									desc = L["FDSD"],
 									get = function() return TF3.db.profile.filterDuelSpam end,
-									set = function() TF3.db.profile.filterDuelSpam = not TF3.db.profile.filterDuelSpam; TF3:DuelFilter()end,
+									set = function() TF3.db.profile.filterDuelSpam = not TF3.db.profile.filterDuelSpam; TF3:DuelFilter() end,
 								},
 							},
 						},
@@ -160,7 +175,7 @@ function TF3:getOptions()
 									disabled = function() return not TF3.db.profile.turnOn end,
 									name = L["TRADE Filters"],
 									args = {
-										optionsHeader1 = {
+										optionsHeader21a = {
 											type	= "header",
 											order	= 1,
 											name	= L["EditFilter"],
@@ -174,7 +189,7 @@ function TF3:getOptions()
 											get = function() return TF3.db.profile.addfilterTRADE_enable end,
 											set = function() TF3.db.profile.addfilterTRADE_enable = not TF3.db.profile.addfilterTRADE_enable end,
 										},
-										optionsHeader2 = {
+										optionsHeader21b = {
 											type	= "header",
 											order	= 3,
 											name	= L["BTF"],
@@ -238,7 +253,7 @@ function TF3:getOptions()
 									disabled = function() return not TF3.db.profile.turnOn end,
 									name = L["BASE Filters"],
 									args = {
-										optionsHeader1 = {
+										optionsHeader22a = {
 											type	= "header",
 											order	= 1,
 											name	= L["EditFilter"],
@@ -252,7 +267,7 @@ function TF3:getOptions()
 											get = function() return TF3.db.profile.addfilterBASE_enable end,
 											set = function() TF3.db.profile.addfilterBASE_enable = not TF3.db.profile.addfilterBASE_enable end,
 										},
-										optionsHeader2 = {
+										optionsHeader22b = {
 											type	= "header",
 											order	= 6,
 											name	= L["BCF"],
@@ -316,7 +331,7 @@ function TF3:getOptions()
 									disabled = function() return not TF3.db.profile.turnOn end,
 									name = L["BG Filters"],
 									args = {
-										optionsHeader1 = {
+										optionsHeader23a = {
 											type	= "header",
 											order	= 1,
 											name	= L["EditFilter"],
@@ -330,7 +345,7 @@ function TF3:getOptions()
 											get = function() return TF3.db.profile.addfilterBG_enable end,
 											set = function() TF3.db.profile.addfilterBG_enable = not TF3.db.profile.addfilterBG_enable end,
 										},
-										optionsHeader2 = {
+										optionsHeader23b = {
 											type	= "header",
 											order	= 6,
 											name	= L["BG"],
@@ -406,7 +421,7 @@ function TF3:getOptions()
 									name = L["bLists"],
 									desc = L["listsGD"],
 									args = {
-										optionsHeader1 = {
+										optionsHeader31a = {
 											type	= "header",
 											order	= 1,
 											name	= L["bLists"],
@@ -491,7 +506,7 @@ function TF3:getOptions()
 									name = L["wLists"],
 									desc = L["listsGD"],
 									args = {
-										optionsHeader3b = {
+										optionsHeader32a = {
 											type	= "header",
 											order	= 1,
 											name	= L["wLists"],
@@ -582,11 +597,16 @@ function TF3:getOptions()
 							type = "group",
 							handler = TF3,
 							childGroups = "tab",
-							order = 5,
+							order = 4,
 							disabled = function() return not TF3.db.profile.turnOn end,
 							name = L["Exempt List"],
 							desc = L["Current Exempt List"],
 							args = {
+								optionsHeader4a = {
+									type	= "header",
+									order	= 1,
+									name	= L["Exempt List"],
+								},
 								enable_exempt_party = {
 									type = 'toggle',
 									order = 1,
@@ -610,14 +630,12 @@ function TF3:getOptions()
 						outputGroup = {
 							type = "group",
 							handler = TF3,
-							order = 6,
-							disabled = function()
-								return not TF3.db.profile.turnOn
-							end,
+							order = 5,
+							disabled = function() return not TF3.db.profile.turnOn end,
 							name = L["OUTPUT"],
 							desc = L["OUTPUT"],
 							args = {
-								optionsHeader5 = {
+								optionsHeader5a = {
 									type	= "header",
 									order	= 1,
 									name	= L["OUTPUT"],
@@ -641,7 +659,7 @@ function TF3:getOptions()
 									get = function() return TF3.db.profile.redirect_blacklist end,
 									set = function() TF3.db.profile.redirect_blacklist = not TF3.db.profile.redirect_blacklist end,
 								},
-								optionsHeader6 = {
+								optionsHeader5b = {
 									type	= "header",
 									order	= 4,
 									name	= L["DEBUGGING"],
@@ -668,7 +686,7 @@ function TF3:getOptions()
 									get = function() return TF3.db.profile.debug_checking end,
 									set = function() TF3.db.profile.debug_checking = not TF3.db.profile.debug_checking end,
 								},
-								optionsHeader4 = {
+								optionsHeader5c = {
 									type	= "header",
 									order	= 7,
 									name	= L["FSELF"],

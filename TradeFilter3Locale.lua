@@ -16,7 +16,6 @@ if L then
 --@localization(locale="enUS", namespace="FILTERS", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
 --@localization(locale="enUS", namespace="FILTERS/BASE", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
 --@localization(locale="enUS", namespace="FILTERS/BG", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
---@localization(locale="enUS", namespace="FILTERS/SPECIAL", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
 --@localization(locale="enUS", namespace="FILTERS/TRADE", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
 --@localization(locale="enUS", namespace="TOC", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
 --@localization(locale="enUS", namespace="WHITELIST", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
@@ -30,7 +29,6 @@ if L then
 --@localization(locale="deDE", namespace="FILTERS", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
 --@localization(locale="deDE", namespace="FILTERS/BASE", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
 --@localization(locale="deDE", namespace="FILTERS/BG", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
---@localization(locale="deDE", namespace="FILTERS/SPECIAL", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
 --@localization(locale="deDE", namespace="FILTERS/TRADE", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
 --@localization(locale="deDE", namespace="TOC", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
 --@localization(locale="deDE", namespace="WHITELIST", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
@@ -44,7 +42,6 @@ if L then
 --@localization(locale="zhCN", namespace="FILTERS", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
 --@localization(locale="zhCN", namespace="FILTERS/BASE", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
 --@localization(locale="zhCN", namespace="FILTERS/BG", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
---@localization(locale="zhCN", namespace="FILTERS/SPECIAL", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
 --@localization(locale="zhCN", namespace="FILTERS/TRADE", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
 --@localization(locale="zhCN", namespace="TOC", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
 --@localization(locale="zhCN", namespace="WHITELIST", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
@@ -58,7 +55,6 @@ if L then
 --@localization(locale="zhTW", namespace="FILTERS", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
 --@localization(locale="zhTW", namespace="FILTERS/BASE", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
 --@localization(locale="zhTW", namespace="FILTERS/BG", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
---@localization(locale="zhTW", namespace="FILTERS/SPECIAL", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
 --@localization(locale="zhTW", namespace="FILTERS/TRADE", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
 --@localization(locale="zhTW", namespace="TOC", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
 --@localization(locale="zhTW", namespace="WHITELIST", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
@@ -72,7 +68,6 @@ if L then
 --@localization(locale="koKR", namespace="FILTERS", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
 --@localization(locale="koKR", namespace="FILTERS/BASE", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
 --@localization(locale="koKR", namespace="FILTERS/BG", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
---@localization(locale="koKR", namespace="FILTERS/SPECIAL", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
 --@localization(locale="koKR", namespace="FILTERS/TRADE", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
 --@localization(locale="koKR", namespace="TOC", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
 --@localization(locale="koKR", namespace="WHITELIST", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
@@ -86,7 +81,6 @@ if L then
 --@localization(locale="frFR", namespace="FILTERS", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
 --@localization(locale="frFR", namespace="FILTERS/BASE", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
 --@localization(locale="frFR", namespace="FILTERS/BG", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
---@localization(locale="frFR", namespace="FILTERS/SPECIAL", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
 --@localization(locale="frFR", namespace="FILTERS/TRADE", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
 --@localization(locale="frFR", namespace="TOC", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
 --@localization(locale="frFR", namespace="WHITELIST", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
@@ -100,7 +94,6 @@ if L then
 --@localization(locale="ruRU", namespace="FILTERS", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
 --@localization(locale="ruRU", namespace="FILTERS/BASE", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
 --@localization(locale="ruRU", namespace="FILTERS/BG", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
---@localization(locale="ruRU", namespace="FILTERS/SPECIAL", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
 --@localization(locale="ruRU", namespace="FILTERS/TRADE", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
 --@localization(locale="ruRU", namespace="TOC", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@
 --@localization(locale="ruRU", namespace="WHITELIST", format="lua_additive_table", handle-unlocalized="english", same-key-is-true=true, handle-subnamespaces="concat")@

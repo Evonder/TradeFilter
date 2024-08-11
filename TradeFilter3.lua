@@ -51,9 +51,11 @@ local debugFrame = L["debugFrame"]
 local currentChatFrames = {}
 local chatFrames = {}
 local lastmsgID = 0
+local lastMsg = ""
 local wlmsgID = 0
 local msgsFiltered = 0
 local msgsBlackFiltered = 0
+local msgsRepeatsFiltered = 0
 local numGroupMembers = 0
 local subGroupMembers = 0
 local OptionsPanel
@@ -83,6 +85,7 @@ local defaults = {
         filterBG = false,
         filterGeneral = false,
         filterDuelSpam = false,
+        filterRepeats = false,
         filterTrade = true,
         addfilterTRADE_enable = false,
         addfilterBASE_enable = false,
@@ -123,7 +126,7 @@ function TF3:OnInitialize()
     end
 
     if IsLoggedIn() then
-        self:IsLoggedIn()
+        TF3:IsLoggedIn()
     else
         self:RegisterEvent("PLAYER_LOGIN", "IsLoggedIn")
     end
@@ -140,6 +143,10 @@ end
 -- :OpenOptions(): Opens the options window.
 function TF3:OpenOptions()
     Settings.OpenToCategory(OptionsPanel)
+end
+
+function TradeFilter_OnAddonCompartmentClick(addonName, buttonName, menuButtonFrame)
+    TF3:OpenOptions()
 end
 
 function TF3:FirstLogin()
@@ -169,26 +176,17 @@ function TF3:LDBInitialize()
                 else
                     msgsFiltered = 0
                     msgsBlackFiltered = 0
+                    msgsRepeatFiltered = 0
                     TF3Frame.obj.text = msgsFiltered .. L[" Messages Filtered"]
                     TF3Frame.obj.value = msgsFiltered
-                    TF3Frame.obj.OnEnter(self)
                 end
-            end,
-            OnEnter = function(self)
-                GameTooltip:SetOwner(self, "ANCHOR_NONE")
-                GameTooltip:SetPoint("TOPLEFT", self, "BOTTOMLEFT")
-                GameTooltip:ClearLines()
-                TF3Frame.obj.OnTooltipShow(GameTooltip)
-                GameTooltip:Show()
-            end,
-            OnLeave = function(self)
-                GameTooltip:Hide()
             end,
             OnTooltipShow = function(self)
                 local hint = L["|cffeda55fRight Click|r to open config GUI.\n|cffeda55fLeft Click|r reset filtered count."]
                 self:AddLine(L["Messages filtered are saved per session only"])
                 self:AddLine(" ")
                 self:AddLine(msgsFiltered .. L[" Messages Filtered"])
+                self:AddLine(msgsRepeatsFiltered .. L[" Repeats Blocked"])
                 self:AddLine(msgsBlackFiltered .. "|cFFFF0000" .. L[" Blacklist Filtered"] .. "|r")
                 self:AddLine(" ")
                 self:AddLine(hint, 0.2, 1, 0.2, 1)
@@ -203,9 +201,11 @@ function TF3:LDBUpdate(arg)
         msgsBlackFiltered = msgsBlackFiltered + 1
     elseif (arg == "ldbfilter") then
         msgsFiltered = msgsFiltered + 1
+    elseif (arg == "ldbrepeats") then
+        msgsRepeatsFiltered = msgsRepeatsFiltered + 1
     end
-    TF3Frame.obj.text = msgsBlackFiltered + msgsFiltered .. L[" Messages Filtered"]
-    TF3Frame.obj.value = msgsBlackFiltered + msgsFiltered
+    TF3Frame.obj.text = msgsBlackFiltered + msgsFiltered + msgsRepeatsFiltered .. L[" Messages Filtered"]
+    TF3Frame.obj.value = msgsBlackFiltered + msgsFiltered + msgsRepeatsFiltered
 end
 
 --[[ Helper Functions ]]--
@@ -333,14 +333,15 @@ function TF3:createChatFrame(toFrame, msg, msgID)
     ChatFrame_RemoveAllChannels(frame)
     frame:AddMessage(msg)
     lastmsgID = msgID
+    lastMsg = msg
     TF3:indexChatFrames()
 end
 
 --[[ BlackList Func ]]--
 --[[ Base blacklist words from BadBoy(Funkydude) ]]--
-local function TF3:BlackList(msg, userID, chanName, msgID, coloredName, whitelisted)
+function TF3:BlackList(event, msg, userID, chanName, msgID, coloredName, whitelisted)
     if (msgID == lastmsgID) then
-        return
+        return false
     end
     if (not TF3.db.profile.blacklist) then
         TF3.db.profile.blacklist = TF3:FixWowAceSubnamespaces("blacklist")
@@ -382,9 +383,9 @@ local function TF3:BlackList(msg, userID, chanName, msgID, coloredName, whitelis
 end
 
 --[[ WhiteList Func ]]--
-local function TF3:WhiteList(event, msg, userID, chanName, msgID, coloredName)
+function TF3:WhiteList(event, msg, userID, chanName, msgID, coloredName)
     if (msgID == wlmsgID) then
-        return
+        return false
     end
     if (not TF3.db.profile.whitelist) then
         TF3.db.profile.whitelist = TF3:FixWowAceSubnamespaces("whitelist")
@@ -424,7 +425,13 @@ local function PreFilterFunc(self, event, ...)
     local blacklisted = nil
     local whitelisted = nil
     if (msgID == lastmsgID) then
-        return
+        return true
+    end
+    if (msg == lastMsg and TF3.db.profile.filterRepeats) then
+        if (LDB) then
+            TF3:LDBUpdate("ldbrepeats")
+        end
+        return true
     end
     if (chanID == 5) then return end
     if (TF3.db.profile.whitelist_enable) then
@@ -570,9 +577,9 @@ local function PreFilterFunc(self, event, ...)
 end
 
 --[[ Filter Func ]]--
-local function TF3:FilterFunc(chan, msg, userID, zoneID, chanName, msgID, coloredName)
+function TF3:FilterFunc(chan, msg, userID, zoneID, chanName, msgID, coloredName)
     if (msgID == lastmsgID or msgID == wlmsgID) then
-        return
+        return true
     end
     local filterFuncList = ChatFrame_GetMessageEventFilters("CHAT_MSG_CHANNEL")
     local filtered

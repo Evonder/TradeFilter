@@ -20,6 +20,8 @@ function TF3:FixWowAceSubnamespaces(db)
 			["WLIST5"] = L["WHITELIST/WLIST5"],
 			["WLIST6"] = L["WHITELIST/WLIST6"],
 			["WLIST7"] = L["WHITELIST/WLIST7"],
+			["WLIST8"] = L["WHITELIST/WLIST8"],
+			["WLIST9"] = L["WHITELIST/WLIST9"],
 		}
 		return whitelist
 	elseif (db == "blacklist") then
@@ -101,13 +103,6 @@ function TF3:FixWowAceSubnamespaces(db)
 			["FILTER9"] = L["FILTERS/TRADE/FILTER9"],
 		}
 		return TRADE
-	elseif (db == "SPECIAL") then
-		-- print("Importing SPECIAL filters")
-		local SPECIAL = {
-			["FILTER1"] = L["FILTERS/SPECIAL/FILTER1"],
-			["FILTER2"] = L["FILTERS/SPECIAL/FILTER2"],
-		}
-		return SPECIAL
 	end
 end
 
@@ -117,5 +112,4 @@ function TF3:dbImportSV()
 	TF3.db.profile.filters.BASE = TF3:FixWowAceSubnamespaces("BASE")
 	TF3.db.profile.filters.BG = TF3:FixWowAceSubnamespaces("BG")
 	TF3.db.profile.filters.TRADE = TF3:FixWowAceSubnamespaces("TRADE")
-	TF3.db.profile.filters.SPECIAL = TF3:FixWowAceSubnamespaces("SPECIAL")
 end
